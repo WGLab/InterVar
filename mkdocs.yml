@@ -1,0 +1,25 @@
+site_name: InterVar Documentation
+site_url: http://intervar.openbioinformatics.org/
+repo_url: http://github.com/WGLab/doc-ANNOVAR/
+repo_name: GitHub
+site_description: Documentation for the InterVar software
+site_author: Quan Li, Kai Wang
+site_favicon: favicon.ico
+copyright: 2015-2015 InterVar
+google_analytics: ['UA-48623707-1', 'intervar.openbioinformatics.org']
+
+docs_dir: docs/
+include_search: true
+
+pages:
+- InterVar: index.md
+- User Guide:
+  - Download InterVar: user-guide/download.md
+  - Quick Start-Up Guide: user-guide/startup.md
+  - Manual: user-guide/manual.md
+- Misc:
+  - FAQ: misc/faq.md
+  - What is New: misc/whatsnew.md
+  - Version History: misc/version_history.md
+  - Credit: misc/credit.md
+  - How to Contribute: misc/contributing.md
