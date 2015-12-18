@@ -10,9 +10,9 @@
 import copy,logging,os,io,re,time,sys,platform
 
 if platform.python_version()< '3.0.0' :
-	import ConfigParser
+    import ConfigParser
 else:
-	import configparser
+    import configparser
 
 paras = {}
 
@@ -254,8 +254,8 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs):
     '''
     
     PS1=0
-	PS1_t1=0
-	PS1_t2=0
+    PS1_t1=0
+    PS1_t2=0
     cls=line.split('\t')
     funcs_tmp=["missense","non-synon"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
@@ -263,7 +263,6 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs):
     if line_tmp.find(fc)>=0 :
         PS1_t1=1;
         # need to wait to check Same amino acid change as a previously pathogenic variant
-	
 
     if PS1_t1 !=0 and PS1_t2 != 0 :
         PS1=1
@@ -342,16 +341,15 @@ def check_PM4(line,Funcanno_flgs,Allels_flgs):
     Protein length changes as a result of in-frame deletions/insertions in a nonrepeat region or stop-loss variants
     '''
     PM4=0
-	PM4_t1=0
-	PM4_t2=0
+    PM4_t1=0
+    PM4_t2=0
     cls=line.split('\t')
     funcs_tmp=["cds-indel","stop-loss"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
-		if line_tmp.find(fc)>=0 :
-			PM4_t1=1;
+        if line_tmp.find(fc)>=0 :
+            PM4_t1=1;
         # need to wait to check  in a nonrepeat region
-	
 
     if PM4_t1 !=0 and PM4_t2 != 0 :
         PM4=1
@@ -364,8 +362,8 @@ def check_PM5(line,Funcanno_flgs,Allels_flgs):
     pathogenic has been seen before;Example: Arg156His is pathogenic; now you observe Arg156Cys
     '''
     PM5=0
-	PM5_t1=0
-	PM5_t2=0
+    PM5_t1=0
+    PM5_t2=0
     cls=line.split('\t')
     funcs_tmp=["missense","non-synon"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
@@ -373,10 +371,9 @@ def check_PM5(line,Funcanno_flgs,Allels_flgs):
     if line_tmp.find(fc)>=0 :
         PM5_t1=1;
         # need to wait to check no-Same amino acid change as a previously pathogenic variant
-	
 
     if PM5_t1 !=0 and PM5_t2 != 0 :
-		PM5=1
+        PM5=1
     return(PM5)
 
 def check_PM6(line,Funcanno_flgs,Allels_flgs):
@@ -524,16 +521,15 @@ def check_BP3(line,Funcanno_flgs,Allels_flgs):
     In-frame deletions/insertions in a repetitive region without a known function
     '''
     BP3=0
-	BP3_t1=0
-	BP3_t2=0
+    BP3_t1=0
+    BP3_t2=0
     cls=line.split('\t')
     funcs_tmp=["cds-indel","stop-loss"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
-		if line_tmp.find(fc)>=0 :
-			BP3_t1=1;
+        if line_tmp.find(fc)>=0 :
+            BP3_t1=1;
         # need to wait to check  in a repeat region
-	
 
     if BP3_t1 !=0 and BP3_t2 != 0 :
         BP3=1
@@ -720,22 +716,22 @@ def my_inter_var(annovar_outfile):
     return
 
 def main():
-	if platform.python_version()< '3.0.0'  :
-		config=ConfigParser.ConfigParser()
-	else:
-		config=configparser.ConfigParser()
-	
-	config.read("config.ini")
-	sections = config.sections()
-	for section in sections:
-		ConfigSectionMap(config,section)    
-	print ("The paras are %s " % paras)
-	#check_downdb()
-	#check_input()
-	#check_annovar_result() #  to obtain myanno.hg19_multianno.csv
-	annovar_outfile=paras['outfile']+"."+paras['buildver']+"_multianno.txt"
+    if platform.python_version()< '3.0.0'  :
+        config=ConfigParser.ConfigParser()
+    else:
+        config=configparser.ConfigParser()
+    
+    config.read("config.ini")
+    sections = config.sections()
+    for section in sections:
+        ConfigSectionMap(config,section)    
+    print ("The paras are %s " % paras)
+    #check_downdb()
+    #check_input()
+    #check_annovar_result() #  to obtain myanno.hg19_multianno.csv
+    annovar_outfile=paras['outfile']+"."+paras['buildver']+"_multianno.txt"
     check_gdi_rvs_LOF(annovar_outfile)
-	my_inter_var(annovar_outfile)
+    my_inter_var(annovar_outfile)
 
     
 
