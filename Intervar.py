@@ -61,14 +61,14 @@ def check_annovar_result():
 # table_annovar.pl example/ex1.avinput humandb/ -buildver hg19 -out myanno -remove -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03,phastConsElements46way   -operation  g,f,f,f,f,f,f,r   -nastring . -csvout
     inputft= paras['inputfile_type']
     if inputft.lower() == 'avinput' :
-        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03,phastConsElements46way   -operation  g,f,f,f,f,f,f,r   -nastring ."
+        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03,phastConsElements46way,dbscsnv11   -operation  g,f,f,f,f,f,f,r,f   -nastring ."
     else:
-        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+".avinput "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03,phastConsElements46way   -operation  g,f,f,f,f,f,f,r   -nastring ."
+        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+".avinput "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03,phastConsElements46way,dbscsnv11   -operation  g,f,f,f,f,f,f,r,f   -nastring ."
     print("%s" %cmd)
     os.system(cmd)
     return
 
-def get_gdi_rvs_lof(gene_name,line_out,dicts,temple):
+def get_gdi_rvis_lof(gene_name,line_out,dicts,temple):
     try:
         line_out=line_out+"\t"+'\t'.join(str(e) for e in dicts[gene_name])
     except KeyError:
@@ -78,12 +78,12 @@ def get_gdi_rvs_lof(gene_name,line_out,dicts,temple):
     return(line_out)
 
 
-def check_gdi_rvs_LOF(anvfile):
+def check_gdi_rvis_LOF(anvfile):
     gdi={}
-    rvs={}
+    rvis={}
     lof={}
     newoutfile=anvfile+".grl_p"
-# begin open file  and set dicts for gdi rvs and lof:
+# begin open file  and set dicts for gdi rvis and lof:
     try:
         fh = open(paras['gdi_file'], "r")
         str = fh.read()
@@ -99,15 +99,15 @@ def check_gdi_rvs_LOF(anvfile):
         fh.close()
 
     try:
-        fh = open(paras['rvs_file'], "r")
+        fh = open(paras['rvis_file'], "r")
         str = fh.read()
         for line in str.split('\n'):
             cls=line.split('\t')
-            rvs['Gene']=['RVIS_ExAC_0.05%(AnyPopn)','%RVIS_ExAC_0.05%(AnyPopn)']
+            rvis['Gene']=['RVIS_ExAC_0.05%(AnyPopn)','%RVIS_ExAC_0.05%(AnyPopn)']
             if len(cls)>1:
-                rvs[cls[4]]=cls[5:]
+                rvis[cls[4]]=cls[5:]
     except IOError:
-        print("Error: can\'t read the annovar output file %s" % paras['rvs_file'])
+        print("Error: can\'t read the annovar output file %s" % paras['rvis_file'])
         return
     else:
         pass
@@ -139,13 +139,13 @@ def check_gdi_rvs_LOF(anvfile):
                     gene_name='Gene'
 #some with multiple genes, so one gene by one gene  to annote
                 gdi_temp=['.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.'] 
-                rvs_temp=['.', '.'] 
+                rvis_temp=['.', '.'] 
                 lof_temp=['.']
                 for gg in gene_name.split(','):
                     line_out=line+"\t"+gg
-                    line_out=get_gdi_rvs_lof(gg,line_out,gdi,gdi_temp)
-                    line_out=get_gdi_rvs_lof(gg,line_out,rvs,rvs_temp)
-                    line_out=get_gdi_rvs_lof(gg,line_out,lof,lof_temp)
+                    line_out=get_gdi_rvis_lof(gg,line_out,gdi,gdi_temp)
+                    line_out=get_gdi_rvis_lof(gg,line_out,rvis,rvis_temp)
+                    line_out=get_gdi_rvis_lof(gg,line_out,lof,lof_temp)
                     fw.write("%s\n" % line_out)
 
 #        fh.write("This is my test file for exception handling!!")
@@ -327,6 +327,18 @@ def check_PM2(line,Funcanno_flgs,Allels_flgs):
     1000 Genomes Project, or Exome Aggregation Consortium
     '''
     PM2=0
+    #Freqs_flgs={'1000g2014oct_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
+    cutoff_maf=0.001  # extremely low frequency
+    cls=line.split('\t')
+    for key in Freqs_flgs.keys():
+        try:
+            if float(cls[Freqs_flgs[key]])<=cutoff_maf or float(cls[Freqs_flgs[key]])>=(1.0-cutoff_maf): BM2=1
+        except ValueError:
+            PM2=1 # means absent
+        else:
+            pass
+
+
     return(PM2)
 
 def check_PM3(line,Funcanno_flgs,Allels_flgs):
@@ -566,14 +578,23 @@ def check_BP7(line,Funcanno_flgs,Allels_flgs):
     conserved
     '''
     BP7=0
+	BP7_t1=0
+	BP7_t2=0
     cls=line.split('\t')
     funcs_tmp=["synon","coding-synon"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     fc=funcs_tmp[0]
     if line_tmp.find(fc)>=0 :
-        BP7=1;
-    # need to wait to check the  impact to the splice
+    # need to wait to check the  impact to the splice from dbscSNV 
+	# either score(ada and rf) >0.6 as splicealtering 
+        if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]<0.6 and cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]<0.6:
+            BP7_t1=1
+# check the conservation score > 400 
+    if cls[Funcanno_flgs['phastConsElements46way']>=400 :
+        BP7_t1=2
 
+    if BP7_t1 !=0 and BP7_t2 != 0 :
+        BP7=1        
     return(BP7)
 
 
@@ -679,7 +700,7 @@ def my_inter_var(annovar_outfile):
     newoutfile=annovar_outfile+".grl_p"
 
     Freqs_flgs={'1000g2014oct_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
-    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'clinvar_20150629':0}
+	Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'clinvar_20150629':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'phastConsElements46way':0}
     Allels_flgs={'Ref':0,'Alt':0}
 
     try:
@@ -725,12 +746,12 @@ def main():
     sections = config.sections()
     for section in sections:
         ConfigSectionMap(config,section)    
-    print ("The paras are %s " % paras)
+    #print ("The paras are %s " % paras)
     #check_downdb()
     #check_input()
     #check_annovar_result() #  to obtain myanno.hg19_multianno.csv
     annovar_outfile=paras['outfile']+"."+paras['buildver']+"_multianno.txt"
-    check_gdi_rvs_LOF(annovar_outfile)
+    check_gdi_rvis_LOF(annovar_outfile)
     my_inter_var(annovar_outfile)
 
     
