@@ -58,12 +58,12 @@ def check_input():
     return
 
 def check_annovar_result():
-# table_annovar.pl example/ex1.avinput humandb/ -buildver hg19 -out myanno -remove -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03,phastConsElements46way   -operation  g,f,f,f,f,f,f,r   -nastring . -csvout
+# table_annovar.pl example/ex1.avinput humandb/ -buildver hg19 -out myanno -remove -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03   -operation  g,f,f,f,f,f,f   -nastring . -csvout
     inputft= paras['inputfile_type']
     if inputft.lower() == 'avinput' :
-        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03,phastConsElements46way,dbscsnv11,dbnsfp31a_interpro   -operation  g,f,f,f,f,f,f,r,f,f   -nastring ."
+        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk   -operation  g,f,f,f,f,f,f,f,f,r   -nastring ."
     else:
-        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+".avinput "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03,phastConsElements46way,dbscsnv11,dbnsfp31a_interpro   -operation  g,f,f,f,f,f,f,r,f,f   -nastring ."
+        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+".avinput "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk   -operation  g,f,f,f,f,f,f,f,f,r   -nastring ."
     print("%s" %cmd)
     os.system(cmd)
     return
@@ -370,8 +370,10 @@ def check_PM4(line,Funcanno_flgs,Allels_flgs):
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 :
-            PM4_t1=1;
+            PM4_t1=1
         # need to wait to check  in a nonrepeat region
+    if cls[Funcanno_flgs['rmsk']] == '.':
+        PM4_t2=1
 
     if PM4_t1 !=0 and PM4_t2 != 0 :
         PM4=1
@@ -552,6 +554,8 @@ def check_BP3(line,Funcanno_flgs,Allels_flgs):
         if line_tmp.find(fc)>=0 :
             BP3_t1=1;
         # need to wait to check  in a repeat region
+    if cls[Funcanno_flgs['rmsk']] != '.':
+        BP3_t2=1
 
     if BP3_t1 !=0 and BP3_t2 != 0 :
         BP3=1
@@ -600,7 +604,7 @@ def check_BP7(line,Funcanno_flgs,Allels_flgs):
     BP7=0
     BP7_t1=0
     BP7_t2=0
-    cutoff_conserv=400
+    cutoff_conserv=2
     cls=line.split('\t')
     funcs_tmp=["synon","coding-synon"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
@@ -610,8 +614,8 @@ def check_BP7(line,Funcanno_flgs,Allels_flgs):
     # either score(ada and rf) >0.6 as splicealtering 
         if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]<0.6 and cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]<0.6:
             BP7_t1=1
-# check the conservation score > 400 
-    if cls[Funcanno_flgs['phastConsElements46way']] <= cutoff_conserv or cls[Funcanno_flgs['phastConsElements46way']] == '.' :
+# check the conservation score of gerp++ > 2
+    if cls[Funcanno_flgs['GERP++_RS']] <= cutoff_conserv or cls[Funcanno_flgs['GERP++_RS']] == '.' :
             BP7_t2=1
 
     if BP7_t1 !=0 and BP7_t2 != 0 :
@@ -722,7 +726,7 @@ def my_inter_var(annovar_outfile):
     newoutfile=annovar_outfile+".grl_p"
 
     Freqs_flgs={'1000g2014oct_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
-    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'clinvar_20150629':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'phastConsElements46way':0,'LoFtool_percentile':0,'Interpro_domain':0}
+    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'clinvar_20150629':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0}
     Allels_flgs={'Ref':0,'Alt':0}
 
     try:

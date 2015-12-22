@@ -1,0 +1,17 @@
+1	948921	948921	T	C	comments: rs15842, a SNP in 5' UTR of ISG15
+1	984971	984971	G	A	comments: rs111818381
+1	984971	984971	G	C	comments: rs111818381
+1	1404001	1404001	G	T	comments: rs149123833, a SNP in 3' UTR of ATAD3C
+1	5935162	5935162	A	T	comments: rs1287637, a splice site variant in NPHP4
+1	162736463	162736463	C	T	comments: rs1000050, a SNP in Illumina SNP arrays
+1	84875173	84875173	C	T	comments: rs6576700 or SNP_A-1780419, a SNP in Affymetrix SNP arrays
+1	13211293	13211294	TC	-	comments: rs59770105, a 2-bp deletion
+1	11403596	11403596	-	AT	comments: rs35561142, a 2-bp insertion
+1	105492231	105492231	A	ATAAA	comments: rs10552169, a block substitution
+1	67705958	67705958	G	A	comments: rs11209026 (R381Q), a SNP in IL23R associated with Crohn's disease
+2	234183368	234183368	A	G	comments: rs2241880 (T300A), a SNP in the ATG16L1 associated with Crohn's disease
+16	50745926	50745926	C	T	comments: rs2066844 (R702W), a non-synonymous SNP in NOD2
+16	50756540	50756540	G	C	comments: rs2066845 (G908R), a non-synonymous SNP in NOD2
+16	50763778	50763778	-	C	comments: rs2066847 (c.3016_3017insC), a frameshift SNP in NOD2
+13	20763686	20763686	G	-	comments: rs1801002 (del35G), a frameshift mutation in GJB2, associated with hearing loss
+13	20797176	21105944	0	-	comments: a 342kb deletion encompassing GJB6, associated with hearing loss
