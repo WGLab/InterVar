@@ -58,12 +58,12 @@ def check_input():
     return
 
 def check_annovar_result():
-# table_annovar.pl example/ex1.avinput humandb/ -buildver hg19 -out myanno -remove -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03   -operation  g,f,f,f,f,f,f   -nastring . -csvout
+# table_annovar.pl example/ex1.avinput humandb/ -buildver hg19 -out myanno -remove -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03   -operation  g,f,f,f,f,f,f   -nastring . -csvout
     inputft= paras['inputfile_type']
     if inputft.lower() == 'avinput' :
-        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk   -operation  g,f,f,f,f,f,f,f,f,r   -nastring ."
+        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk   -operation  g,f,f,f,f,f,f,f,f,r   -nastring ."
     else:
-        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+".avinput "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20150629,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk   -operation  g,f,f,f,f,f,f,f,f,r   -nastring ."
+        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+".avinput "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk   -operation  g,f,f,f,f,f,f,f,f,r   -nastring ."
     print("%s" %cmd)
     os.system(cmd)
     return
@@ -207,14 +207,14 @@ def classfy(PVS1,PS,PM,PP,BA1,BS,BP):
 
     return(BPS[BPS_out])
 
-def check_PVS1(line,Funcanno_flgs,Allels_flgs):
+def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
     '''
     Certain types of variants (e.g., nonsense, frameshift, canonical
     +- 1 or 2 splice sites, initiation codon, single exon or multiexon
     deletion) in a gene where LOF is a known mechanism of disease
     '''
     cls=line.split('\t')
-    funcs_tmp=["nonsense","frameshift","splic"]
+    funcs_tmp=["nonsense","frameshift","splic","stopgain"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     PVS=0
     PVS_t1=0
@@ -225,47 +225,57 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs):
             PVS_t1=1
             break
     # wait to check LOF genes use the LoFtool_percentile,but  how to know is the disese mechanism
-    lofscore_cutoff=0.1 
-    if cls[Funcanno_flgs['LoFtool_percentile']]>0.1:
-        PVS_t2=1
-#   try:
-#       fh = open(paras['lof_genes'], "r")
-#       str = fh.read()
-#       for line2 in str.split('\n'):
-#           cls2=line2.split('\t')
-#           #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
-#           if len(cls2[0])>1 and  cls[Funcanno_flgs['Gene']] == cls2[0] :
-#               PVS_t2=1
-#               #print(" PVSt2= %d" % (PVS_t2) )
-#               break
-#   except IOError:
-#       print("Error: can\'t read the LOF genes file %s" % paras['lof_genes'])
-#       PVS_t2=0
-#   else:
-#       fh.close()    
-
+#    lofscore_cutoff=0.1 
+#    if cls[Funcanno_flgs['LoFtool_percentile']]>0.1:
+#        PVS_t2=1
+    try:
+        if lof_genes_dict[ cls[Funcanno_flgs['Gene']] ] == '1' :
+            PVS_t2=1
+    except KeyError:
+        PVS_t2=0
+    else:
+        pass
     #print("PVSt1= %d PVSt2= %d" % (PVS_t1,PVS_t2) )
     if PVS_t1 !=0 and PVS_t2 != 0 :
         PVS=1
 
     return(PVS)
 
-def check_PS1(line,Funcanno_flgs,Allels_flgs):
+def check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
     '''
     PS1 Same amino acid change as a previously established pathogenic variant regardless of nucleotide change
     Example: Val->Leu caused by either G>C or G>T in the same codon
+    AAChange.refGene
+    NOD2:NM_001293557:exon3:c.C2023T:p.R675W,NOD2:NM_022162:exon4:c.C2104T:p.R702W
     '''
     
     PS1=0
     PS1_t1=0
     PS1_t2=0
     cls=line.split('\t')
-    funcs_tmp=["missense","non-synon"]
+    funcs_tmp=["missense","nonsynony"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
-    fc=funcs_tmp[0]
-    if line_tmp.find(fc)>=0 :
-        PS1_t1=1;
-        # need to wait to check Same amino acid change as a previously pathogenic variant
+
+    for fc in funcs_tmp:
+        if line_tmp.find(fc)>=0 :
+            PS1_t1=1;
+            # need to wait to check Same amino acid change as a previously pathogenic variant
+            line_tmp2=cls[Funcanno_flgs['AAChange.refGene']]
+            cls0=line_tmp2.split(',')
+            cls0_1=cls0[0].split(':')
+            aa=cls0_1[4]
+            aa_last=aa[len(aa)-1:]
+            keys_tmp2=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+cls[Allels_flgs['Ref']]+"_"+cls[Allels_flgs['Alt']]
+            #print("%s %s %s" %(aa,aa_last,keys_tmp2))
+            try:
+                if  aa_changes_dict[keys_tmp2] == aa_last:
+                    PS1_t2=1
+                    #print("%s %s" %(aa_changes_dict[keys_tmp2],aa_last))
+            except KeyError:
+                PS1_t2=0
+            else:
+                pass
+
 
     if PS1_t1 !=0 and PS1_t2 != 0 :
         PS1=1
@@ -289,13 +299,13 @@ def check_PS3(line,Funcanno_flgs,Allels_flgs):
     cls=line.split('\t')
     line_tmp=cls[Funcanno_flgs['Gene damage prediction (all disease-causing genes)']]
 
-    funcs_tmp=["missense","non-synon"]
+    funcs_tmp=["missense","nonsynony"]
     line_tmp2=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
-    fc=funcs_tmp[0]
+    for fc in funcs_tmp:
     
-    #if line_tmp == 'Medium' or line_tmp == 'High':
-    if line_tmp2.find(fc)>=0 and  (line_tmp == 'High') :
-        PS3=1
+        #if line_tmp == 'Medium' or line_tmp == 'High':
+        if line_tmp2.find(fc)>=0 and  (line_tmp == 'High') :
+            PS3=1
 
     return(PS3)
 
@@ -309,7 +319,7 @@ def check_PS4(line,Funcanno_flgs,Allels_flgs):
     return(PS4)
 
 
-def check_PM1(line,Funcanno_flgs,Allels_flgs):
+def check_PM1(line,Funcanno_flgs,Allels_flgs,domain_benign_dict):
     '''
     Located in a mutational hot spot and/or critical and well-established functional domain (e.g., active site of
     an enzyme) without benign variation
@@ -318,14 +328,24 @@ def check_PM1(line,Funcanno_flgs,Allels_flgs):
     PM1_t1=0
     PM1_t2=0
     cls=line.split('\t')
-    funcs_tmp=["missense","non-synon"]
+    funcs_tmp=["missense","nonsynony"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
-    fc=funcs_tmp[0]
-    if line_tmp.find(fc)>=0 :
-        PM1_t1=1;
+    for fc in funcs_tmp:
+        if line_tmp.find(fc)>=0 :
+            PM1_t1=1;
         # need to wait to check whether in hot spot  or  functional domain/without benign variation
     if cls[Funcanno_flgs['Interpro_domain']]!= '.' :
-        PM1_t2=1;
+        keys_tmp2=cls[Allels_flgs['Chr']]+"_"+cls[Funcanno_flgs['Gene']]+": "+cls[Funcanno_flgs['Interpro_domain']]
+        try:
+            if domain_benign_dict[keys_tmp2] =="1":
+                PM1_t2=0
+                #print("PM1=0 %s" %keys_tmp2)
+        except KeyError:
+            PM1_t2=1
+            #print("PM1=1 %s" %keys_tmp2)
+        else:
+            pass
+
     if PM1_t1==1 and PM1_t2==1 :
         PM1=1
 
@@ -366,7 +386,8 @@ def check_PM4(line,Funcanno_flgs,Allels_flgs):
     PM4_t1=0
     PM4_t2=0
     cls=line.split('\t')
-    funcs_tmp=["cds-indel","stop-loss"]
+    #funcs_tmp=["cds-indel","stop-loss"]
+    funcs_tmp=["nonframeshift insertion","nonframeshift insertion","nonframeshift substitution","stoploss"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 :
@@ -380,21 +401,37 @@ def check_PM4(line,Funcanno_flgs,Allels_flgs):
 
     return(PM4)
 
-def check_PM5(line,Funcanno_flgs,Allels_flgs):
+def check_PM5(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
     '''
     Novel missense change at an amino acid residue where a different missense change determined to be
     pathogenic has been seen before;Example: Arg156His is pathogenic; now you observe Arg156Cys
+    NOD2:NM_001293557:exon3:c.C2023T:p.R675W,NOD2:NM_022162:exon4:c.C2104T:p.R702W
     '''
     PM5=0
     PM5_t1=0
     PM5_t2=0
     cls=line.split('\t')
-    funcs_tmp=["missense","non-synon"]
+    funcs_tmp=["missense","nonsynony"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
-    fc=funcs_tmp[0]
-    if line_tmp.find(fc)>=0 :
-        PM5_t1=1;
+    for fc in funcs_tmp:
+        if line_tmp.find(fc)>=0 :
+            PM5_t1=1;
         # need to wait to check no-Same amino acid change as a previously pathogenic variant
+            line_tmp2=cls[Funcanno_flgs['AAChange.refGene']]
+            cls0=line_tmp2.split(',')
+            cls0_1=cls0[0].split(':')
+            aa=cls0_1[4]
+            aa_last=aa[len(aa)-1:]
+            keys_tmp2=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+cls[Allels_flgs['Ref']]+"_"+cls[Allels_flgs['Alt']]
+            #print("%s %s %s" %(aa,aa_last,keys_tmp2))
+            try:
+                if  aa_changes_dict[keys_tmp2] != aa_last:
+                    PM5_t2=1
+                    #print("PM5 %s %s" %(aa_changes_dict[keys_tmp2],aa_last))
+            except KeyError:
+                PM5_t2=0
+            else:
+                pass
 
     if PM5_t1 !=0 and PM5_t2 != 0 :
         PM5=1
@@ -422,11 +459,11 @@ def check_PP2(line,Funcanno_flgs,Allels_flgs):
     '''
     PP2=0
     cls=line.split('\t')
-    funcs_tmp=["missense","non-synon"]
+    funcs_tmp=["missense","nonsynony"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
-    fc=funcs_tmp[0]
-    if line_tmp.find(fc)>=0 :
-        PP2=1;
+    for fc in funcs_tmp:
+        if line_tmp.find(fc)>=0 :
+            PP2=1;
         # need to wait to check whether has a low rate of benign missense variation.....
     return(PP2)
 
@@ -503,12 +540,12 @@ def check_BS3(line,Funcanno_flgs,Allels_flgs):
     cls=line.split('\t')
     line_tmp=cls[Funcanno_flgs['Gene damage prediction (all disease-causing genes)']]
 
-    funcs_tmp=["missense","non-synon"]
+    funcs_tmp=["missense","nonsynony"]
     line_tmp2=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
-    fc=funcs_tmp[0]
-    
-    if line_tmp2.find(fc)>=0 and  line_tmp == 'Low' :
-        BS3=1
+    for fc in funcs_tmp:
+        if line_tmp2.find(fc)>=0 and  line_tmp == 'Low' :
+            BS3=1
+
     return(BS3)
 
 def check_BS4(line,Funcanno_flgs,Allels_flgs):
@@ -524,11 +561,11 @@ def check_BP1(line,Funcanno_flgs,Allels_flgs):
     '''
     BP1=0
     cls=line.split('\t')
-    funcs_tmp=["missense","non-synon"]
+    funcs_tmp=["missense","nonsynony"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
-    fc=funcs_tmp[0]
-    if line_tmp.find(fc)>=0 :
-        BP1=1;
+    for fc in funcs_tmp:
+        if line_tmp.find(fc)>=0 :
+            BP1=1;
         # need to wait to check whether truncating is the only cause disease
     return(BP1)
 
@@ -548,7 +585,8 @@ def check_BP3(line,Funcanno_flgs,Allels_flgs):
     BP3_t1=0
     BP3_t2=0
     cls=line.split('\t')
-    funcs_tmp=["cds-indel","stop-loss"]
+    #funcs_tmp=["cds-indel","stop-loss"]
+    funcs_tmp=["nonframeshift insertion","nonframeshift insertion","nonframeshift substitution","stoploss"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 :
@@ -586,7 +624,7 @@ def check_BP6(line,Funcanno_flgs,Allels_flgs):
     BP6=0
     cls=line.split('\t')
 
-    line_tmp2=cls[Funcanno_flgs['clinvar_20150629']]
+    line_tmp2=cls[Funcanno_flgs['CLINSIG']]
     if line_tmp2 != '.':
         cls3=line_tmp2.split(';')
         clinvar_bp=cls3[0]
@@ -608,12 +646,12 @@ def check_BP7(line,Funcanno_flgs,Allels_flgs):
     cls=line.split('\t')
     funcs_tmp=["synon","coding-synon"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
-    fc=funcs_tmp[0]
-    if line_tmp.find(fc)>=0 :
+    for fc in funcs_tmp:
+        if line_tmp.find(fc)>=0 :
     # need to wait to check the  impact to the splice from dbscSNV 
     # either score(ada and rf) >0.6 as splicealtering 
-        if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]<0.6 and cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]<0.6:
-            BP7_t1=1
+            if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]<0.6 and cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]<0.6:
+                BP7_t1=1
 # check the conservation score of gerp++ > 2
     if cls[Funcanno_flgs['GERP++_RS']] <= cutoff_conserv or cls[Funcanno_flgs['GERP++_RS']] == '.' :
             BP7_t2=1
@@ -633,9 +671,60 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
     BS=[0,0,0,0]
     BP=[0,0,0,0,0,0,0]
 
-    PVS1=check_PVS1(line,Funcanno_flgs,Allels_flgs)
+#begin read some important datsets firstly;
+    lof_genes_dict={}
+    aa_changes_dict={}
+    domain_benign_dict={}
+#1.LOF gene list
+    try:
+        fh = open(paras['lof_genes'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
+            if len(cls2[0])>1:
+                lof_genes_dict[cls2[0]]='1'
+    except IOError:
+        print("Error: can\'t read the LOF genes file %s" % paras['lof_genes'])
+        return
+    else:
+        fh.close()    
+
+#2. AA change list
+    try:
+        fh = open(paras['ps1_aa'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            if len(cls2)>1 :
+                keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]+"_"+cls2[4]
+                aa_changes_dict[keys]=cls2[6]
+                #print("%s %s" %(keys,aa_changes_dict[keys]) )
+    except IOError:
+        print("Error: can\'t read the  amino acid change file %s" % paras['ps1_aa'])
+    else:
+        fh.close()    
+
+#3. Domain with benign 
+    try:
+        fh = open(paras['pm1_domain'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            if len(cls2)>1:
+                keys=cls2[0]+"_"+cls2[1]+": "+cls2[2]
+                domain_benign_dict[keys]="1"
+    except IOError:
+        print("Error: can\'t read the PM1 domain  file %s" % paras['pm1_domain'])
+    else:
+        fh.close()    
+#end read datasets
+
+
+
+    PVS1=check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict)
     
-    PS1=check_PS1(line,Funcanno_flgs,Allels_flgs)
+    PS1=check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict)
     PS[0]=PS1
     PS2=check_PS2(line,Funcanno_flgs,Allels_flgs)
     PS[1]=PS2
@@ -644,7 +733,7 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
     PS4=check_PS4(line,Funcanno_flgs,Allels_flgs)
     PS[3]=PS4
 
-    PM1=check_PM1(line,Funcanno_flgs,Allels_flgs)
+    PM1=check_PM1(line,Funcanno_flgs,Allels_flgs,domain_benign_dict)
     PM[0]=PM1
     PM2=check_PM2(line,Freqs_flgs,Allels_flgs)
     PM[1]=PM2
@@ -652,7 +741,7 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
     PM[2]=PM3
     PM4=check_PM4(line,Funcanno_flgs,Allels_flgs)
     PM[3]=PM4
-    PM5=check_PM5(line,Funcanno_flgs,Allels_flgs)
+    PM5=check_PM5(line,Funcanno_flgs,Allels_flgs,aa_changes_dict)
     PM[4]=PM5
     PM6=check_PM6(line,Funcanno_flgs,Allels_flgs)
     PM[5]=PM6
@@ -726,8 +815,8 @@ def my_inter_var(annovar_outfile):
     newoutfile=annovar_outfile+".grl_p"
 
     Freqs_flgs={'1000g2014oct_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
-    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'clinvar_20150629':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0}
-    Allels_flgs={'Ref':0,'Alt':0}
+    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'CLINSIG':0,'CLNDBN':0,'CLNACC':0,'CLNDSDB':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0}
+    Allels_flgs={'Ref':0,'Alt':0,'Chr':0,'Start':0,'End':0,'Ref':0,'Alt':0}
 
     try:
         fh=open(newoutfile, "r")
@@ -745,7 +834,7 @@ def my_inter_var(annovar_outfile):
 
             else:
                 #begin check the BP status from clinvar
-                line_tmp2=cls[Funcanno_flgs['clinvar_20150629']]
+                line_tmp2=cls[Funcanno_flgs['CLINSIG']]
                 if line_tmp2 != '.':
                     cls3=line_tmp2.split(';')
                     clinvar_bp=cls3[0]
