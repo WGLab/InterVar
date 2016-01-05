@@ -61,9 +61,9 @@ def check_annovar_result():
 # table_annovar.pl example/ex1.avinput humandb/ -buildver hg19 -out myanno -remove -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03   -operation  g,f,f,f,f,f,f   -nastring . -csvout
     inputft= paras['inputfile_type']
     if inputft.lower() == 'avinput' :
-        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk   -operation  g,f,f,f,f,f,f,f,f,r   -nastring ."
+        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk,ensGene   -operation  g,f,f,f,f,f,f,f,f,r,g   -nastring ."
     else:
-        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+".avinput "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk   -operation  g,f,f,f,f,f,f,f,f,r   -nastring ."
+        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+".avinput "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk,ensGene   -operation  g,f,f,f,f,f,f,f,f,r,g   -nastring ."
     print("%s" %cmd)
     os.system(cmd)
     return
@@ -215,13 +215,14 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
     '''
     cls=line.split('\t')
     funcs_tmp=["nonsense","frameshift","splic","stopgain"]
+    funcs_tmp2="nonframe"
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     PVS=0
     PVS_t1=0
     PVS_t2=0
     # Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0
     for fc in funcs_tmp:
-        if line_tmp.find(fc)>=0 : 
+        if line_tmp.find(fc)>=0 and line_tmp.find(funcs_tmp2)<0 :
             PVS_t1=1
             break
     # wait to check LOF genes use the LoFtool_percentile,but  how to know is the disese mechanism
@@ -351,23 +352,37 @@ def check_PM1(line,Funcanno_flgs,Allels_flgs,domain_benign_dict):
 
     return(PM1)
 
-def check_PM2(line,Freqs_flgs,Allels_flgs):
+def check_PM2(line,Freqs_flgs,Allels_flgs,Funcanno_flgs,mim2gene_dict,mim2gene_dict2):
     '''
     Absent from controls (or at extremely low frequency if recessive) (Table 6) in Exome Sequencing Project,
     1000 Genomes Project, or Exome Aggregation Consortium
     '''
     PM2=0
     #Freqs_flgs={'1000g2014oct_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
-    cutoff_maf=0.001  # extremely low frequency
+    cutoff_maf=0.005  # extremely low frequency
     cls=line.split('\t')
-    for key in Freqs_flgs.keys():
-        try:
-            if float(cls[Freqs_flgs[key]])<=cutoff_maf or float(cls[Freqs_flgs[key]])>=(1.0-cutoff_maf): BM2=1
-        except ValueError:
-            PM2=1 # means absent
-        else:
-            pass
+    mims_id="1256"
 
+    #mim2gene_dict[keys]
+    try:
+        mim1=mim2gene_dict[ cls[Funcanno_flgs['Gene.ensGene']] ]
+        mim2=mim2gene_dict2[cls[Funcanno_flgs['Gene']]]
+        if  mims_id.find(mim1[0])!=-1 or  mims_id.find(mim2[0])!=-1:
+            #print("PM2 %s %s " % (mim1,mim2))
+            for key in Freqs_flgs.keys():
+                if(cls[Freqs_flgs[key]]=='.'):   # means absent and it is domomin
+                    PM2=1
+    except KeyError:  # means it is recessive
+        for key in Freqs_flgs.keys():
+            try:
+                if float(cls[Freqs_flgs[key]])<=cutoff_maf or float(cls[Freqs_flgs[key]])>=(1.0-cutoff_maf): 
+                    PM2=1
+            except ValueError:
+                PM2=0 # means absent and it is  recessive
+            else:
+                pass
+    else:
+        pass
 
     return(PM2)
 
@@ -394,6 +409,8 @@ def check_PM4(line,Funcanno_flgs,Allels_flgs):
             PM4_t1=1
         # need to wait to check  in a nonrepeat region
     if cls[Funcanno_flgs['rmsk']] == '.':
+        PM4_t2=1
+    if cls[Funcanno_flgs['rmsk']] != '.' and  line_tmp.find("stoploss")>=0 :
         PM4_t2=1
 
     if PM4_t1 !=0 and PM4_t2 != 0 :
@@ -452,7 +469,7 @@ def check_PP1(line,Funcanno_flgs,Allels_flgs):
     PP1=0
     return(PP1)
 
-def check_PP2(line,Funcanno_flgs,Allels_flgs):
+def check_PP2(line,Funcanno_flgs,Allels_flgs,PP2_genes_dict):
     '''
     Missense variant in a gene that has a low rate of benign missense variation and in which 
     missense variants are a common mechanism of disease
@@ -463,16 +480,41 @@ def check_PP2(line,Funcanno_flgs,Allels_flgs):
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 :
-            PP2=1;
-        # need to wait to check whether has a low rate of benign missense variation.....
+        # need to check whether gene has a low rate of benign missense variation.....
+            try:
+                if PP2_genes_dict[ cls[Funcanno_flgs['Gene']] ] == '1' :
+                    PP2=1
+            except KeyError:
+                PP2=0
+            else:
+                pass
+
     return(PP2)
 
 def check_PP3(line,Funcanno_flgs,Allels_flgs):
     '''
     Multiple lines of computational evidence support a deleterious effect on the gene or gene product
     (conservation, evolutionary, splicing impact, etc.)
+    sfit for conservation, PhyloP for evolutionary, splicing impact from dbNSFP
     '''
     PP3=0
+    PP3_t1=0
+    PP3_t2=0
+    PP3_t3=0
+    sift_cutoff=0.05 #SIFT_score,SIFT_pred, The smaller the score the more likely the SNP has damaging effect
+    PhyloP_cutoff=1.6  # phyloP46way_placental >  , The larger the score, the more conserved the site
+    dbscSNV_cutoff=0.6    #either score(ada and rf) >0.6 as splicealtering
+    
+    cls=line.split('\t')
+   
+    if cls[Funcanno_flgs['SIFT_pred']] < sift_cutoff:
+        PP3_t1=1
+    if cls[Funcanno_flgs['phyloP46way_placental']]> PhyloP_cutoff:
+        PP3_t2=1
+    if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]>dbscSNV_cutoff or cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]>dbscSNV_cutoff:
+        PP3_t3=1
+    if (PP3_t1+PP3_t2+PP3_t3)>=3:
+        PP3=1
     return(PP3)
 
 def check_PP4(line,Funcanno_flgs,Allels_flgs):
@@ -489,6 +531,14 @@ def check_PP5(line,Funcanno_flgs,Allels_flgs):
     to perform an independent evaluation
     '''
     PP5=0
+    cls=line.split('\t')
+
+    line_tmp2=cls[Funcanno_flgs['CLINSIG']]
+    if line_tmp2 != '.':
+        cls3=line_tmp2.split(';')
+        clinvar_bp=cls3[0]
+        if clinvar_bp.find("ikely pathogenic")>=0 or clinvar_bp.find("athogenic")>=0:
+            PP5=1
     return(PP5)
 
 def check_BA1(line,Freqs_flgs,Allels_flgs):
@@ -517,9 +567,14 @@ def check_BS1(line,Freqs_flgs,Allels_flgs):
     BS1=0
     cutoff=0.001 # disorder cutoff
     cls=line.split('\t')
-    if cls[Freqs_flgs['esp6500siv2_all']] !='.':
-        if float(cls[Freqs_flgs['esp6500siv2_all']])>=cutoff : 
-            BS1=1
+    try:
+        if cls[Freqs_flgs['esp6500siv2_all']] !='.':
+            if float(cls[Freqs_flgs['esp6500siv2_all']])>=cutoff : 
+                BS1=1
+    except ValueError:
+        pass
+    else:
+        pass
 
     return(BS1)
 
@@ -555,9 +610,11 @@ def check_BS4(line,Funcanno_flgs,Allels_flgs):
     BS4=0
     return(BS4)
 
-def check_BP1(line,Funcanno_flgs,Allels_flgs):
+def check_BP1(line,Funcanno_flgs,Allels_flgs,BP1_genes_dict):
     '''
     Missense variant in a gene for which primarily truncating variants are known to cause disease
+    truncating:  stop_gain / frameshift deletion/  nonframshift deletion
+    We defined Protein truncating variants  (4) (table S1) as single-nucleotide variants (SNVs) predicted to introduce a premature stop codon or to disrupt a splice site, small insertions or deletions (indels) predicted to disrupt a transcript reading frame, and larger deletions 
     '''
     BP1=0
     cls=line.split('\t')
@@ -565,8 +622,14 @@ def check_BP1(line,Funcanno_flgs,Allels_flgs):
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 :
-            BP1=1;
         # need to wait to check whether truncating is the only cause disease
+            try:
+                if BP1_genes_dict[ cls[Funcanno_flgs['Gene']] ] == '1' :
+                    BP1=1
+            except KeyError:
+                BP1=0
+            else:
+                pass
     return(BP1)
 
 def check_BP2(line,Funcanno_flgs,Allels_flgs):
@@ -586,7 +649,8 @@ def check_BP3(line,Funcanno_flgs,Allels_flgs):
     BP3_t2=0
     cls=line.split('\t')
     #funcs_tmp=["cds-indel","stop-loss"]
-    funcs_tmp=["nonframeshift insertion","nonframeshift insertion","nonframeshift substitution","stoploss"]
+    #funcs_tmp=["nonframeshift insertion","nonframeshift insertion","nonframeshift substitution","stoploss"]
+    funcs_tmp=["nonframeshift insertion","nonframeshift insertion","nonframeshift substitution"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 :
@@ -605,6 +669,23 @@ def check_BP4(line,Funcanno_flgs,Allels_flgs):
     evolutionary,splicing impact, etc.)
     '''
     BP4=0
+    BP4_t1=0
+    BP4_t2=0
+    BP4_t3=0
+    sift_cutoff=0.05 #SIFT_score,SIFT_pred, The smaller the score the more likely the SNP has damaging effect
+    PhyloP_cutoff=1.6  # phyloP46way_placental >  , The larger the score, the more conserved the site
+    dbscSNV_cutoff=0.6    #either score(ada and rf) >0.6 as splicealtering
+    
+    cls=line.split('\t')
+   
+    if cls[Funcanno_flgs['SIFT_pred']] >= sift_cutoff:
+        BP4_t1=1
+    if cls[Funcanno_flgs['phyloP46way_placental']] <= PhyloP_cutoff:
+        BP4_t2=1
+    if cls[Funcanno_flgs['dbscSNV_RF_SCORE']] <=dbscSNV_cutoff and cls[Funcanno_flgs['dbscSNV_ADA_SCORE']] <=dbscSNV_cutoff:
+        BP4_t3=1
+    if (BP4_t1+BP4_t2+BP4_t3)==3:
+        BP4=1
     return(BP4)
 
 
@@ -628,7 +709,7 @@ def check_BP6(line,Funcanno_flgs,Allels_flgs):
     if line_tmp2 != '.':
         cls3=line_tmp2.split(';')
         clinvar_bp=cls3[0]
-        if clinvar_bp.find("non-pathogenic")>=0 or clinvar_bp.find("benign")>=0:
+        if clinvar_bp.find("ikely benign")>=0 or clinvar_bp.find("enign")>=0:
             BP6=1
 
     return(BP6)
@@ -645,9 +726,10 @@ def check_BP7(line,Funcanno_flgs,Allels_flgs):
     cutoff_conserv=2
     cls=line.split('\t')
     funcs_tmp=["synon","coding-synon"]
+    funcs_tmp2="nonsynon"
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
-        if line_tmp.find(fc)>=0 :
+        if line_tmp.find(fc)>=0 and line_tmp.find(funcs_tmp2)<0 :
     # need to wait to check the  impact to the splice from dbscSNV 
     # either score(ada and rf) >0.6 as splicealtering 
             if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]<0.6 and cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]<0.6:
@@ -671,12 +753,17 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
     BS=[0,0,0,0]
     BP=[0,0,0,0,0,0,0]
 
-#begin read some important datsets firstly;
+#begin read some important datsets/list firstly;
     lof_genes_dict={}
     aa_changes_dict={}
     domain_benign_dict={}
-#1.LOF gene list
-    try:
+    mim2gene_dict={}
+    mim2gene_dict2={} 
+    PP2_genes_dict={}
+    BP1_genes_dict={}
+
+#1.LOF gene list       
+    try:               
         fh = open(paras['lof_genes'], "r")
         str = fh.read()
         for line2 in str.split('\n'):
@@ -717,6 +804,54 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
     except IOError:
         print("Error: can\'t read the PM1 domain  file %s" % paras['pm1_domain'])
     else:
+        fh.close()   
+
+#4. OMIM mim2gene.txt file 
+    try:
+        fh = open(paras['mim2gene'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            if len(cls2)>1:
+                keys=cls2[4]
+                mim2gene_dict[keys]=cls2[0]
+                keys1=cls2[3]
+                keys=keys1.upper()
+                mim2gene_dict2[keys]=cls2[0]
+    except IOError:
+        print("Error: can\'t read the OMIM  file %s" % paras['mim2gene'])
+    else:
+        fh.close()   
+
+#5.PP2 gene list       
+    try:               
+        fh = open(paras['pp2_genes'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
+            if len(cls2[0])>1:
+                PP2_genes_dict[cls2[0]]='1'
+                #print("%s %d" % (cls2[0], len(cls2[0])) )
+    except IOError:
+        print("Error: can\'t read the PP2 genes file %s" % paras['PP2_genes'])
+        return
+    else:
+        fh.close()    
+
+#5.BP1 gene list       
+    try:               
+        fh = open(paras['bp1_genes'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
+            if len(cls2[0])>1:
+                BP1_genes_dict[cls2[0]]='1'
+    except IOError:
+        print("Error: can\'t read the BP1 genes file %s" % paras['BP1_genes'])
+        return
+    else:
         fh.close()    
 #end read datasets
 
@@ -735,7 +870,7 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
 
     PM1=check_PM1(line,Funcanno_flgs,Allels_flgs,domain_benign_dict)
     PM[0]=PM1
-    PM2=check_PM2(line,Freqs_flgs,Allels_flgs)
+    PM2=check_PM2(line,Freqs_flgs,Allels_flgs,Funcanno_flgs,mim2gene_dict,mim2gene_dict2)
     PM[1]=PM2
     PM3=check_PM3(line,Funcanno_flgs,Allels_flgs)
     PM[2]=PM3
@@ -749,7 +884,7 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
 
     PP1=check_PP1(line,Funcanno_flgs,Allels_flgs)
     PP[0]=PP1
-    PP2=check_PP2(line,Funcanno_flgs,Allels_flgs)
+    PP2=check_PP2(line,Funcanno_flgs,Allels_flgs,PP2_genes_dict)
     PP[1]=PP2
     PP3=check_PP3(line,Funcanno_flgs,Allels_flgs)
     PP[2]=PP3
@@ -770,7 +905,7 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
     BS4=check_BS4(line,Funcanno_flgs,Allels_flgs)
     BS[3]=BS4
 
-    BP1=check_BP1(line,Funcanno_flgs,Allels_flgs)
+    BP1=check_BP1(line,Funcanno_flgs,Allels_flgs,BP1_genes_dict)
     BP[0]=BP1
     BP2=check_BP2(line,Funcanno_flgs,Allels_flgs)
     BP[1]=BP2
@@ -815,7 +950,7 @@ def my_inter_var(annovar_outfile):
     newoutfile=annovar_outfile+".grl_p"
 
     Freqs_flgs={'1000g2014oct_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
-    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'CLINSIG':0,'CLNDBN':0,'CLNACC':0,'CLNDSDB':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0}
+    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'CLINSIG':0,'CLNDBN':0,'CLNACC':0,'CLNDSDB':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0,'SIFT_pred':0,'phyloP46way_placental':0,'Gene.ensGene':0}
     Allels_flgs={'Ref':0,'Alt':0,'Chr':0,'Start':0,'End':0,'Ref':0,'Alt':0}
 
     try:
@@ -841,6 +976,7 @@ def my_inter_var(annovar_outfile):
                     
                 intervar_bp=assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs)
                 print("clinvar %s ; Intervar %s" % (clinvar_bp,intervar_bp))
+                print("%s" % (line))
 
             line_sum=line_sum+1
 
