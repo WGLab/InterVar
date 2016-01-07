@@ -29,6 +29,134 @@ def ConfigSectionMap(config,section):
             paras[option] = None
     return
 
+#begin read some important datsets/list firstly;
+lof_genes_dict={}
+aa_changes_dict={}
+domain_benign_dict={}
+mim2gene_dict={}
+mim2gene_dict2={}
+morbidmap_dict={}
+morbidmap_dict2={}
+PP2_genes_dict={}
+BP1_genes_dict={}
+
+def read_datasets():
+#1.LOF gene list       
+    try:               
+        fh = open(paras['lof_genes'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
+            if len(cls2[0])>1:
+                lof_genes_dict[cls2[0]]='1'
+    except IOError:
+        print("Error: can\'t read the LOF genes file %s" % paras['lof_genes'])
+        return
+    else:
+        fh.close()    
+
+#2. AA change list
+    try:
+        fh = open(paras['ps1_aa'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            if len(cls2)>1 :
+                keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]+"_"+cls2[4]
+                aa_changes_dict[keys]=cls2[6]
+                #print("%s %s" %(keys,aa_changes_dict[keys]) )
+    except IOError:
+        print("Error: can\'t read the  amino acid change file %s" % paras['ps1_aa'])
+    else:
+        fh.close()    
+
+#3. Domain with benign 
+    try:
+        fh = open(paras['pm1_domain'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            if len(cls2)>1:
+                keys=cls2[0]+"_"+cls2[1]+": "+cls2[2]
+                domain_benign_dict[keys]="1"
+    except IOError:
+        print("Error: can\'t read the PM1 domain  file %s" % paras['pm1_domain'])
+    else:
+        fh.close()   
+
+#4. OMIM mim2gene.txt file 
+    try:
+        fh = open(paras['mim2gene'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            if len(cls2)>1:
+                keys=cls2[4]
+                mim2gene_dict[keys]=cls2[0]
+                keys1=cls2[3]
+                keys=keys1.upper()
+                mim2gene_dict2[keys]=cls2[0]
+    except IOError:
+        print("Error: can\'t read the OMIM  file %s" % paras['mim2gene'])
+    else:
+        fh.close()   
+
+#5.PP2 gene list       
+    try:               
+        fh = open(paras['pp2_genes'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
+            if len(cls2[0])>1:
+                PP2_genes_dict[cls2[0]]='1'
+                #print("%s %d" % (cls2[0], len(cls2[0])) )
+    except IOError:
+        print("Error: can\'t read the PP2 genes file %s" % paras['PP2_genes'])
+        return
+    else:
+        fh.close()    
+
+#5.BP1 gene list       
+    try:               
+        fh = open(paras['bp1_genes'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
+            if len(cls2[0])>1:
+                BP1_genes_dict[cls2[0]]='1'
+    except IOError:
+        print("Error: can\'t read the BP1 genes file %s" % paras['BP1_genes'])
+        return
+    else:
+        fh.close()    
+
+#6.morbidmap from OMIM  for BP5 ,  multifactorial disorders  list       
+    try:               
+        fh = open(paras['morbidmap'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('|')
+            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
+            #{Tuberculosis, protection against}, 607948 (3)|TIRAP, BACTS1|606252|11q24.2
+            if len(cls2[0])>1 and cls2[0].find('{')==0:  # disorder start with "{"
+                morbidmap_dict2[ cls2[2] ]='1'  # key as mim number 
+                for cls3 in cls2[1].split(', '):
+                    keys=cls3.upper()
+                    morbidmap_dict[ keys ]='1'  # key as gene name
+    except IOError:
+        print("Error: can\'t read the morbidmap disorder file %s" % paras['morbidmap'])
+        return
+    else:
+        fh.close()    
+
+#end read datasets
+    return
+
+
+
 def check_downdb():
     path=paras['database_locat']
     path=path.strip()
@@ -42,7 +170,10 @@ def check_downdb():
     ds=paras['database_names']
     ds.expandtabs(1);
     for dbs in ds.split():
-        cmd="perl "+paras['annotate_variation']+" -buildver "+paras['buildver']+" -downdb -webfrom annovar "+dbs+" "+paras['database_locat']
+        if dbs != 'rmsk':
+            cmd="perl "+paras['annotate_variation']+" -buildver "+paras['buildver']+" -downdb -webfrom annovar "+dbs+" "+paras['database_locat']
+        if dbs == 'rmsk':
+            cmd="perl "+paras['annotate_variation']+" -buildver "+paras['buildver']+" -downdb "+dbs+" "+paras['database_locat']
         print("%s" %cmd)
         #os.system(cmd)
 
@@ -689,11 +820,21 @@ def check_BP4(line,Funcanno_flgs,Allels_flgs):
     return(BP4)
 
 
-def check_BP5(line,Funcanno_flgs,Allels_flgs):
+def check_BP5(line,Funcanno_flgs,Allels_flgs,morbidmap_dict):
     '''
     Variant found in a case with an alternate molecular basis for disease
+    check the genes whether are for mutilfactor disorder
     '''
     BP5=0
+    cls=line.split('\t')
+    try:
+        if morbidmap_dict[ cls[Funcanno_flgs['Gene']] ] == '1' :
+            BP5=1
+    except KeyError:
+        BP5=0
+    else:
+        pass
+
     return(BP5)
 
 def check_BP6(line,Funcanno_flgs,Allels_flgs):
@@ -723,7 +864,7 @@ def check_BP7(line,Funcanno_flgs,Allels_flgs):
     BP7=0
     BP7_t1=0
     BP7_t2=0
-    cutoff_conserv=2
+    cutoff_conserv=2 # for GERP++
     cls=line.split('\t')
     funcs_tmp=["synon","coding-synon"]
     funcs_tmp2="nonsynon"
@@ -752,109 +893,6 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
     BA1=0
     BS=[0,0,0,0]
     BP=[0,0,0,0,0,0,0]
-
-#begin read some important datsets/list firstly;
-    lof_genes_dict={}
-    aa_changes_dict={}
-    domain_benign_dict={}
-    mim2gene_dict={}
-    mim2gene_dict2={} 
-    PP2_genes_dict={}
-    BP1_genes_dict={}
-
-#1.LOF gene list       
-    try:               
-        fh = open(paras['lof_genes'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
-            cls2=line2.split('\t')
-            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
-            if len(cls2[0])>1:
-                lof_genes_dict[cls2[0]]='1'
-    except IOError:
-        print("Error: can\'t read the LOF genes file %s" % paras['lof_genes'])
-        return
-    else:
-        fh.close()    
-
-#2. AA change list
-    try:
-        fh = open(paras['ps1_aa'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
-            cls2=line2.split('\t')
-            if len(cls2)>1 :
-                keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]+"_"+cls2[4]
-                aa_changes_dict[keys]=cls2[6]
-                #print("%s %s" %(keys,aa_changes_dict[keys]) )
-    except IOError:
-        print("Error: can\'t read the  amino acid change file %s" % paras['ps1_aa'])
-    else:
-        fh.close()    
-
-#3. Domain with benign 
-    try:
-        fh = open(paras['pm1_domain'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
-            cls2=line2.split('\t')
-            if len(cls2)>1:
-                keys=cls2[0]+"_"+cls2[1]+": "+cls2[2]
-                domain_benign_dict[keys]="1"
-    except IOError:
-        print("Error: can\'t read the PM1 domain  file %s" % paras['pm1_domain'])
-    else:
-        fh.close()   
-
-#4. OMIM mim2gene.txt file 
-    try:
-        fh = open(paras['mim2gene'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
-            cls2=line2.split('\t')
-            if len(cls2)>1:
-                keys=cls2[4]
-                mim2gene_dict[keys]=cls2[0]
-                keys1=cls2[3]
-                keys=keys1.upper()
-                mim2gene_dict2[keys]=cls2[0]
-    except IOError:
-        print("Error: can\'t read the OMIM  file %s" % paras['mim2gene'])
-    else:
-        fh.close()   
-
-#5.PP2 gene list       
-    try:               
-        fh = open(paras['pp2_genes'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
-            cls2=line2.split('\t')
-            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
-            if len(cls2[0])>1:
-                PP2_genes_dict[cls2[0]]='1'
-                #print("%s %d" % (cls2[0], len(cls2[0])) )
-    except IOError:
-        print("Error: can\'t read the PP2 genes file %s" % paras['PP2_genes'])
-        return
-    else:
-        fh.close()    
-
-#5.BP1 gene list       
-    try:               
-        fh = open(paras['bp1_genes'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
-            cls2=line2.split('\t')
-            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
-            if len(cls2[0])>1:
-                BP1_genes_dict[cls2[0]]='1'
-    except IOError:
-        print("Error: can\'t read the BP1 genes file %s" % paras['BP1_genes'])
-        return
-    else:
-        fh.close()    
-#end read datasets
-
 
 
     PVS1=check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict)
@@ -913,26 +951,25 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
     BP[2]=BP3
     BP4=check_BP4(line,Funcanno_flgs,Allels_flgs)
     BP[3]=BP4
-    BP5=check_BP5(line,Funcanno_flgs,Allels_flgs)
+    BP5=check_BP5(line,Funcanno_flgs,Allels_flgs,morbidmap_dict)
     BP[4]=BP5
     BP6=check_BP6(line,Funcanno_flgs,Allels_flgs)
     BP[5]=BP6
     BP7=check_BP7(line,Funcanno_flgs,Allels_flgs)
     BP[6]=BP7
 
-    #print("%s PVS1=%s PS=%s PM=%s PP=%s BA1=%s BS=%s BP=%s" %(line, PVS1,PS,PM,PP,BA1,BS,BP))
-    print("PVS1=%s PS=%s PM=%s PP=%s BA1=%s BS=%s BP=%s" %(PVS1,PS,PM,PP,BA1,BS,BP))
-    
-    
-    
-    
+    #print("PVS1=%s PS=%s PM=%s PP=%s BA1=%s BS=%s BP=%s" %(PVS1,PS,PM,PP,BA1,BS,BP))
+     
     
     cls=line.split('\t')
     if len(cls)>1:#esp6500siv2_all 1000g2014oct_all ExAC_ALL    
         BP_out=classfy(PVS1,PS,PM,PP,BA1,BS,BP)
+        line_t="%s PVS1=%s PS=%s PM=%s PP=%s BA1=%s BS=%s BP=%s" %(BP_out,PVS1,PS,PM,PP,BA1,BS,BP)
+
         #print("%s " % BP_out)
+        BP_out=line_t
         pass
-    BP=BP_out
+    #BP=BP_out
     return(BP_out)
 
 
@@ -948,13 +985,15 @@ def search_key_index(line,dict):
 
 def my_inter_var(annovar_outfile):
     newoutfile=annovar_outfile+".grl_p"
+    newoutfile2=annovar_outfile+".intervar"
 
     Freqs_flgs={'1000g2014oct_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
     Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'CLINSIG':0,'CLNDBN':0,'CLNACC':0,'CLNDSDB':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0,'SIFT_pred':0,'phyloP46way_placental':0,'Gene.ensGene':0}
-    Allels_flgs={'Ref':0,'Alt':0,'Chr':0,'Start':0,'End':0,'Ref':0,'Alt':0}
+    Allels_flgs={'Chr':0,'Start':0,'End':0,'Ref':0,'Alt':0}
 
     try:
         fh=open(newoutfile, "r")
+        fw=open(newoutfile2, "w")
         str=fh.read()
         line_sum=0;
         for line in str.split('\n'):
@@ -975,16 +1014,18 @@ def my_inter_var(annovar_outfile):
                     clinvar_bp=cls3[0]
                     
                 intervar_bp=assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs)
-                print("clinvar %s ; Intervar %s" % (clinvar_bp,intervar_bp))
-                print("%s" % (line))
+                #print("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s | Intervar: %s" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],clinvar_bp,intervar_bp))
+                fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t Intervar: %s \n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],clinvar_bp,intervar_bp))
+                #print("%s\t%s %s" % (line,clinvar_bp,intervar_bp))
 
             line_sum=line_sum+1
 
     except IOError:
-        print("Error: can\'t read the annovar output file %s" % newoutfile)
+        print("Error: can\'t readi/write the annovar output files %s" % (newoutfile,newoutfile2))
         return
     else:
         fh.close()
+        fw.close()
     return
 
 def main():
@@ -1002,6 +1043,7 @@ def main():
     #check_input()
     #check_annovar_result() #  to obtain myanno.hg19_multianno.csv
     annovar_outfile=paras['outfile']+"."+paras['buildver']+"_multianno.txt"
+    read_datasets()
     check_gdi_rvis_LOF(annovar_outfile)
     my_inter_var(annovar_outfile)
 
