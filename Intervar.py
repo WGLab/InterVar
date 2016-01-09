@@ -417,7 +417,7 @@ def check_PS2(line,Funcanno_flgs,Allels_flgs):
     '''
     De novo (both maternity and paternity confirmed) in a patient with the disease and no family history
     '''
-    PS2=0
+    PS2=1
     return(PS2)
 
 
@@ -696,7 +696,7 @@ def check_BS1(line,Freqs_flgs,Allels_flgs):
     > 1% in ESP6500all? need to check more 
     '''
     BS1=0
-    cutoff=0.001 # disorder cutoff
+    cutoff=0.01 # disorder cutoff
     cls=line.split('\t')
     try:
         if cls[Freqs_flgs['esp6500siv2_all']] !='.':
@@ -713,8 +713,20 @@ def check_BS2(line,Freqs_flgs,Allels_flgs):
     '''
     Observed in a healthy adult individual for a recessive (homozygous), dominant (heterozygous), or X-linked
     (hemizygous) disorder, with full penetrance expected at an early age
+    check ExAC_ALL
     '''
     BS2=0
+    cls=line.split('\t')
+    try:
+        if cls[Freqs_flgs['ExAC_ALL']] !='.':  # means the variants showed in EXAC
+            # need to wait check the  disorder, with full penetrance expected at an early age?
+                BS2=1
+    except ValueError:
+        pass
+    else:
+        pass
+
+
     return(BS2)
 
 def check_BS3(line,Funcanno_flgs,Allels_flgs):
@@ -988,7 +1000,7 @@ def my_inter_var(annovar_outfile):
     newoutfile2=annovar_outfile+".intervar"
 
     Freqs_flgs={'1000g2014oct_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
-    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'CLINSIG':0,'CLNDBN':0,'CLNACC':0,'CLNDSDB':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0,'SIFT_pred':0,'phyloP46way_placental':0,'Gene.ensGene':0}
+    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'CLINSIG':0,'CLNDBN':0,'CLNACC':0,'CLNDSDB':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0,'SIFT_pred':0,'phyloP46way_placental':0,'Gene.ensGene':0,'clinvar_20151201':0,'CADD_raw':0,'CADD_phred':0}
     Allels_flgs={'Chr':0,'Start':0,'End':0,'Ref':0,'Alt':0}
 
     try:
@@ -1008,14 +1020,15 @@ def my_inter_var(annovar_outfile):
 
             else:
                 #begin check the BP status from clinvar
-                line_tmp2=cls[Funcanno_flgs['CLINSIG']]
+                #line_tmp2=cls[Funcanno_flgs['CLINSIG']]
+                line_tmp2=cls[Funcanno_flgs['clinvar_20151201']]
                 if line_tmp2 != '.':
                     cls3=line_tmp2.split(';')
                     clinvar_bp=cls3[0]
                     
                 intervar_bp=assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs)
                 #print("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s | Intervar: %s" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],clinvar_bp,intervar_bp))
-                fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t Intervar: %s \n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],clinvar_bp,intervar_bp))
+                fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t Intervar: %s \n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],clinvar_bp,intervar_bp))
                 #print("%s\t%s %s" % (line,clinvar_bp,intervar_bp))
 
             line_sum=line_sum+1
