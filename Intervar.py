@@ -7,7 +7,36 @@
 # Description: python script for  Interpretation of Pathogenetic Benign
 #########################################################################
 
-import copy,logging,os,io,re,time,sys,platform
+import copy,logging,os,io,re,time,sys,platform,optparse
+
+prog="InterVar"
+
+version = """%prog 0.1
+Copyright (C) 2016 Wang Genomic Lab
+Lisense GPL: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRENTY, to the extent permittable by law.
+Written by Quan LI,leequan@gmail.com. 
+============================================================================
+"""
+
+usage = """Usage: %prog [OPTION] INPUT OUTPUT ...
+       %prog  --config=config.ini ...
+"""
+
+description = """=============================================================================
+InterVar                                                                       
+Interpretation of Pathogenic/Benign variants using python scripts of InterVar.
+=============================================================================
+"""
+end = """=============================================================================
+Thanks for using InterVar!
+Report bugs to leequan@gmail.com;
+InterVar homepage: <https://wInterVar.wglab.org>
+=============================================================================
+"""
+
+
 
 if platform.python_version()< '3.0.0' :
     import ConfigParser
@@ -39,6 +68,7 @@ morbidmap_dict={}
 morbidmap_dict2={}
 PP2_genes_dict={}
 BP1_genes_dict={}
+PS4_snps_dict={}
 
 def read_datasets():
 #1.LOF gene list       
@@ -52,6 +82,7 @@ def read_datasets():
                 lof_genes_dict[cls2[0]]='1'
     except IOError:
         print("Error: can\'t read the LOF genes file %s" % paras['lof_genes'])
+        sys.exit()
         return
     else:
         fh.close()    
@@ -68,6 +99,7 @@ def read_datasets():
                 #print("%s %s" %(keys,aa_changes_dict[keys]) )
     except IOError:
         print("Error: can\'t read the  amino acid change file %s" % paras['ps1_aa'])
+        sys.exit()
     else:
         fh.close()    
 
@@ -82,6 +114,7 @@ def read_datasets():
                 domain_benign_dict[keys]="1"
     except IOError:
         print("Error: can\'t read the PM1 domain  file %s" % paras['pm1_domain'])
+        sys.exit()
     else:
         fh.close()   
 
@@ -99,6 +132,7 @@ def read_datasets():
                 mim2gene_dict2[keys]=cls2[0]
     except IOError:
         print("Error: can\'t read the OMIM  file %s" % paras['mim2gene'])
+        sys.exit()
     else:
         fh.close()   
 
@@ -114,6 +148,7 @@ def read_datasets():
                 #print("%s %d" % (cls2[0], len(cls2[0])) )
     except IOError:
         print("Error: can\'t read the PP2 genes file %s" % paras['PP2_genes'])
+        sys.exit()
         return
     else:
         fh.close()    
@@ -129,6 +164,7 @@ def read_datasets():
                 BP1_genes_dict[cls2[0]]='1'
     except IOError:
         print("Error: can\'t read the BP1 genes file %s" % paras['BP1_genes'])
+        sys.exit()
         return
     else:
         fh.close()    
@@ -148,9 +184,27 @@ def read_datasets():
                     morbidmap_dict[ keys ]='1'  # key as gene name
     except IOError:
         print("Error: can\'t read the morbidmap disorder file %s" % paras['morbidmap'])
-        return
+        sys.exit()
     else:
         fh.close()    
+
+#7.prevalence of the variant with OR>5 for PS4 ,  the dataset is from gwasdb jjwanglab.org/gwasdb
+    try:               
+        fh = open(paras['ps4_snps'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            # PS4_snps_dict
+            if len(cls2[0])>1:  # disorder start with "{"
+                keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]+"_"+cls2[4]
+                PS4_snps_dict[ keys ]='1'  # key as gene name
+    except IOError:
+        print("Error: can\'t read the snp file %s" % paras['ps4_snps'])
+        sys.exit()
+    else:
+        fh.close()    
+
+
 
 #end read datasets
     return
@@ -164,18 +218,28 @@ def check_downdb():
     isExists=os.path.exists(path)
     if not isExists:
         os.makedirs(path)
-        print("%s is created!" % path)
+        print("Notice: the folder of %s is created!" % path)
     else:
-        print("%s is already created!" % path)
+        print("Warning: the folder of %s is already created!" % path)
     ds=paras['database_names']
     ds.expandtabs(1);
+    # database_names = refGene 1000g2014oct esp6500siv2_all snp138 ljb26_all clinvar_20150629 exac03 hg19_dbscsnv11 dbnsfp31a_interpro rmsk ensGene
+
     for dbs in ds.split():
+        # os.path.isfile(options.table_annovar)
+        file_name=dbs
+        if dbs=="1000g2014oct":
+            file_name="ALL.sites.2014_10"
+
+        dataset_file=paras['database_locat']+"/"+paras['buildver']+"_"+file_name+".txt"
         if dbs != 'rmsk':
-            cmd="perl "+paras['annotate_variation']+" -buildver "+paras['buildver']+" -downdb -webfrom annovar "+dbs+" "+paras['database_locat']
+            cmd="perl "+paras['annotate_variation']+" -buildver "+paras['buildver']+" -downdb -webfrom annovar "+file_name+" "+paras['database_locat']
         if dbs == 'rmsk':
-            cmd="perl "+paras['annotate_variation']+" -buildver "+paras['buildver']+" -downdb "+dbs+" "+paras['database_locat']
-        print("%s" %cmd)
-        #os.system(cmd)
+            cmd="perl "+paras['annotate_variation']+" -buildver "+paras['buildver']+" -downdb "+file_name+" "+paras['database_locat']
+        if  not os.path.isfile(dataset_file):
+            print("Warning: The Annovar dataset file of %s is not in %s,begin to download this %s ..." %(dbs,paras['database_locat'],dataset_file))
+            print("%s" %cmd)
+            os.system(cmd)
 
 def check_input():
     inputft= paras['inputfile_type']
@@ -184,8 +248,9 @@ def check_input():
     if inputft.lower() == 'vcf':
         #convert2annovar.pl -format vcf4 variantfile > variant.avinput
         cmd="perl "+paras['convert2annovar']+" -format vcf4 "+ paras['inputfile']+"> "+paras['inputfile']+".avinput"
+        print("Warning: Begin to convert your vcf file of %s to AVinput of Annovar ..." % paras['inputfile'])
         print("%s" %cmd)
-        #os.system(cmd)
+        os.system(cmd)
     return
 
 def check_annovar_result():
@@ -224,6 +289,7 @@ def check_gdi_rvis_LOF(anvfile):
                 gdi[cls[0]]=cls[1:]
     except IOError:
         print("Error: can\'t read the annovar output file %s" % paras['gdi_file'])
+        sys.exit()
         return
     else:
         pass
@@ -239,6 +305,7 @@ def check_gdi_rvis_LOF(anvfile):
                 rvis[cls[4]]=cls[5:]
     except IOError:
         print("Error: can\'t read the annovar output file %s" % paras['rvis_file'])
+        sys.exit()
         return
     else:
         pass
@@ -253,6 +320,7 @@ def check_gdi_rvis_LOF(anvfile):
                 lof[cls[0]]=cls[1:]
     except IOError:
         print("Error: can\'t read the annovar output file %s" % paras['lof_file'])
+        sys.exit()
         return
     else:
         pass
@@ -282,6 +350,7 @@ def check_gdi_rvis_LOF(anvfile):
 #        fh.write("This is my test file for exception handling!!")
     except IOError:
         print("Error: can\'t read/write the annovar output file %s %s" % (anvfile,newoutfile))
+        sys.exit()
         return
     else:
         pass
@@ -445,9 +514,18 @@ def check_PS3(line,Funcanno_flgs,Allels_flgs):
 def check_PS4(line,Funcanno_flgs,Allels_flgs):
     '''
     The prevalence of the variant in affected individuals is significantly increased compared with the prevalence
-    in controls; OR
+    in controls; OR>5 in all the gwas, the dataset is from gwasdb jjwanglab.org/gwasdb
     '''
     PS4=0
+    cls=line.split('\t')
+    keys_tmp2=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+cls[Allels_flgs['Ref']]+"_"+cls[Allels_flgs['Alt']]
+    try:
+        if PS4_snps_dict[keys_tmp2] == "1":
+            PS4=1
+    except KeyError:
+        pass
+    else:
+        pass
     return(PS4)
 
 
@@ -638,12 +716,34 @@ def check_PP3(line,Funcanno_flgs,Allels_flgs):
     
     cls=line.split('\t')
    
-    if cls[Funcanno_flgs['SIFT_pred']] < sift_cutoff:
-        PP3_t1=1
-    if cls[Funcanno_flgs['phyloP46way_placental']]> PhyloP_cutoff:
-        PP3_t2=1
-    if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]>dbscSNV_cutoff or cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]>dbscSNV_cutoff:
-        PP3_t3=1
+    try:
+        if float(cls[Funcanno_flgs['SIFT_score']]) < sift_cutoff:
+            PP3_t1=1
+    except ValueError:  # the sift absent means many:  synonymous indel  stop, but synonymous also is no impact
+        funcs_tmp=["synon","coding-synon"]
+        line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
+        for fc in funcs_tmp:
+            if line_tmp.find(fc)<0 :
+                PP3_t1=1
+    else:
+        pass
+    try:
+        if float(cls[Funcanno_flgs['phyloP46way_placental']])> PhyloP_cutoff:
+            PP3_t2=1
+    except ValueError:  
+        # absent means there are gaps in the multiple alignment,so cannot have the score,not conserved
+        pass
+    else:
+        pass
+    try:
+        if float(cls[Funcanno_flgs['dbscSNV_RF_SCORE']])>dbscSNV_cutoff or float(cls[Funcanno_flgs['dbscSNV_ADA_SCORE']])>dbscSNV_cutoff:
+            PP3_t3=1
+    except ValueError:
+        pass
+    else:
+        pass
+
+
     if (PP3_t1+PP3_t2+PP3_t3)>=3:
         PP3=1
     return(PP3)
@@ -664,7 +764,7 @@ def check_PP5(line,Funcanno_flgs,Allels_flgs):
     PP5=0
     cls=line.split('\t')
 
-    line_tmp2=cls[Funcanno_flgs['CLINSIG']]
+    line_tmp2=cls[Funcanno_flgs['clinvar_20151201']]
     if line_tmp2 != '.':
         cls3=line_tmp2.split(';')
         clinvar_bp=cls3[0]
@@ -820,13 +920,36 @@ def check_BP4(line,Funcanno_flgs,Allels_flgs):
     dbscSNV_cutoff=0.6    #either score(ada and rf) >0.6 as splicealtering
     
     cls=line.split('\t')
-   
-    if cls[Funcanno_flgs['SIFT_pred']] >= sift_cutoff:
-        BP4_t1=1
-    if cls[Funcanno_flgs['phyloP46way_placental']] <= PhyloP_cutoff:
+    try: 
+        if float(cls[Funcanno_flgs['SIFT_score']]) >= sift_cutoff:
+            BP4_t1=1
+    except ValueError:  # the sift absent means many:  synonymous indel  stop, but synonymous also is no impact
+        funcs_tmp=["synon","coding-synon"]
+        funcs_tmp2="nonsynon"
+        line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
+        for fc in funcs_tmp:
+            if line_tmp.find(fc)>=0 and line_tmp.find(funcs_tmp2)<0 :
+                BP4_t1=1
+    else:
+        pass
+    try:
+        if float(cls[Funcanno_flgs['phyloP46way_placental']]) <= PhyloP_cutoff:
+            BP4_t2=1
+    except ValueError:
+        # absent means there are gaps in the multiple alignment,so cannot have the score,not conserved
         BP4_t2=1
-    if cls[Funcanno_flgs['dbscSNV_RF_SCORE']] <=dbscSNV_cutoff and cls[Funcanno_flgs['dbscSNV_ADA_SCORE']] <=dbscSNV_cutoff:
-        BP4_t3=1
+    else:
+        pass
+    try:
+        if float(cls[Funcanno_flgs['dbscSNV_RF_SCORE']]) <=dbscSNV_cutoff and float(cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]) <=dbscSNV_cutoff:
+            BP4_t3=1
+    except ValueError:
+        BP4_t3=1  # means absent, this site is not in splicing consensus regions
+    else:
+        pass
+
+
+
     if (BP4_t1+BP4_t2+BP4_t3)==3:
         BP4=1
     return(BP4)
@@ -858,7 +981,7 @@ def check_BP6(line,Funcanno_flgs,Allels_flgs):
     BP6=0
     cls=line.split('\t')
 
-    line_tmp2=cls[Funcanno_flgs['CLINSIG']]
+    line_tmp2=cls[Funcanno_flgs['clinvar_20151201']]
     if line_tmp2 != '.':
         cls3=line_tmp2.split(';')
         clinvar_bp=cls3[0]
@@ -884,9 +1007,12 @@ def check_BP7(line,Funcanno_flgs,Allels_flgs):
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 and line_tmp.find(funcs_tmp2)<0 :
     # need to wait to check the  impact to the splice from dbscSNV 
-    # either score(ada and rf) >0.6 as splicealtering 
-            if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]<0.6 and cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]<0.6:
-                BP7_t1=1
+    # either score(ada and rf) >0.6 as splicealtering
+            if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]=="." or  cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]==".":
+                BP7_t1=1  # absent means it is not in the  splice consensus sequence
+            else:
+                if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]<0.6 and cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]<0.6:
+                    BP7_t1=1
 # check the conservation score of gerp++ > 2
     if cls[Funcanno_flgs['GERP++_RS']] <= cutoff_conserv or cls[Funcanno_flgs['GERP++_RS']] == '.' :
             BP7_t2=1
@@ -1000,7 +1126,7 @@ def my_inter_var(annovar_outfile):
     newoutfile2=annovar_outfile+".intervar"
 
     Freqs_flgs={'1000g2014oct_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
-    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'CLINSIG':0,'CLNDBN':0,'CLNACC':0,'CLNDSDB':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0,'SIFT_pred':0,'phyloP46way_placental':0,'Gene.ensGene':0,'clinvar_20151201':0,'CADD_raw':0,'CADD_phred':0}
+    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'CLNDBN':0,'CLNACC':0,'CLNDSDB':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0,'SIFT_score':0,'phyloP46way_placental':0,'Gene.ensGene':0,'clinvar_20151201':0,'CADD_raw':0,'CADD_phred':0}
     Allels_flgs={'Chr':0,'Start':0,'End':0,'Ref':0,'Alt':0}
 
     try:
@@ -1008,6 +1134,7 @@ def my_inter_var(annovar_outfile):
         fw=open(newoutfile2, "w")
         str=fh.read()
         line_sum=0;
+        print("Notice: Begin the variants interpretation by InterVar ")
         for line in str.split('\n'):
             BP="UNK" # the inter of pathogenetic/benign
             clinvar_bp="UNK"
@@ -1020,7 +1147,7 @@ def my_inter_var(annovar_outfile):
 
             else:
                 #begin check the BP status from clinvar
-                #line_tmp2=cls[Funcanno_flgs['CLINSIG']]
+                #line_tmp2=cls[Funcanno_flgs['clinvar_20151201']]
                 line_tmp2=cls[Funcanno_flgs['clinvar_20151201']]
                 if line_tmp2 != '.':
                     cls3=line_tmp2.split(';')
@@ -1029,6 +1156,7 @@ def my_inter_var(annovar_outfile):
                 intervar_bp=assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs)
                 #print("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s | Intervar: %s" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],clinvar_bp,intervar_bp))
                 fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t Intervar: %s \n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],clinvar_bp,intervar_bp))
+                #print("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t Intervar: %s \n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],clinvar_bp,intervar_bp))
                 #print("%s\t%s %s" % (line,clinvar_bp,intervar_bp))
 
             line_sum=line_sum+1
@@ -1041,24 +1169,178 @@ def my_inter_var(annovar_outfile):
         fw.close()
     return
 
+def do_single(option, opt, value, parser):
+    print("%s" %value)
+
+
+
+
 def main():
+
+
     if platform.python_version()< '3.0.0'  :
         config=ConfigParser.ConfigParser()
     else:
         config=configparser.ConfigParser()
     
-    config.read("config.ini")
-    sections = config.sections()
-    for section in sections:
-        ConfigSectionMap(config,section)    
-    #print ("The paras are %s " % paras)
-    #check_downdb()
-    #check_input()
+
+
+
+
+    parser = optparse.OptionParser(usage=usage, version=version, description=description)
+
+
+    parser.add_option("-?", action="help", help=optparse.SUPPRESS_HELP, dest="help")
+    parser.add_option("-v", action="version", help=optparse.SUPPRESS_HELP, dest="version")
+    
+    parser.add_option("-c", "--config", dest="config", action="store",
+                  help="The config file of all options. it is for your own configure file.You can edit all the options in the configure and if you use this options,you can ignore all the other options bellow", metavar="config.ini")
+
+    parser.add_option("-b", "--buildver", dest="buildver", action="store",
+                  help="The genomic build version, it can be hg19 and will support GRCh37 hg18 GRCh38 later", metavar="hg19")
+
+
+    parser.add_option("-i", "--input", dest="input", action="store",
+                  help="The input file contains your variants", metavar="example/ex1.avinput")
+
+    parser.add_option("--input_type", dest="input_type", action="store",
+                  help="The input file type, it can be  AVinput(Annovar's format),VCF", metavar="AVinput")
+
+    parser.add_option("-o", "--output", dest="output", action="store",
+                  help="The prefix of output file which contains the results, the file of results will be as [$$prefix].intervar ", metavar="example/myanno")
+
+    #parser.add_option("--this-is-a-bit-too-long-argument", metavar="SOMETHING",
+    #              help="when arguments get too long the line splits, this also works for the longer help strings")
+    #parser.add_option("-s", metavar="SOMETHING", action="callback", callback=do_single, type="string",
+    #              help="single token argument with a parameter")
+
+
+
+    group = optparse.OptionGroup(parser, "InterVar Other Options")
+    group.add_option("-t", "--database_intervar", dest="database_intervar", action="store",
+            help="The  database location/dir for the Intervar files", metavar="intervardb")
+    parser.add_option_group(group)
+
+
+
+    group = optparse.OptionGroup(parser, "Annovar Options",
+                                "Caution: check these options from manual of Annovar.")
+    group.add_option("--table_annovar", action="store", help="The Annovar perl script of table_annovar.pl",metavar="./table_annovar.pl",dest="table_annovar")
+    group.add_option("--convert2annovar", action="store", help="The Annovar perl script of convert2annovar.pl",metavar="./convert2annovar.pl",dest="convert2annovar")
+    group.add_option("--annotate_variation", action="store", help="The Annovar perl script of annotate_variation.pl",metavar="./annotate_variation.pl",dest="annotate_variation")
+    group.add_option("-d", "--database_locat", dest="database_locat", action="store",
+            help="The  database location/dir for the annotation datasets", metavar="humandb")
+
+    parser.add_option_group(group)
+
+    (options, args) = parser.parse_args()
+    
+    #(options,args) = parser.parse_args()
+    if len(sys.argv)==1:
+        parser.print_help()
+        sys.exit()
+
+    print("%s" %description)
+    print("%s" %version)
+    print("Notice: Your command of InterVar is %s" % sys.argv[:])
+
+    if os.path.isfile("config.ini"):
+        config.read("config.ini")
+        sections = config.sections()
+        for section in sections:
+            ConfigSectionMap(config,section)    
+    else:
+        print("Error: The default configure file of config.ini is not exit! Please redownload the InterVar.")
+        sys.exit()
+
+#begin to process user's options:
+    if options.config != None:
+        if os.path.isfile(options.config):
+            config.read(options.config)
+            sections = config.sections()
+            for section in sections:
+                ConfigSectionMap(config,section)
+        else:
+            print("Error: The config file %s is not here,please check the path of your config file." % options.config)
+            sys.exit()
+
+    if options.table_annovar != None:
+        if os.path.isfile(options.table_annovar):
+            paras['table_annovar']=options.table_annovar
+        else:
+            print("Error: The Annovar file %s is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+                    % options.table_annovar)
+            sys.exit()
+    if options.convert2annovar != None:
+        if os.path.isfile(options.convert2annovar):
+            paras['convert2annovar']=options.convert2annovar
+        else:
+            print("Error: The Annovar file %s is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+                    % options.convert2annovar)
+            sys.exit()
+    if options.annotate_variation != None:
+        if os.path.isfile(options.annotate_variation):
+            paras['annotate_variation']=options.annotate_variation
+        else:
+            print("Error: The Annovar file %s is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+                    % options.annotate_variation)
+            sys.exit()
+
+
+
+    if options.buildver != None:
+        paras['buildver']=options.buildver
+    if options.database_locat != None:
+        paras['database_locat']=options.buildver
+    if options.input != None:
+        paras['inputfile']=options.input
+    if options.input_type != None:
+        paras['inputfile_type']=options.input_type
+    if options.output != None:
+        paras['outfile']=options.output
+
+            
+
+
+    #print ("The options for your analysis are %s " % paras)
+    check_downdb()
+    check_input()
     #check_annovar_result() #  to obtain myanno.hg19_multianno.csv
     annovar_outfile=paras['outfile']+"."+paras['buildver']+"_multianno.txt"
     read_datasets()
     check_gdi_rvis_LOF(annovar_outfile)
     my_inter_var(annovar_outfile)
+
+    inputfile=paras['inputfile']
+    if os.path.isfile(inputfile):
+        count = 0
+        thefile = open(inputfile, 'rb')
+        while True:
+            buffer = thefile.read(8192*1024)
+            if not buffer:
+                break
+            count += buffer.count('\n')
+        thefile.close( )
+        print ("Notice: About %d lines in your provided file %s " % (count,inputfile))
+
+    outfile=annovar_outfile+".intervar"
+    if os.path.isfile(outfile):
+        count = 0
+        thefile = open(outfile, 'rb')
+        while True:
+            buffer = thefile.read(8192*1024)
+            if not buffer:
+                break
+            count += buffer.count('\n')
+        thefile.close( )
+
+        print ("Notice: About %d variants has been processed by InterVar" % count)
+        print ("Notice: The Intervar is finished, the output file is %s.intervar " % annovar_outfile)
+    else:
+        print ("Warning: The Intervar seems not run correctly, please your input and options in configure file")
+
+    print("%s" %end)
+
 
     
 
