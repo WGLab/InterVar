@@ -20,13 +20,13 @@ Written by Quan LI,leequan@gmail.com.
 ============================================================================
 """
 
-usage = """Usage: %prog [OPTION] INPUT OUTPUT ...
+usage = """Usage: %prog [OPTION] -i  INPUT -o  OUTPUT ...
        %prog  --config=config.ini ...
 """
 
 description = """=============================================================================
 InterVar                                                                       
-Interpretation of Pathogenic/Benign variants using python scripts of InterVar.
+Interpretation of Pathogenic/Benign for variants using python scripts of InterVar.
 =============================================================================
 """
 end = """=============================================================================
@@ -58,6 +58,8 @@ def ConfigSectionMap(config,section):
             paras[option] = None
     return
 
+user_evidence_dict={}
+
 #begin read some important datsets/list firstly;
 lof_genes_dict={}
 aa_changes_dict={}
@@ -71,6 +73,22 @@ BP1_genes_dict={}
 PS4_snps_dict={}
 
 def read_datasets():
+#0. read the user specified evidence file
+    if os.path.isfile(paras['evidence_file']):
+        try:
+            fh=open(paras['evidence_file'], "r")
+            str = fh.read()
+            for line2 in str.split('\n'):
+                cls2=line2.split('\t')
+                if len(cls2)>1:
+                    keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]
+
+                    user_evidence_dict[keys]=cls2[4].upper()
+        except IOError:
+            print("Error: can\'t read the user specified evidence file %s" % paras['evidence_file'])
+        else:
+            fh.close()    
+
 #1.LOF gene list       
     try:               
         fh = open(paras['lof_genes'], "r")
@@ -486,7 +504,7 @@ def check_PS2(line,Funcanno_flgs,Allels_flgs):
     '''
     De novo (both maternity and paternity confirmed) in a patient with the disease and no family history
     '''
-    PS2=1
+    PS2=0
     return(PS2)
 
 
@@ -578,14 +596,19 @@ def check_PM2(line,Freqs_flgs,Allels_flgs,Funcanno_flgs,mim2gene_dict,mim2gene_d
         mim2=mim2gene_dict2[cls[Funcanno_flgs['Gene']]]
         if  mims_id.find(mim1[0])!=-1 or  mims_id.find(mim2[0])!=-1:
             #print("PM2 %s %s " % (mim1,mim2))
+            tt=1;
             for key in Freqs_flgs.keys():
-                if(cls[Freqs_flgs[key]]=='.'):   # means absent and it is domomin
-                    PM2=1
+                if(cls[Freqs_flgs[key]]!='.'):   # means absent and it is domomin
+                    tt=tt*0;
+            if tt==1:
+                PM2=1
+                #print("PM2 =1  ab and dom")
     except KeyError:  # means it is recessive
         for key in Freqs_flgs.keys():
             try:
                 if float(cls[Freqs_flgs[key]])<=cutoff_maf or float(cls[Freqs_flgs[key]])>=(1.0-cutoff_maf): 
                     PM2=1
+                    #print("PM2 =1  mf and res")
             except ValueError:
                 PM2=0 # means absent and it is  recessive
             else:
@@ -793,14 +816,14 @@ def check_BA1(line,Freqs_flgs,Allels_flgs):
 def check_BS1(line,Freqs_flgs,Allels_flgs):
     '''
     Allele frequency is greater than expected for disorder (see Table 6)
-    > 1% in ESP6500all? need to check more 
+    > 1% in ESP6500all ExAc? need to check more 
     '''
     BS1=0
     cutoff=0.01 # disorder cutoff
     cls=line.split('\t')
     try:
-        if cls[Freqs_flgs['esp6500siv2_all']] !='.':
-            if float(cls[Freqs_flgs['esp6500siv2_all']])>=cutoff : 
+        if cls[Freqs_flgs['ExAC_ALL']] !='.':
+            if float(cls[Freqs_flgs['ExAC_ALL']])>=cutoff or (1.0-float(cls[Freqs_flgs['ExAC_ALL']]))>=cutoff  : 
                 BS1=1
     except ValueError:
         pass
@@ -1098,7 +1121,53 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
 
     #print("PVS1=%s PS=%s PM=%s PP=%s BA1=%s BS=%s BP=%s" %(PVS1,PS,PM,PP,BA1,BS,BP))
      
-    
+    #begin process the user's evidence file
+    cls=line.split('\t')
+    if os.path.isfile(paras['evidence_file']):
+        keys=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['Ref']]+"_"+cls[Allels_flgs['Alt']]
+        try:
+            evds=user_evidence_dict[keys] #PS1=1;PM1=1;BA1=1;PVS1 PP BS BP
+            for evd in evds.split(';'):
+                evd_t=evd.split('=')
+                if(len(evd_t)>1):
+                    if int(evd_t[1])<=1:
+                        #print ("%s %s %s " %(keys,evd_t[1],evd_t[0]))
+                        if(evd_t[0]=="PVS1"): PVS1=evd_t[1]
+                        if(evd_t[0]=="BA1"): BA1=evd_t[1]
+                        if(evd_t[0].find('PS')!=-1): 
+                            t=evd_t[0].find('PS'); 
+                            tt=evd_t[0];
+                            tt3=int(tt[t+2:t+3])
+                            if(t<len(evd_t[0])-2 and tt3<4 ): PS[tt3-1]=int(evd_t[1])
+                        if(evd_t[0].find('PM')!=-1):
+                            t=evd_t[0].find('PM'); 
+                            tt=evd_t[0];
+                            tt3=int(tt[t+2:t+3])
+                            if(t<len(evd_t[0])-2 and tt3<6 ): PM[tt3-1]=int(evd_t[1])
+                        if(evd_t[0].find('PP')!=-1): 
+                            t=evd_t[0].find('PP'); 
+                            tt=evd_t[0];
+                            tt3=int(tt[t+2:t+3])
+                            if(t<len(evd_t[0])-2 and tt3<5 ): PP[tt3-1]=int(evd_t[1])
+                        if(evd_t[0].find('BS')!=-1): 
+                            t=evd_t[0].find('BS'); 
+                            tt=evd_t[0];
+                            tt3=int(tt[t+2:t+3])
+                            if(t<len(evd_t[0])-2 and tt3<4 ): BS[tt3-1]=int(evd_t[1])
+                        if(evd_t[0].find('BP')!=-1):
+                            t=evd_t[0].find('BP'); 
+                            tt=evd_t[0];
+                            tt3=int(tt[t+2:t+3])
+                            if(t<len(evd_t[0])-2 and tt3<7 ): BP[tt3-1]=int(evd_t[1])
+
+                    
+        except KeyError:
+            pass
+        else:
+            pass
+
+    # end process the user's evidence file 
+
     cls=line.split('\t')
     if len(cls)>1:#esp6500siv2_all 1000g2014oct_all ExAC_ALL    
         BP_out=classfy(PVS1,PS,PM,PP,BA1,BS,BP)
@@ -1163,6 +1232,7 @@ def my_inter_var(annovar_outfile):
 
     except IOError:
         print("Error: can\'t readi/write the annovar output files %s" % (newoutfile,newoutfile2))
+        sys.exit()
         return
     else:
         fh.close()
@@ -1218,7 +1288,14 @@ def main():
 
     group = optparse.OptionGroup(parser, "InterVar Other Options")
     group.add_option("-t", "--database_intervar", dest="database_intervar", action="store",
-            help="The  database location/dir for the Intervar files", metavar="intervardb")
+            help="The  database location/dir for the Intervar dataset files", metavar="intervardb")
+    group.add_option("-s", "--evidence_file", dest="evidence_file", action="store",
+            help="User specified Evidence file for each variant", metavar="your_evidence_file")
+    parser.add_option_group(group)
+    group = optparse.OptionGroup(parser, "How to add your own Evidence for each Variant",
+    """Prepare your own evidence  file as tab-delimited,format like this:
+            Chr Pos Ref_allele Alt_allele  PM1=1;BS2=1;BP3=0
+                                """)
     parser.add_option_group(group)
 
 
@@ -1232,6 +1309,11 @@ def main():
             help="The  database location/dir for the annotation datasets", metavar="humandb")
 
     parser.add_option_group(group)
+    group = optparse.OptionGroup(parser, "Examples",
+                                """./Intervar.py -c config.ini  # Run the examples in config.ini
+                                 ./Intervar.py  -b hg19 -i your_input  --input_type=VCF  -o your_output 
+                                """)
+    parser.add_option_group(group)
 
     (options, args) = parser.parse_args()
     
@@ -1243,6 +1325,9 @@ def main():
     print("%s" %description)
     print("%s" %version)
     print("Notice: Your command of InterVar is %s" % sys.argv[:])
+
+
+
 
     if os.path.isfile("config.ini"):
         config.read("config.ini")
@@ -1263,6 +1348,24 @@ def main():
         else:
             print("Error: The config file %s is not here,please check the path of your config file." % options.config)
             sys.exit()
+
+    if options.buildver != None:
+        paras['buildver']=options.buildver
+    if options.database_locat != None:
+        paras['database_locat']=options.database_locat
+    if options.input != None:
+        paras['inputfile']=options.input
+    if options.input_type != None:
+        paras['inputfile_type']=options.input_type
+    if options.output != None:
+        paras['outfile']=options.output
+    if options.evidence_file != None:
+        paras['evidence_file']=options.evidence_file
+        print("warning: You provided your own evidence file %s for the InterVar." % options.evidence_file)
+    if options.database_intervar != None:
+        paras['database_intervar']=options.database_intervar
+
+
 
     if options.table_annovar != None:
         if os.path.isfile(options.table_annovar):
@@ -1287,17 +1390,12 @@ def main():
             sys.exit()
 
 
+    if not os.path.isfile(paras['inputfile']):
+        print("Error: Your input file %s is not here,please check the path of your input file." % paras['inputfile'])
+        sys.exit()
+    if  not os.path.isfile(paras['evidence_file']) and paras['evidence_file']!="None":
+        print("Warning: Your specified evidence file %s is not here,please check the path of your evidence file." % paras['evidence_file'])
 
-    if options.buildver != None:
-        paras['buildver']=options.buildver
-    if options.database_locat != None:
-        paras['database_locat']=options.buildver
-    if options.input != None:
-        paras['inputfile']=options.input
-    if options.input_type != None:
-        paras['inputfile_type']=options.input_type
-    if options.output != None:
-        paras['outfile']=options.output
 
             
 
@@ -1321,7 +1419,7 @@ def main():
                 break
             count += buffer.count('\n')
         thefile.close( )
-        print ("Notice: About %d lines in your provided file %s " % (count,inputfile))
+        print ("Notice: About %d lines in your input file %s " % (count,inputfile))
 
     outfile=annovar_outfile+".intervar"
     if os.path.isfile(outfile):
@@ -1337,7 +1435,7 @@ def main():
         print ("Notice: About %d variants has been processed by InterVar" % count)
         print ("Notice: The Intervar is finished, the output file is %s.intervar " % annovar_outfile)
     else:
-        print ("Warning: The Intervar seems not run correctly, please your input and options in configure file")
+        print ("Warning: The Intervar seems not run correctly, please check your input and options in configure file")
 
     print("%s" %end)
 
