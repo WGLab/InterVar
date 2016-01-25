@@ -2,7 +2,7 @@
 #########################################################################
 # Author: Lee Quan (leequan@gmail.com)
 # Created Time: 2015-11-10 19:15:32 Tuesday 
-# File Name: Intervar.py File type: python
+# File Name: InterVar.py File type: python
 # Last Change:.
 # Description: python script for  Interpretation of Pathogenetic Benign
 #########################################################################
@@ -275,9 +275,9 @@ def check_annovar_result():
 # table_annovar.pl example/ex1.avinput humandb/ -buildver hg19 -out myanno -remove -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03   -operation  g,f,f,f,f,f,f   -nastring . -csvout
     inputft= paras['inputfile_type']
     if inputft.lower() == 'avinput' :
-        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk,ensGene   -operation  g,f,f,f,f,f,f,f,f,r,g   -nastring ."
+        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk,ensGene,knownGene   -operation  g,f,f,f,f,f,f,f,f,r,g,g   -nastring ."
     else:
-        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+".avinput "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk,ensGene   -operation  g,f,f,f,f,f,f,f,f,r,g   -nastring ."
+        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+".avinput "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2014oct_all,snp138,ljb26_all,clinvar_20151201,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk,ensGene,knownGene   -operation  g,f,f,f,f,f,f,f,f,r,g,g   -nastring ."
     print("%s" %cmd)
     os.system(cmd)
     return
@@ -634,7 +634,7 @@ def check_PM4(line,Funcanno_flgs,Allels_flgs):
     PM4_t2=0
     cls=line.split('\t')
     #funcs_tmp=["cds-indel","stop-loss"]
-    funcs_tmp=["nonframeshift insertion","nonframeshift insertion","nonframeshift substitution","stoploss"]
+    funcs_tmp=["nonframeshift insertion","nonframeshift deletion","stoploss"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 :
@@ -1138,27 +1138,27 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
                             t=evd_t[0].find('PS'); 
                             tt=evd_t[0];
                             tt3=int(tt[t+2:t+3])
-                            if(t<len(evd_t[0])-2 and tt3<4 ): PS[tt3-1]=int(evd_t[1])
+                            if(t<len(evd_t[0])-2 and tt3<=4 ): PS[tt3-1]=int(evd_t[1])
                         if(evd_t[0].find('PM')!=-1):
                             t=evd_t[0].find('PM'); 
                             tt=evd_t[0];
                             tt3=int(tt[t+2:t+3])
-                            if(t<len(evd_t[0])-2 and tt3<6 ): PM[tt3-1]=int(evd_t[1])
+                            if(t<len(evd_t[0])-2 and tt3<=6 ): PM[tt3-1]=int(evd_t[1])
                         if(evd_t[0].find('PP')!=-1): 
                             t=evd_t[0].find('PP'); 
                             tt=evd_t[0];
                             tt3=int(tt[t+2:t+3])
-                            if(t<len(evd_t[0])-2 and tt3<5 ): PP[tt3-1]=int(evd_t[1])
+                            if(t<len(evd_t[0])-2 and tt3<=5 ): PP[tt3-1]=int(evd_t[1])
                         if(evd_t[0].find('BS')!=-1): 
                             t=evd_t[0].find('BS'); 
                             tt=evd_t[0];
                             tt3=int(tt[t+2:t+3])
-                            if(t<len(evd_t[0])-2 and tt3<4 ): BS[tt3-1]=int(evd_t[1])
+                            if(t<len(evd_t[0])-2 and tt3<=4 ): BS[tt3-1]=int(evd_t[1])
                         if(evd_t[0].find('BP')!=-1):
                             t=evd_t[0].find('BP'); 
                             tt=evd_t[0];
                             tt3=int(tt[t+2:t+3])
-                            if(t<len(evd_t[0])-2 and tt3<7 ): BP[tt3-1]=int(evd_t[1])
+                            if(t<len(evd_t[0])-2 and tt3<=7 ): BP[tt3-1]=int(evd_t[1])
 
                     
         except KeyError:
@@ -1195,8 +1195,9 @@ def my_inter_var(annovar_outfile):
     newoutfile2=annovar_outfile+".intervar"
 
     Freqs_flgs={'1000g2014oct_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
-    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'CLNDBN':0,'CLNACC':0,'CLNDSDB':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0,'SIFT_score':0,'phyloP46way_placental':0,'Gene.ensGene':0,'clinvar_20151201':0,'CADD_raw':0,'CADD_phred':0}
+    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'CLNDBN':0,'CLNACC':0,'CLNDSDB':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0,'SIFT_score':0,'phyloP46way_placental':0,'Gene.ensGene':0,'clinvar_20151201':0,'CADD_raw':0,'CADD_phred':0,'snp138':0,'AAChange.ensGene':0,'AAChange.knownGene':0}
     Allels_flgs={'Chr':0,'Start':0,'End':0,'Ref':0,'Alt':0}
+# ExAC_ALL esp6500siv2_all   1000g2014oct_all  SIFT_score    CADD_raw    CADD_phred  GERP++_RS   phyloP46way_placental  dbscSNV_ADA_SCORE   dbscSNV_RF_SCORE   Interpro_domain
 
     try:
         fh=open(newoutfile, "r")
@@ -1223,9 +1224,11 @@ def my_inter_var(annovar_outfile):
                     clinvar_bp=cls3[0]
                     
                 intervar_bp=assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs)
-                #print("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s | Intervar: %s" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],clinvar_bp,intervar_bp))
-                fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t Intervar: %s \n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],clinvar_bp,intervar_bp))
-                #print("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t Intervar: %s \n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],clinvar_bp,intervar_bp))
+                #print("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s | InterVar: %s" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],clinvar_bp,intervar_bp))
+                fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']], cls[Funcanno_flgs['Gene.ensGene']],cls[Funcanno_flgs['snp138']],cls[Funcanno_flgs['AAChange.ensGene']],cls[Funcanno_flgs['AAChange.refGene']],clinvar_bp,intervar_bp,cls[Freqs_flgs['ExAC_ALL']], cls[Freqs_flgs['esp6500siv2_all']], cls[Freqs_flgs['1000g2014oct_all']], cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],cls[Funcanno_flgs['SIFT_score']],  cls[Funcanno_flgs['GERP++_RS']],cls[Funcanno_flgs['phyloP46way_placental']], cls[Funcanno_flgs['dbscSNV_ADA_SCORE']], cls[Funcanno_flgs['dbscSNV_RF_SCORE']], cls[Funcanno_flgs['Interpro_domain']],cls[Funcanno_flgs['AAChange.knownGene']]   ))
+# ExAC_ALL esp6500siv2_all   1000g2014oct_all  SIFT_score    CADD_raw    CADD_phred  GERP++_RS   phyloP46way_placental  dbscSNV_ADA_SCORE   dbscSNV_RF_SCORE   Interpro_domain
+                #fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],clinvar_bp,intervar_bp))
+                #print("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],clinvar_bp,intervar_bp))
                 #print("%s\t%s %s" % (line,clinvar_bp,intervar_bp))
 
             line_sum=line_sum+1
@@ -1288,12 +1291,12 @@ def main():
 
     group = optparse.OptionGroup(parser, "InterVar Other Options")
     group.add_option("-t", "--database_intervar", dest="database_intervar", action="store",
-            help="The  database location/dir for the Intervar dataset files", metavar="intervardb")
+            help="The  database location/dir for the InterVar dataset files", metavar="intervardb")
     group.add_option("-s", "--evidence_file", dest="evidence_file", action="store",
             help="User specified Evidence file for each variant", metavar="your_evidence_file")
     parser.add_option_group(group)
-    group = optparse.OptionGroup(parser, "How to add your own Evidence for each Variant",
-    """Prepare your own evidence  file as tab-delimited,format like this:
+    group = optparse.OptionGroup(parser, "   How to add your own Evidence for each Variant",
+    """ Prepare your own evidence  file as tab-delimited,the line format:
             Chr Pos Ref_allele Alt_allele  PM1=1;BS2=1;BP3=0
                                 """)
     parser.add_option_group(group)
@@ -1310,8 +1313,8 @@ def main():
 
     parser.add_option_group(group)
     group = optparse.OptionGroup(parser, "Examples",
-                                """./Intervar.py -c config.ini  # Run the examples in config.ini
-                                 ./Intervar.py  -b hg19 -i your_input  --input_type=VCF  -o your_output 
+                                """./InterVar.py -c config.ini  # Run the examples in config.ini
+                                 ./InterVar.py  -b hg19 -i your_input  --input_type=VCF  -o your_output 
                                 """)
     parser.add_option_group(group)
 
@@ -1335,7 +1338,7 @@ def main():
         for section in sections:
             ConfigSectionMap(config,section)    
     else:
-        print("Error: The default configure file of config.ini is not exit! Please redownload the InterVar.")
+        print("Error: The default configure file of [ config.ini ] is not exit! Please redownload the InterVar.")
         sys.exit()
 
 #begin to process user's options:
@@ -1346,7 +1349,7 @@ def main():
             for section in sections:
                 ConfigSectionMap(config,section)
         else:
-            print("Error: The config file %s is not here,please check the path of your config file." % options.config)
+            print("Error: The config file [ %s ] is not here,please check the path of your config file." % options.config)
             sys.exit()
 
     if options.buildver != None:
@@ -1361,7 +1364,7 @@ def main():
         paras['outfile']=options.output
     if options.evidence_file != None:
         paras['evidence_file']=options.evidence_file
-        print("warning: You provided your own evidence file %s for the InterVar." % options.evidence_file)
+        print("Warning: You provided your own evidence file [ %s ] for the InterVar." % options.evidence_file)
     if options.database_intervar != None:
         paras['database_intervar']=options.database_intervar
 
@@ -1371,30 +1374,31 @@ def main():
         if os.path.isfile(options.table_annovar):
             paras['table_annovar']=options.table_annovar
         else:
-            print("Error: The Annovar file %s is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+            print("Error: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
                     % options.table_annovar)
             sys.exit()
     if options.convert2annovar != None:
         if os.path.isfile(options.convert2annovar):
             paras['convert2annovar']=options.convert2annovar
         else:
-            print("Error: The Annovar file %s is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+            print("Error: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
                     % options.convert2annovar)
             sys.exit()
     if options.annotate_variation != None:
         if os.path.isfile(options.annotate_variation):
             paras['annotate_variation']=options.annotate_variation
         else:
-            print("Error: The Annovar file %s is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+            print("Error: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
                     % options.annotate_variation)
             sys.exit()
 
 
     if not os.path.isfile(paras['inputfile']):
-        print("Error: Your input file %s is not here,please check the path of your input file." % paras['inputfile'])
+        print("Error: Your input file [ %s ] is not here,please check the path of your input file." % paras['inputfile'])
         sys.exit()
     if  not os.path.isfile(paras['evidence_file']) and paras['evidence_file']!="None":
-        print("Warning: Your specified evidence file %s is not here,please check the path of your evidence file." % paras['evidence_file'])
+        print("Warning: Your specified evidence file [ %s ] is not here,please check the path of your evidence file." % paras['evidence_file'])
+        print("         Your analysis will begin without your specified evidence.")
 
 
             
@@ -1403,7 +1407,7 @@ def main():
     #print ("The options for your analysis are %s " % paras)
     check_downdb()
     check_input()
-    #check_annovar_result() #  to obtain myanno.hg19_multianno.csv
+    check_annovar_result() #  to obtain myanno.hg19_multianno.csv
     annovar_outfile=paras['outfile']+"."+paras['buildver']+"_multianno.txt"
     read_datasets()
     check_gdi_rvis_LOF(annovar_outfile)
@@ -1433,9 +1437,9 @@ def main():
         thefile.close( )
 
         print ("Notice: About %d variants has been processed by InterVar" % count)
-        print ("Notice: The Intervar is finished, the output file is %s.intervar " % annovar_outfile)
+        print ("Notice: The InterVar is finished, the output file is [ %s.intervar ]" % annovar_outfile)
     else:
-        print ("Warning: The Intervar seems not run correctly, please check your input and options in configure file")
+        print ("Warning: The InterVar seems not run correctly, please check your inputs and options in configure file")
 
     print("%s" %end)
 

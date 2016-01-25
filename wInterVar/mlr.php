@@ -29,93 +29,7 @@
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">Start InterVar</a>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">About</a>
-                    </li>
-                    <li>
-                        <a href="#">Services</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                        </li>
-                        <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Related projects<span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="http://wannovar.usc.edu/">wANNOVAR</a></li>
-                        </ul>
-                        </li>
-                    </ul>
-                    <div class="navbar-header navbar-right col-md-3" >
-
-                        <a class="title navbar-brand" href="http://genomics.usc.edu" style="padding:5px" ><img src="/WGL_long.png" alt="" style="height:100%;"></a>
-
-                    </div>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
-
-    <!-- Half Page Image Background Carousel Header -->
-    <header id="myCarousel" class="carousel slide">
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-        </ol>
-
-        <!-- Wrapper for InterVars -->
-        <div class="carousel-inner">
-            <div class="item active">
-                <!-- Set the first background image using inline CSS below. -->
-                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=InterVar One');"></div>
-                <div class="carousel-caption">
-                    <h2>Caption 1</h2>
-                </div>
-            </div>
-            <div class="item">
-                <!-- Set the second background image using inline CSS below. -->
-                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=InterVar Two');"></div>
-                <div class="carousel-caption">
-                    <h2>Caption 2</h2>
-                </div>
-            </div>
-            <div class="item">
-                <!-- Set the third background image using inline CSS below. -->
-                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=InterVar Three');"></div>
-                <div class="carousel-caption">
-                    <h2>Caption 3</h2>
-                </div>
-            </div>
-        </div>
-
-        <!-- Controls -->
-        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-            <span class="icon-prev"></span>
-        </a>
-        <a class="right carousel-control" href="#myCarousel" data-slide="next">
-            <span class="icon-next"></span>
-        </a>
-
-    </header>
-
+<?php        include "nav.html";        ?>
     <!-- Page Content -->
     <div class="container">
 
@@ -199,7 +113,7 @@
         if( $bp4!="") $BP[3]=1;
         if( $bp5!="") $BP[4]=1;
         if( $bp6!="") $BP[5]=1;
-        if( $bp6!="") $BP[6]=1;
+        if( $bp7!="") $BP[6]=1;
 
     //#$BPS=("Pathogenic","Likely pathogenic","Benign","Likely benign","Uncertain significance");
         $BPS[0]="Pathogenic";
@@ -254,38 +168,62 @@ if($BPS_out <=1)
 print("<center><h2>This variant is <font color=red><u>$BPS[$BPS_out]</u></h2></font> </center>");
 if($BPS_out ==2 || $BPS_out ==3)
 print("<center><h2>This variant is <font color=green><u>$BPS[$BPS_out]</u></h2></font> </center>");
-print("<br><hr>");
-print("<font size=3 color=black>Notes:<br>");
-print("1.       The risk <br>");
-print("2.       The evidence<br>");
+print("<br>");
+print("The evidence details:<br>");
+print("PVS1: $PVS1 | ");
+/*print("PS:["); for($i=0;$i< sizeof($PS)-1;$i++) print("$PS[$i],"); print("$PS[$i]] ");
+print("PM:["); for($i=0;$i< sizeof($PM)-1;$i++) print("$PM[$i],"); print("$PM[$i]] ");
+print("PP:["); for($i=0;$i< sizeof($PP)-1;$i++) print("$PP[$i],"); print("$PP[$i]] <br>");
+print("BA1: $BA1 ");
+print("BS:["); for($i=0;$i< sizeof($BS)-1;$i++) print("$BS[$i],"); print("$BS[$i]] ");
+print("BP:["); for($i=0;$i< sizeof($BP)-1;$i++) print("$BP[$i],"); print("$BP[$i]] <br>");
+ */
+
+ for($i=0;$i<= sizeof($PS)-1;$i++) {$j=$i+1;print("PS$j:$PS[$i] | "); }
+ for($i=0;$i<= sizeof($PM)-1;$i++) {$j=$i+1;print("PM$j:$PM[$i] | "); }
+ for($i=0;$i<= sizeof($PP)-1;$i++) {$j=$i+1;print("PP$j:$PP[$i] | "); }
+    
+print("<br>&nbsp; BA1: $BA1 | ");
+ for($i=0;$i<= sizeof($BS)-1;$i++) {$j=$i+1;print("BS$j:$BS[$i] | "); }
+ for($i=0;$i<= sizeof($BP)-1;$i++) {$j=$i+1;print("BP$j:$BP[$i] | "); }
+print("<br> ");
 
 
+print("<font color=red>The evidence for Pathogenic:<br>");
+    if($PVS1>0) print("PVS1 ");
+for($i=1;$i<=sizeof($PS);$i++) if($PS[$i-1]>0)  print("PS$i ");
+for($i=1;$i<=sizeof($PM);$i++) if($PM[$i-1]>0)  print("PM$i ");
+for($i=1;$i<=sizeof($PP);$i++) if($PP[$i-1]>0)  print("PP$i ");
+print("<br></font>");
+
+
+print("<font color=green>The evidence for Benign:<br>");
+    if($BA1>0) print("BA1 ");
+for($i=1;$i<=sizeof($BS);$i++) if($BS[$i-1]>0)  print("BS$i ");
+for($i=1;$i<=sizeof($BP);$i++) if($BP[$i-1]>0)  print("BP$i ");
+print("<br></font>");
+
+print("<hr><font size=3 color=black>Notes:<br>");
+print("1.       The paper: Standards and guidelines for the interpretation of sequenc variants: a joint consensus recommendation of the American College of Medical Genetics and Genomics and the Association for Molecular Pathology <br>");
+print("2.       The evidences of your provided<br>");
 
 
 
 ?>
 
 <center>
-<a href=javascript:history.go(-1)>go back!</a><br>
+
+<a href=javascript:history.go(-1) class="btn btn-info" >go back!</a><br>
 
 
         </div>
 
         <hr>
 
-        <!-- Footer -->
-        <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright &copy; WangLab 2016</p>
-                </div>
-            </div>
-            <!-- /.row -->
-        </footer>
 
     </div>
     <!-- /.container -->
-
+<?php        include "footer.html";        ?>
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
 
