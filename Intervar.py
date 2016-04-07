@@ -71,6 +71,7 @@ morbidmap_dict2={}
 PP2_genes_dict={}
 BP1_genes_dict={}
 PS4_snps_dict={}
+exclude_snps_dict={}
 
 def read_datasets():
 #0. read the user specified evidence file
@@ -82,7 +83,7 @@ def read_datasets():
                 cls2=line2.split('\t')
                 if len(cls2)>1:
                     keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]
-
+                    keys=re.sub("[Cc][Hh][Rr]","",keys)
                     user_evidence_dict[keys]=cls2[4].upper()
         except IOError:
             print("Error: can\'t read the user specified evidence file %s" % paras['evidence_file'])
@@ -150,6 +151,7 @@ def read_datasets():
                 mim2gene_dict2[keys]=cls2[0]
     except IOError:
         print("Error: can\'t read the OMIM  file %s" % paras['mim2gene'])
+        print("Error: Please download it from http://www.omim.org/downloads")
         sys.exit()
     else:
         fh.close()   
@@ -201,7 +203,8 @@ def read_datasets():
                     keys=cls3.upper()
                     morbidmap_dict[ keys ]='1'  # key as gene name
     except IOError:
-        print("Error: can\'t read the morbidmap disorder file %s" % paras['morbidmap'])
+        print("Error: can\'t read the OMIM morbidmap disorder file %s" % paras['morbidmap'])
+        print("Error: Please download it from http://www.omim.org/downloads")
         sys.exit()
     else:
         fh.close()    
@@ -217,11 +220,26 @@ def read_datasets():
                 keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]+"_"+cls2[4]
                 PS4_snps_dict[ keys ]='1'  # key as gene name
     except IOError:
-        print("Error: can\'t read the snp file %s" % paras['ps4_snps'])
+        print("Error: can\'t read the snp list file for PS4 %s" % paras['ps4_snps'])
         sys.exit()
     else:
         fh.close()    
 
+#8. read the user specified SNP list, the variants will pass the frequency check.
+    if os.path.isfile(paras['exclude_snps']):
+        try:
+            fh=open(paras['exclude_snps'], "r")
+            str = fh.read()
+            for line2 in str.split('\n'):
+                cls2=line2.split('\t')
+                if len(cls2)>1:
+                    keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]
+                    keys=re.sub("[Cc][Hh][Rr]","",keys)
+                    exclude_snps_dict[keys]="1"
+        except IOError:
+            print("Error: can\'t read the user specified SNP list file %s" % paras['exclude_snps'])
+        else:
+            fh.close()    
 
 
 #end read datasets
@@ -381,6 +399,39 @@ def check_gdi_rvis_LOF(anvfile):
 
     return(sum)
 
+def check_genes(anvfile):
+#check with multiple genes, so one gene by one gene  to annote
+    newoutfile=anvfile+".grl_p"
+    try:
+        fh = open(anvfile, "r")
+        fw = open(newoutfile, "w")
+        str = fh.read()
+        sum=0
+        for line in str.split('\n'):
+            cls=line.split('\t')
+            if len(cls)>1:
+                gene_name=cls[6]
+                if cls[6] == 'Gene.refGene':
+                    gene_name='Gene'
+#some with multiple genes, so one gene by one gene  to annote
+                sum=sum+1
+                for gg in gene_name.split(','):
+                    line_out=line+"\t"+gg
+                    fw.write("%s\n" % line_out)
+
+    except IOError:
+        print("Error: can\'t read/write the annovar output file %s %s" % (anvfile,newoutfile))
+        sys.exit()
+        return
+    else:
+        pass
+        fh.close()
+        fw.close()
+
+    return(sum)
+
+
+
 def sum_of_list(list):
     sum=0
     for i in list:
@@ -494,7 +545,6 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
             aa_last=aa[len(aa)-1:]
             #keys_tmp2=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+cls[Allels_flgs['Ref']]+"_"+cls[Allels_flgs['Alt']]
             keys_tmp2=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+cls[Allels_flgs['Alt']]
-            #print("%s %s %s" %(aa,aa_last,keys_tmp2))
             try:
                 if  aa_changes_dict[keys_tmp2]:
                     PS1_t2=0
@@ -1033,6 +1083,7 @@ def check_BP5(line,Funcanno_flgs,Allels_flgs,morbidmap_dict):
     '''
     BP5=0
     cls=line.split('\t')
+    '''
     try:
         if morbidmap_dict[ cls[Funcanno_flgs['Gene']] ] == '1' :
             BP5=1
@@ -1040,7 +1091,9 @@ def check_BP5(line,Funcanno_flgs,Allels_flgs,morbidmap_dict):
         BP5=0
     else:
         pass
-
+    '''
+    #diable BP5
+    BP5=0
     return(BP5)
 
 def check_BP6(line,Funcanno_flgs,Allels_flgs):
@@ -1169,10 +1222,24 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
 
     #print("PVS1=%s PS=%s PM=%s PP=%s BA1=%s BS=%s BP=%s" %(PVS1,PS,PM,PP,BA1,BS,BP))
      
-    #begin process the user's evidence file
     cls=line.split('\t')
+    #begin process the exclude snp list. which will affect BA1 BS1 BS2
+    if os.path.isfile(paras['exclude_snps']):
+        keys=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['Ref']]+"_"+cls[Allels_flgs['Alt']]
+        keys=re.sub("[Cc][Hh][Rr]","",keys)
+        try:
+            if exclude_snps_dict[keys]=="1":  
+                BA1=0; 
+                BS[0]=0; 
+                BS[1]=0;
+        except KeyError:
+            pass
+        else:
+            pass
+    #begin process the user's evidence file
     if os.path.isfile(paras['evidence_file']):
         keys=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['Ref']]+"_"+cls[Allels_flgs['Alt']]
+        keys=re.sub("[Cc][Hh][Rr]","",keys)
         try:
             evds=user_evidence_dict[keys] #PS1=1;PM1=1;BA1=1;PVS1 PP BS BP
             for evd in evds.split(';'):
@@ -1253,6 +1320,7 @@ def my_inter_var(annovar_outfile):
         str=fh.read()
         line_sum=0;
         print("Notice: Begin the variants interpretation by InterVar ")
+        fw.write("#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("Chr","Start","End","Ref","Alt","Ref.Gene","Func.refGene","ExonicFunc.refGene", "Gene.ensGene","avsnp144","AAChange.ensGene","AAChange.refGene","Clinvar","InterVar and Evidence","Freq_ExAC_ALL", "Freq_esp6500siv2_all","Freq_1000g2015aug_all", "CADD_raw","CADD_phred","SIFT_score","GERP++_RS","phyloP46way_placental","dbscSNV_ADA_SCORE", "dbscSNV_RF_SCORE", "Interpro_domain","AAChange.knownGene"  ))
         for line in str.split('\n'):
             BP="UNK" # the inter of pathogenetic/benign
             clinvar_bp="UNK"
@@ -1265,18 +1333,13 @@ def my_inter_var(annovar_outfile):
 
             else:
                 #begin check the BP status from clinvar
-                #line_tmp2=cls[Funcanno_flgs['CLINSIG']]
                 line_tmp2=cls[Funcanno_flgs['CLINSIG']]
                 if line_tmp2 != '.':
                     cls3=line_tmp2.split(';')
                     clinvar_bp=cls3[0]
                     
                 intervar_bp=assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs)
-                #print("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s | InterVar: %s" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],clinvar_bp,intervar_bp))
                 fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']], cls[Funcanno_flgs['Gene.ensGene']],cls[Funcanno_flgs['avsnp144']],cls[Funcanno_flgs['AAChange.ensGene']],cls[Funcanno_flgs['AAChange.refGene']],clinvar_bp,intervar_bp,cls[Freqs_flgs['ExAC_ALL']], cls[Freqs_flgs['esp6500siv2_all']], cls[Freqs_flgs['1000g2015aug_all']], cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],cls[Funcanno_flgs['SIFT_score']],  cls[Funcanno_flgs['GERP++_RS']],cls[Funcanno_flgs['phyloP46way_placental']], cls[Funcanno_flgs['dbscSNV_ADA_SCORE']], cls[Funcanno_flgs['dbscSNV_RF_SCORE']], cls[Funcanno_flgs['Interpro_domain']],cls[Funcanno_flgs['AAChange.knownGene']]   ))
-# ExAC_ALL esp6500siv2_all   1000g2015aug_all  SIFT_score    CADD_raw    CADD_phred  GERP++_RS   phyloP46way_placental  dbscSNV_ADA_SCORE   dbscSNV_RF_SCORE   Interpro_domain
-                #fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],clinvar_bp,intervar_bp))
-                #print("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']],cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],clinvar_bp,intervar_bp))
                 #print("%s\t%s %s" % (line,clinvar_bp,intervar_bp))
 
             line_sum=line_sum+1
@@ -1289,11 +1352,6 @@ def my_inter_var(annovar_outfile):
         fh.close()
         fw.close()
     return(line_sum)
-
-def do_single(option, opt, value, parser):
-    print("%s" %value)
-
-
 
 
 def main():
@@ -1329,12 +1387,6 @@ def main():
 
     parser.add_option("-o", "--output", dest="output", action="store",
                   help="The prefix of output file which contains the results, the file of results will be as [$$prefix].intervar ", metavar="example/myanno")
-
-    #parser.add_option("--this-is-a-bit-too-long-argument", metavar="SOMETHING",
-    #              help="when arguments get too long the line splits, this also works for the longer help strings")
-    #parser.add_option("-s", metavar="SOMETHING", action="callback", callback=do_single, type="string",
-    #              help="single token argument with a parameter")
-
 
 
     group = optparse.OptionGroup(parser, "InterVar Other Options")
@@ -1418,6 +1470,7 @@ def main():
 
     paras['ps1_aa'] = paras['ps1_aa']+'.'+paras['buildver']
     paras['ps4_snps'] = paras['ps4_snps']+'.'+paras['buildver']
+    paras['exclude_snps'] = paras['exclude_snps']+'.'+paras['buildver']
 
     if options.table_annovar != None:
         if os.path.isfile(options.table_annovar):
@@ -1453,13 +1506,14 @@ def main():
             
 
 
-    print ("The options for your analysis are %s " % paras)
+    print ("INFO: The options are %s " % paras)
     check_downdb()
     check_input()
     check_annovar_result() #  to obtain myanno.hg19_multianno.csv
     annovar_outfile=paras['outfile']+"."+paras['buildver']+"_multianno.txt"
     read_datasets()
-    sum1=check_gdi_rvis_LOF(annovar_outfile)
+    #sum1=check_gdi_rvis_LOF(annovar_outfile)
+    sum1=check_genes(annovar_outfile)
     sum2=my_inter_var(annovar_outfile)
 
     inputfile=paras['inputfile']
@@ -1476,16 +1530,7 @@ def main():
 
     outfile=annovar_outfile+".intervar"
     if os.path.isfile(outfile):
-        count = 0
-        thefile = open(outfile, 'rb')
-        while True:
-            buffer = thefile.read(8192*1024)
-            if not buffer:
-                break
-            count += buffer.count('\n')
-        thefile.close( )
-
-        print ("Notice: About %d variants has been processed by InterVar" % count)
+        print ("Notice: About %d variants has been processed by InterVar" % (sum2-1))
         print ("Notice: The InterVar is finished, the output file is [ %s.intervar ]" % annovar_outfile)
     else:
         print ("Warning: The InterVar seems not run correctly, please check your inputs and options in configure file")
