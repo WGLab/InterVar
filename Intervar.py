@@ -417,7 +417,7 @@ def check_genes(anvfile):
                 sum=sum+1
                 for gg in gene_name.split(','):
                     line_out=line+"\t"+gg
-                    fw.write("%s\n" % line_out)
+                    fw.write("%s\t\n" % line_out)
 
     except IOError:
         print("Error: can\'t read/write the annovar output file %s %s" % (anvfile,newoutfile))
