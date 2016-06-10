@@ -1012,7 +1012,7 @@ def check_BP3(line,Funcanno_flgs,Allels_flgs):
     cls=line.split('\t')
     #funcs_tmp=["cds-indel","stop-loss"]
     #funcs_tmp=["nonframeshift insertion","nonframeshift insertion","nonframeshift substitution","stoploss"]
-    funcs_tmp=["nonframeshift insertion","nonframeshift insertion","nonframeshift substitution"]
+    funcs_tmp=["nonframeshift insertion","nonframeshift deletion","nonframeshift substitution"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 :
