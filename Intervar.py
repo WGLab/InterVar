@@ -72,6 +72,9 @@ PP2_genes_dict={}
 BP1_genes_dict={}
 PS4_snps_dict={}
 exclude_snps_dict={}
+mim_recessive_dict={}
+knownGeneCanonical_dict={}
+
 
 def read_datasets():
 #0. read the user specified evidence file
@@ -84,6 +87,7 @@ def read_datasets():
                 if len(cls2)>1:
                     keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]
                     keys=re.sub("[Cc][Hh][Rr]","",keys)
+                    #print("%s" %keys)
                     user_evidence_dict[keys]=cls2[4].upper()
         except IOError:
             print("Error: can\'t read the user specified evidence file %s" % paras['evidence_file'])
@@ -101,6 +105,7 @@ def read_datasets():
                 lof_genes_dict[cls2[0]]='1'
     except IOError:
         print("Error: can\'t read the LOF genes file %s" % paras['lof_genes'])
+        print("Error: Please download it from the source website")
         sys.exit()
         return
     else:
@@ -118,6 +123,7 @@ def read_datasets():
                 #print("%s %s" %(keys,aa_changes_dict[keys]) )
     except IOError:
         print("Error: can\'t read the  amino acid change file %s" % paras['ps1_aa'])
+        print("Error: Please download it from the source website")
         sys.exit()
     else:
         fh.close()    
@@ -133,6 +139,7 @@ def read_datasets():
                 domain_benign_dict[keys]="1"
     except IOError:
         print("Error: can\'t read the PM1 domain  file %s" % paras['pm1_domain'])
+        print("Error: Please download it from the source website")
         sys.exit()
     else:
         fh.close()   
@@ -168,6 +175,7 @@ def read_datasets():
                 #print("%s %d" % (cls2[0], len(cls2[0])) )
     except IOError:
         print("Error: can\'t read the PP2 genes file %s" % paras['PP2_genes'])
+        print("Error: Please download it from the source website")
         sys.exit()
         return
     else:
@@ -184,6 +192,7 @@ def read_datasets():
                 BP1_genes_dict[cls2[0]]='1'
     except IOError:
         print("Error: can\'t read the BP1 genes file %s" % paras['BP1_genes'])
+        print("Error: Please download it from the source website")
         sys.exit()
         return
     else:
@@ -221,6 +230,7 @@ def read_datasets():
                 PS4_snps_dict[ keys ]='1'  # key as gene name
     except IOError:
         print("Error: can\'t read the snp list file for PS4 %s" % paras['ps4_snps'])
+        print("Error: Please download it from the source website")
         sys.exit()
     else:
         fh.close()    
@@ -240,6 +250,36 @@ def read_datasets():
             print("Error: can\'t read the user specified SNP list file %s" % paras['exclude_snps'])
         else:
             fh.close()    
+#9. OMIM mim_recessive.txt file 
+    try:
+        fh = open(paras['mim_recessive'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            if len(cls2[0])>1:
+                mim_recessive_dict[cls2[0]]='1'
+    except IOError:
+        print("Error: can\'t read the OMIM recessive disorder file %s" % paras['mim_recessive'])
+        print("Error: Please download it from the source website")
+        sys.exit()
+    else:
+        fh.close()   
+#10. knownGeneCanonical exon file  # caution the build ver, now it is hg19
+    try:
+        fh = open(paras['knowngenecanonical'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split(' ')
+            if len(cls2)>1:
+                keys=cls2[0]
+                knownGeneCanonical_dict[keys]=cls2[1]
+                #print("%s %s" %(keys,knownGeneCanonical_dict[keys]))
+    except IOError:
+        print("Error: can\'t read the knownGeneCanonical  file %s" % paras['knowngenecanonical'])
+        print("Error: Please download it from the source website")
+        sys.exit()
+    else:
+        fh.close()   
 
 
 #end read datasets
@@ -496,6 +536,8 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
     PVS=0
     PVS_t1=0
     PVS_t2=0
+    PVS_t3=0
+    dbscSNV_cutoff=0.6    #either score(ada and rf) >0.6 as splicealtering
     # Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 and line_tmp.find(funcs_tmp2)<0 :
@@ -513,8 +555,35 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
     else:
         pass
     #print("PVSt1= %d PVSt2= %d" % (PVS_t1,PVS_t2) )
+    # begin check the site in not affect the splicing
+    try:
+        if float(cls[Funcanno_flgs['dbscSNV_RF_SCORE']])>dbscSNV_cutoff or float(cls[Funcanno_flgs['dbscSNV_ADA_SCORE']])>dbscSNV_cutoff:
+            PVS_t3=1
+    except ValueError:
+        pass
+    else:
+        pass
     if PVS_t1 !=0 and PVS_t2 != 0 :
-        PVS=1
+        if PVS_t3 ==0:
+            PVS=1
+    #begin check it in the AAChange.knownGene for the major/Canonical isoform, not 1/last exon
+    #SUFU:uc001kvy.2:exon6:c.G716A:p.R239Q
+    line_tmp2=cls[Funcanno_flgs['AAChange.knownGene']]
+    cls0=line_tmp2.split(',')
+    cls0_1=cls0[0].split(':')
+    if len(cls0_1)>1:
+        trans_id=cls0_1[1]
+        exon=cls0_1[2]
+        try:
+            exon_lth="exon"+knownGeneCanonical_dict[trans_id]
+            if exon==exon_lth or exon =="exon1": # not 1 or last exon
+                PVS=0
+        except KeyError:
+            pass
+        else:
+            pass
+
+
 
     return(PVS)
 
@@ -529,6 +598,8 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
     PS1=0
     PS1_t1=0
     PS1_t2=0
+    PS1_t3=0
+    dbscSNV_cutoff=0.6    #either score(ada and rf) >0.6 as splicealtering
     cls=line.split('\t')
     funcs_tmp=["missense","nonsynony"]
     ACGTs=["A","C","G","T"]
@@ -563,10 +634,17 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
 
             else:
                 pass
-
+    try:
+        if float(cls[Funcanno_flgs['dbscSNV_RF_SCORE']])>dbscSNV_cutoff or float(cls[Funcanno_flgs['dbscSNV_ADA_SCORE']])>dbscSNV_cutoff: # means alter the splicing
+            PS1_t3=1
+    except ValueError:
+        pass
+    else:
+        pass
 
     if PS1_t1 !=0 and PS1_t2 != 0 :
-        PS1=1
+        if PS1_t3 ==1: # remove the splicing affect 
+            PS1=0
     return(PS1)
 
 def check_PS2(line,Funcanno_flgs,Allels_flgs):
@@ -656,31 +734,40 @@ def check_PM2(line,Freqs_flgs,Allels_flgs,Funcanno_flgs,mim2gene_dict,mim2gene_d
     PM2=0
     #Freqs_flgs={'1000g2015aug_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
     cutoff_maf=0.005  # extremely low frequency
+    #cutoff_maf=0.5  # extremely low frequency
     cls=line.split('\t')
-    mims_id="1256"
+    #mims_id="1256"
 
-    #mim2gene_dict[keys]
+    #mim2gene_dict[keys] mim_recessive_dict
     try:
         mim1=mim2gene_dict[ cls[Funcanno_flgs['Gene.ensGene']] ]
         mim2=mim2gene_dict2[cls[Funcanno_flgs['Gene']]]
-        if  mims_id.find(mim1[0])!=-1 or  mims_id.find(mim2[0])!=-1:
-            #print("PM2 %s %s " % (mim1,mim2))
-            tt=1;
-            for key in Freqs_flgs.keys():
-                if(cls[Freqs_flgs[key]]!='.'):   # means absent and it is domomin
-                    tt=tt*0;
-            if tt==1:
-                PM2=1
-                #print("PM2 =1  ab and dom")
-    except KeyError:  # means it is recessive
+        #if  mims_id.find(mim1[0])!=-1 or  mims_id.find(mim2[0])!=-1:
+        try:
+            if  mim_recessive_dict[mim1]=="1" or  mim_recessive_dict[mim2]=="1":  # means it is in recessive
+                #print("PM2 %s %s " % (mim1,mim2))
+                for key in Freqs_flgs.keys():
+                    if(cls[Freqs_flgs[key]]=='.' or float(cls[Freqs_flgs[key]])<=cutoff_maf): 
+                        PM2=1;
+        except KeyError: # means it is not recessive
+                tt=1;
+                for key in Freqs_flgs.keys():
+                    if(cls[Freqs_flgs[key]]!='.'):   # means absent and it is dom
+                        tt=tt*0;
+                if tt==1:
+                    PM2=1
+        else:
+            pass
+                    #print("PM2 =1  ab and dom")
+    except KeyError:  # means it has no mim, also treat as recessive
         for key in Freqs_flgs.keys():
             try:
                 #if float(cls[Freqs_flgs[key]])<=cutoff_maf or float(cls[Freqs_flgs[key]])>=(1.0-cutoff_maf): 
-                if float(cls[Freqs_flgs[key]])<=cutoff_maf : 
+                if float(cls[Freqs_flgs[key]])<=cutoff_maf  : 
                     PM2=1
                     #print("PM2 =1  mf and res")
             except ValueError:
-                PM2=0 # means absent and it is  recessive
+                PM2=1 # means absent and it is  recessive
             else:
                 pass
     else:
@@ -1012,7 +1099,7 @@ def check_BP3(line,Funcanno_flgs,Allels_flgs):
     cls=line.split('\t')
     #funcs_tmp=["cds-indel","stop-loss"]
     #funcs_tmp=["nonframeshift insertion","nonframeshift insertion","nonframeshift substitution","stoploss"]
-    funcs_tmp=["nonframeshift insertion","nonframeshift insertion","nonframeshift substitution"]
+    funcs_tmp=["nonframeshift insertion","nonframeshift deletion","nonframeshift substitution"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 :
@@ -1320,7 +1407,7 @@ def my_inter_var(annovar_outfile):
         str=fh.read()
         line_sum=0;
         print("Notice: Begin the variants interpretation by InterVar ")
-        fw.write("#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("Chr","Start","End","Ref","Alt","Ref.Gene","Func.refGene","ExonicFunc.refGene", "Gene.ensGene","avsnp144","AAChange.ensGene","AAChange.refGene","Clinvar","InterVar and Evidence","Freq_ExAC_ALL", "Freq_esp6500siv2_all","Freq_1000g2015aug_all", "CADD_raw","CADD_phred","SIFT_score","GERP++_RS","phyloP46way_placental","dbscSNV_ADA_SCORE", "dbscSNV_RF_SCORE", "Interpro_domain","AAChange.knownGene"  ))
+        fw.write("#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("Chr","Start","End","Ref","Alt","Ref.Gene","Func.refGene","ExonicFunc.refGene", "Gene.ensGene","avsnp144","AAChange.ensGene","AAChange.refGene","Clinvar","InterVar and Evidence","Freq_ExAC_ALL", "Freq_esp6500siv2_all","Freq_1000g2015aug_all", "CADD_raw","CADD_phred","SIFT_score","GERP++_RS","phyloP46way_placental","dbscSNV_ADA_SCORE", "dbscSNV_RF_SCORE", "Interpro_domain","AAChange.knownGene","rmsk"  ))
         for line in str.split('\n'):
             BP="UNK" # the inter of pathogenetic/benign
             clinvar_bp="UNK"
@@ -1339,7 +1426,7 @@ def my_inter_var(annovar_outfile):
                     clinvar_bp=cls3[0]
                     
                 intervar_bp=assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs)
-                fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']], cls[Funcanno_flgs['Gene.ensGene']],cls[Funcanno_flgs['avsnp144']],cls[Funcanno_flgs['AAChange.ensGene']],cls[Funcanno_flgs['AAChange.refGene']],clinvar_bp,intervar_bp,cls[Freqs_flgs['ExAC_ALL']], cls[Freqs_flgs['esp6500siv2_all']], cls[Freqs_flgs['1000g2015aug_all']], cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],cls[Funcanno_flgs['SIFT_score']],  cls[Funcanno_flgs['GERP++_RS']],cls[Funcanno_flgs['phyloP46way_placental']], cls[Funcanno_flgs['dbscSNV_ADA_SCORE']], cls[Funcanno_flgs['dbscSNV_RF_SCORE']], cls[Funcanno_flgs['Interpro_domain']],cls[Funcanno_flgs['AAChange.knownGene']]   ))
+                fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']], cls[Funcanno_flgs['Gene.ensGene']],cls[Funcanno_flgs['avsnp144']],cls[Funcanno_flgs['AAChange.ensGene']],cls[Funcanno_flgs['AAChange.refGene']],clinvar_bp,intervar_bp,cls[Freqs_flgs['ExAC_ALL']], cls[Freqs_flgs['esp6500siv2_all']], cls[Freqs_flgs['1000g2015aug_all']], cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],cls[Funcanno_flgs['SIFT_score']],  cls[Funcanno_flgs['GERP++_RS']],cls[Funcanno_flgs['phyloP46way_placental']], cls[Funcanno_flgs['dbscSNV_ADA_SCORE']], cls[Funcanno_flgs['dbscSNV_RF_SCORE']], cls[Funcanno_flgs['Interpro_domain']],cls[Funcanno_flgs['AAChange.knownGene']],cls[Funcanno_flgs['rmsk']]   ))
                 #print("%s\t%s %s" % (line,clinvar_bp,intervar_bp))
 
             line_sum=line_sum+1
@@ -1509,7 +1596,7 @@ def main():
     print ("INFO: The options are %s " % paras)
     check_downdb()
     check_input()
-    check_annovar_result() #  to obtain myanno.hg19_multianno.csv
+    #check_annovar_result() #  to obtain myanno.hg19_multianno.csv
     annovar_outfile=paras['outfile']+"."+paras['buildver']+"_multianno.txt"
     read_datasets()
     #sum1=check_gdi_rvis_LOF(annovar_outfile)
