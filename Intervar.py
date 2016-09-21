@@ -7,7 +7,7 @@
 # Description: python script for  Interpretation of Pathogenetic Benign
 #########################################################################
 
-import copy,logging,os,io,re,time,sys,platform,optparse
+import copy,logging,os,io,re,time,sys,platform,optparse,gzip
 
 prog="InterVar"
 
@@ -59,6 +59,17 @@ def ConfigSectionMap(config,section):
     return
 
 user_evidence_dict={}
+
+
+class myGzipFile(gzip.GzipFile): 
+    def __enter__(self): 
+        if self.fileobj is None: 
+            raise ValueError("I/O operation on closed GzipFile object") 
+        return self 
+
+    def __exit__(self, *args): 
+        self.close() 
+
 
 #begin read some important datsets/list firstly;
 lof_genes_dict={}
@@ -333,21 +344,23 @@ def read_datasets():
         fh.close()   
 
 #11.BS2 variants of recessive homo, domin heter
-    try:               
-        fh = open(paras['bs2_snps'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
-            cls2=line2.split(' ')
-            # PS4_snps_dict
-            if len(cls2[0])>=1:  #
-                keys=cls2[0]+"_"+cls2[1]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]
-                #keys=re.sub("[Cc][Hh][Rr]","",keys)
-                BS2_snps_recess_dict[ keys ]=cls2[4]  # key as snp info
-                BS2_snps_domin_dict[ keys ]=cls2[5]  # key as snp info
-                keys=cls2[0]+"_"+cls2[1]+"_"+cls2[1]+"_"+flip_ACGT(cls2[2])+"_"+flip_ACGT(cls2[3])
-                #keys=re.sub("[Cc][Hh][Rr]","",keys)
-                BS2_snps_recess_dict[ keys ]=cls2[4]  # key as snp info
-                BS2_snps_domin_dict[ keys ]=cls2[5]  # key as snp info
+    try:              
+        with myGzipFile(paras['bs2_snps'], "rb") as fh:
+
+            #fh = open(paras['bs2_snps'], "r")
+            str = fh.read()
+            for line2 in str.split('\n'):
+                cls2=line2.split(' ')
+                # PS4_snps_dict
+                if len(cls2[0])>=1:  #
+                    keys=cls2[0]+"_"+cls2[1]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]
+                    #keys=re.sub("[Cc][Hh][Rr]","",keys)
+                    BS2_snps_recess_dict[ keys ]=cls2[4]  # key as snp info
+                    BS2_snps_domin_dict[ keys ]=cls2[5]  # key as snp info
+                    keys=cls2[0]+"_"+cls2[1]+"_"+cls2[1]+"_"+flip_ACGT(cls2[2])+"_"+flip_ACGT(cls2[3])
+                    #keys=re.sub("[Cc][Hh][Rr]","",keys)
+                    BS2_snps_recess_dict[ keys ]=cls2[4]  # key as snp info
+                    BS2_snps_domin_dict[ keys ]=cls2[5]  # key as snp info
 
     except IOError:
         print("Error: can\'t read the snp list file for BS2 %s" % paras['bs2_snps'])
