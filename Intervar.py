@@ -1792,7 +1792,7 @@ def main():
     print ("INFO: The options are %s " % paras)
     check_downdb()
     check_input()
-    #check_annovar_result() #  to obtain myanno.hg19_multianno.csv
+    check_annovar_result() #  to obtain myanno.hg19_multianno.csv
     annovar_outfile=paras['outfile']+"."+paras['buildver']+"_multianno.txt"
     read_datasets()
     #sum1=check_gdi_rvis_LOF(annovar_outfile)
