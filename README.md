@@ -17,52 +17,42 @@ InterVar is a software for variant interpretation of clinical significance. The 
 
 ## OPTIONS
 
-- -h, --help              
+- `-h, --help`    
 show this help message and exit  
 
-- --version             
+- `--version`             
 show program''s version number and exit
 
-- -i INPUTFILE, --input=INPUTFILE           
+- `-i INPUTFILE, --input=INPUTFILE`           
 input file of  variants for analysis
 
-- --input_type=AVinput 
+- `--input_type=AVinput` 
 The input file type, it can be  AVinput(Annovar''sformat),VCF
 
-- -o OUTPUTFILE, --output=OUTPUTFILE     
+- `-o OUTPUTFILE, --output=OUTPUTFILE`     
 prefix the output file (default:output)
 
-- -b BUILDVER, --buildver=BUILDVER    
+- `-b BUILDVER, --buildver=BUILDVER`    
 version of reference genome: hg18, hg19(default), hg38
 
-- -t intervardb, --database_intervar=intervardb
+- `-t intervardb, --database_intervar=intervardb`
 The database location/dir for the InterVar dataset files
 
-- -s your_evidence_file, --evidence_file=your_evidence_file
+- `-s your_evidence_file, --evidence_file=your_evidence_file`
 
-  This potion is for user specified evidence file for each variant,
+  This argument allows user to specify evidence file for each variant. To to add your own Evidence for each Variant, prepare your own evidence  file as tab-delimited file with the line format "Chr Pos Ref_allele Alt_allele  evidence_list". For example, "1 123456 A G PM1=1;BS2=1;BP3=0" as separated by tab. The fifth column should be the list of criteria, seprated by ";".
   
-  How to add your own Evidence for each Variant:
-  
-  Prepare your own evidence  file as tab-delimited,the line format:
-  
-  (The fifth column should be the evidence list, seprated by ";")
-  
-  Chr Pos Ref_allele Alt_allele  evidence_list
-  
-  1 123456 A G PM1=1;BS2=1;BP3=0
+- `--table_annovar=./table_annovar.pl`
+The path to ANNOVAR perl script of table_annovar.pl (if not specified in system PATH)
 
-- --table_annovar=./table_annovar.pl
-The Annovar perl script of table_annovar.pl
+- `--convert2annovar=./convert2annovar.pl`
+The path to ANNOVAR perl script of convert2annovar.pl (if not specified in system PATH)
 
-- --convert2annovar=./convert2annovar.pl
-The Annovar perl script of convert2annovar.pl
+- `--annotate_variation=./annotate_variation.pl`
+The ANNOVAR perl script of annotate_variation.pl (if not specified in system PATH)
 
-- --annotate_variation=./annotate_variation.pl
-The Annovar perl script of annotate_variation.pl
-
--  -d humandb, --database_locat=humandb 
-The database location/dir for the Annovar annotation datasets
+-  `-d humandb, --database_locat=humandb` 
+The database location/directory for the ANNOVAR annotation datasets
 
 
 ## EXAMPLE
@@ -77,6 +67,6 @@ InterVar takes either pre-annotated files for genetic variants as tab-delimited 
 
 We also developed a web server of InterVar called wInterVar, which can be accessed at [http://wintervar.wglab.org](http://wintervar.wglab.org). The user can directly input their missense variants in wInterVar by chromosomal position, by dbSNP identifier, or by gene name with nucleic acid change information. The wInterVar server will provide full details on the variants, including all the annotations and criteria used for automated interpretation. The user then has the ability to manually adjust these criteria and resubmit to the server to perform re-interpretation. Since all criteria for all possible non-synonymous variants have been pre-computed by us, the execution of wInterVar is very fast, typically less than 1 second to obtain the results. However, the wInterVar server is limited to missense variants, and cannot process other types of variants (such as indels), and the user will need to use InterVar instead.
 
-## Reference
+## REFERENCE
 
 Li Q, Wang K. InterVar: clinical interpretation of genetic variants by the ACMG/AMP 2015 guidelines.
