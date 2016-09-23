@@ -7,11 +7,11 @@ Intervar.py [options]
 
 ## WHAT DOES IT DO
 
-InterVar is a python script for variant interpretation of clinical significance. The input is either a pre-annotated variant file (tab-delimited text file, generate by ANNOVAR or other similar tools), or a VCF file (which will be annotated by ANNOVAR). The output contains 18 criteria based on ACMG/AMP 2015 guidelines, as well as automated interpretation for each variant, which can be used by human reviewers for manual adjustment. The final goal is to assign each variant as "pathogenic", "likely pathogenic", "uncertain significance", "likely benign" or "benign" by rules specified in the ACMG/AMP 2015 guidelines.
+InterVar is a software for variant interpretation of clinical significance. The input is either a pre-annotated variant file (tab-delimited text file, generate by ANNOVAR or other similar tools), or a VCF file (which will be annotated by ANNOVAR). The output contains 18 criteria based on ACMG/AMP 2015 guidelines, as well as automated interpretation for each variant, which can be used by human reviewers for manual adjustment. The final goal is to assign each variant as "pathogenic", "likely pathogenic", "uncertain significance", "likely benign" or "benign" by rules specified in the ACMG/AMP 2015 guidelines.
 
 ## PREREQUISITE
 
-1. You need install Python.
+1. You need install Python since InterVar is written in Python.
 2. You need install [ANNOVAR](http://annovar.openbioinformatics.org/en/latest/) if your input is a VCF file.
 3. You need obtain other files including mim2gene.txt and morbidmap from [OMIM](http://www.omim.org/downloads). We cannot include them in InterVar due to copyright reasons.
 
