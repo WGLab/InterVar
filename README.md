@@ -67,6 +67,10 @@ InterVar takes either pre-annotated files for genetic variants as tab-delimited 
 
 We also developed a web server of InterVar called wInterVar, which can be accessed at [http://wintervar.wglab.org](http://wintervar.wglab.org). The user can directly input their missense variants in wInterVar by chromosomal position, by dbSNP identifier, or by gene name with nucleic acid change information. The wInterVar server will provide full details on the variants, including all the annotations and criteria used for automated interpretation. The user then has the ability to manually adjust these criteria and resubmit to the server to perform re-interpretation. Since all criteria for all possible non-synonymous variants have been pre-computed by us, the execution of wInterVar is very fast, typically less than 1 second to obtain the results. However, the wInterVar server is limited to missense variants, and cannot process other types of variants (such as indels), and the user will need to use InterVar instead.
 
+## LICENSE
+
+InterVar is licensed under [WGLab MIT License](http://wglab.mit-license.org). Users need to obtain licenses such as OMIM and ANNOVAR by themselves.
+
 ## REFERENCE
 
 Li Q, Wang K. InterVar: clinical interpretation of genetic variants by the ACMG/AMP 2015 guidelines.
