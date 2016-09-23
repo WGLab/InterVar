@@ -1,5 +1,5 @@
 # InterVar
-A bioinformatics software tool for clinical interpretation of genetic variants by ACMG2015 guideline
+A bioinformatics software tool for clinical interpretation of genetic variants by [The ACMG/AMP 2015 guidelines](http://www.ncbi.nlm.nih.gov/pubmed/25741868)
 
 ## SYNOPSIS
 
@@ -7,13 +7,13 @@ Intervar.py [options]
 
 ## WHAT DOES IT DO
 
-InterVar is a python script for variant interpretation of clinical significance. 
+InterVar is a python script for variant interpretation of clinical significance. The input is either a pre-annotated variant file (tab-delimited text file, generate by ANNOVAR or other similar tools), or a VCF file (which will be annotated by ANNOVAR). The output contains 18 criteria based on ACMG/AMP 2015 guidelines, as well as automated interpretation for each variant, which can be used by human reviewers for manual adjustment. The final goal is to assign each variant as "pathogenic", "likely pathogenic", "uncertain significance", "likely benign" or "benign" by rules specified in the ACMG/AMP 2015 guidelines.
 
 ## PREREQUISITE
 
 1. You need install Python.
-2. You need install [ANNOVAR](http://annovar.openbioinformatics.org/en/latest/)
-3. You need download other files such as mim2gene.txt and morbidmap from [OMIM](http://www.omim.org/downloads)
+2. You need install [ANNOVAR](http://annovar.openbioinformatics.org/en/latest/) if your input is a VCF file.
+3. You need obtain other files including mim2gene.txt and morbidmap from [OMIM](http://www.omim.org/downloads). We cannot include them in InterVar due to copyright reasons.
 
 ## OPTIONS
 
@@ -33,7 +33,7 @@ The input file type, it can be  AVinput(Annovar''sformat),VCF
 prefix the output file (default:output)
 
 - -b BUILDVER, --buildver=BUILDVER    
-version of reference genome: hg18, hg19(default)
+version of reference genome: hg18, hg19(default), hg38
 
 - -t intervardb, --database_intervar=intervardb
 The database location/dir for the InterVar dataset files
@@ -73,11 +73,10 @@ The database location/dir for the Annovar annotation datasets
 
 ## HOW DOES IT WORK
 
-InterVar takes either pre-annotated files, or unannotated input files in VCF format or ANNOVAR input format, where each line corresponds to one genetic variant; if the input files are unannotated, InterVar will call ANNOVAR to generate necessary annotations. The execution of InterVar mainly consists of two major steps: 1) automatically interpret 28 evidence codes; and 2) manual adjustment by users to re-interpret the clinical significance. However, users can specify their own evidence code and import into InterVar by using the argument "-evidence_file=your_evidence_file" so that one single step is sufficient to generate the final results. In the output, based on all 28 pieces of evidence codes that are either automatically generated or supplied by the user, each variant will be assigned as "pathogenic", "likely pathogenic", "uncertain significance", "likely benign" or "benign" by rules specified in the ACMG2015 guidelines 24.  
+InterVar takes either pre-annotated files for genetic variants as tab-delimited text files, or unannotated input files in VCF format, where each line corresponds to one genetic variant. If the input files are unannotated, InterVar will call ANNOVAR to generate necessary annotations. The execution of InterVar mainly consists of two major steps: 1) automatically interpret 18 criteria; and 2) manual adjustment by users to re-interpret the clinical significance. However, users can specify their own criteria and import into InterVar by using the argument "-evidence_file=your_evidence_file" so that one single step is sufficient to generate the final results. In the output, based on all 28 pieces of criteria that are either automatically generated or supplied by the user, each variant will be assigned as "pathogenic", "likely pathogenic", "uncertain significance", "likely benign" or "benign" by rules specified in the ACMG/AMP 2015 guidelines.
 
-We also developed a web server of InterVar called wInterVar, which can be accessed at [http://wintervar.wglab.org](http://wintervar.wglab.org). The user can directly input their missense variants in wInterVar by chromosomal position, by dbSNP identifier, or by gene name with nucleic acid change information. The wInterVar server will provide full details on the variants, including all the evidence codes for the variants. The user then has the ability to manually adjust these evidence codes and resubmit to the server to perform re-interpretation. Since all evidence codes for all possible non-synonymous variants have been pre-computed by us, the execution of wInterVar is very fast, typically less than 1 second to obtain the results. However, the wInterVar server cannot process other types of variants (such as indels), and the user will need to use InterVar instead.
+We also developed a web server of InterVar called wInterVar, which can be accessed at [http://wintervar.wglab.org](http://wintervar.wglab.org). The user can directly input their missense variants in wInterVar by chromosomal position, by dbSNP identifier, or by gene name with nucleic acid change information. The wInterVar server will provide full details on the variants, including all the annotations and criteria used for automated interpretation. The user then has the ability to manually adjust these criteria and resubmit to the server to perform re-interpretation. Since all criteria for all possible non-synonymous variants have been pre-computed by us, the execution of wInterVar is very fast, typically less than 1 second to obtain the results. However, the wInterVar server is limited to missense variants, and cannot process other types of variants (such as indels), and the user will need to use InterVar instead.
 
-[The ACMG 2015 guide](http://www.ncbi.nlm.nih.gov/pubmed/25741868)
-Richards, S. et al. Standards and guidelines for the interpretation of sequence variants: a joint consensus recommendation of the American College of Medical Genetics and Genomics and the Association for Molecular Pathology. Genetics in medicine : official journal of the American College of Medical Genetics 17, 405-424 (2015).
+## Reference
 
-
+Li Q, Wang K. InterVar: clinical interpretation of genetic variants by the ACMG/AMP 2015 guidelines.
