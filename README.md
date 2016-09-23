@@ -33,7 +33,7 @@ The input file type, it can be  AVinput(Annovar''sformat),VCF
 prefix the output file (default:output)
 
 - `-b BUILDVER, --buildver=BUILDVER`    
-version of reference genome: hg18, hg19(default), hg38
+version of reference genome: hg19(default), hg38
 
 - `-t intervardb, --database_intervar=intervardb`
 The database location/dir for the InterVar dataset files
