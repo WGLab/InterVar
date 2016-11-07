@@ -69,7 +69,7 @@ We also developed a web server of InterVar called wInterVar, which can be access
 
 ## LICENSE
 
-InterVar is licensed under [WGLab MIT License](http://wglab.mit-license.org). Users need to obtain licenses such as OMIM and ANNOVAR by themselves.
+InterVar is free for non-commercial use without warranty. Users need to obtain licenses such as OMIM and ANNOVAR by themselves. Please contact the authors for commercial use.
 
 ## REFERENCE
 
