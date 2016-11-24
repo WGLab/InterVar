@@ -7,7 +7,7 @@
 # Description: python script for  Interpretation of Pathogenetic Benign
 #########################################################################
 
-import copy,logging,os,io,re,time,sys,platform,optparse
+import copy,logging,os,io,re,time,sys,platform,optparse,gzip
 
 prog="InterVar"
 
@@ -60,6 +60,17 @@ def ConfigSectionMap(config,section):
 
 user_evidence_dict={}
 
+
+class myGzipFile(gzip.GzipFile): 
+    def __enter__(self): 
+        if self.fileobj is None: 
+            raise ValueError("I/O operation on closed GzipFile object") 
+        return self 
+
+    def __exit__(self, *args): 
+        self.close() 
+
+
 #begin read some important datsets/list firstly;
 lof_genes_dict={}
 aa_changes_dict={}
@@ -73,8 +84,32 @@ BP1_genes_dict={}
 PS4_snps_dict={}
 exclude_snps_dict={}
 mim_recessive_dict={}
+mim_domin_dict={}
+mim_adultonset_dict={}
+mim_pheno_dict={}
+mim_orpha_dict={}
+orpha_dict={}
+BS2_snps_recess_dict={}
+BS2_snps_domin_dict={}
 knownGeneCanonical_dict={}
+knownGeneCanonical_st_dict={}
+knownGeneCanonical_ed_dict={}
 
+def flip_ACGT(acgt):
+    nt="";
+    if acgt=="A":
+        nt="T"
+    if acgt=="T":
+        nt="A"
+    if acgt=="C":
+        nt="G"
+    if acgt=="G":
+        nt="C"
+    if acgt=="N":
+        nt="N"
+    if acgt=="X":
+        nt="X"
+    return(nt)
 
 def read_datasets():
 #0. read the user specified evidence file
@@ -100,7 +135,6 @@ def read_datasets():
         str = fh.read()
         for line2 in str.split('\n'):
             cls2=line2.split('\t')
-            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
             if len(cls2[0])>1:
                 lof_genes_dict[cls2[0]]='1'
     except IOError:
@@ -119,8 +153,8 @@ def read_datasets():
             cls2=line2.split('\t')
             if len(cls2)>1 :
                 keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[4]
+                keys=re.sub("[Cc][Hh][Rr]","",keys)
                 aa_changes_dict[keys]=cls2[6]
-                #print("%s %s" %(keys,aa_changes_dict[keys]) )
     except IOError:
         print("Error: can\'t read the  amino acid change file %s" % paras['ps1_aa'])
         print("Error: Please download it from the source website")
@@ -151,7 +185,8 @@ def read_datasets():
         for line2 in str.split('\n'):
             cls2=line2.split('\t')
             if len(cls2)>1:
-                keys=cls2[4]
+                cls0=cls2[4].split(',')
+                keys=cls0[0]
                 mim2gene_dict[keys]=cls2[0]
                 keys1=cls2[3]
                 keys=keys1.upper()
@@ -169,10 +204,8 @@ def read_datasets():
         str = fh.read()
         for line2 in str.split('\n'):
             cls2=line2.split('\t')
-            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
             if len(cls2[0])>1:
                 PP2_genes_dict[cls2[0]]='1'
-                #print("%s %d" % (cls2[0], len(cls2[0])) )
     except IOError:
         print("Error: can\'t read the PP2 genes file %s" % paras['PP2_genes'])
         print("Error: Please download it from the source website")
@@ -187,7 +220,6 @@ def read_datasets():
         str = fh.read()
         for line2 in str.split('\n'):
             cls2=line2.split('\t')
-            #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
             if len(cls2[0])>1:
                 BP1_genes_dict[cls2[0]]='1'
     except IOError:
@@ -203,7 +235,7 @@ def read_datasets():
         fh = open(paras['morbidmap'], "r")
         str = fh.read()
         for line2 in str.split('\n'):
-            cls2=line2.split('|')
+            cls2=line2.split('\t')
             #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
             #{Tuberculosis, protection against}, 607948 (3)|TIRAP, BACTS1|606252|11q24.2
             if len(cls2[0])>1 and cls2[0].find('{')==0:  # disorder start with "{"
@@ -225,8 +257,9 @@ def read_datasets():
         for line2 in str.split('\n'):
             cls2=line2.split('\t')
             # PS4_snps_dict
-            if len(cls2[0])>1:  # disorder start with "{"
-                keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]+"_"+cls2[4]
+            if len(cls2[0])>=1:  # 
+                keys=cls2[0]+"_"+cls2[1]+"_"+cls2[1]+"_"+cls2[3]+"_"+cls2[4]
+                keys=re.sub("[Cc][Hh][Rr]","",keys)
                 PS4_snps_dict[ keys ]='1'  # key as gene name
     except IOError:
         print("Error: can\'t read the snp list file for PS4 %s" % paras['ps4_snps'])
@@ -250,7 +283,7 @@ def read_datasets():
             print("Error: can\'t read the user specified SNP list file %s" % paras['exclude_snps'])
         else:
             fh.close()    
-#9. OMIM mim_recessive.txt file 
+#9. OMIM mim_recessive.txt file mim_domin  mim_adultonset 
     try:
         fh = open(paras['mim_recessive'], "r")
         str = fh.read()
@@ -264,6 +297,36 @@ def read_datasets():
         sys.exit()
     else:
         fh.close()   
+    try:
+        fh = open(paras['mim_domin'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            if len(cls2[0])>1:
+                mim_domin_dict[cls2[0]]='1'
+    except IOError:
+        print("Error: can\'t read the OMIM dominant disorder file %s" % paras['mim_domin'])
+        print("Error: Please download it from the source website")
+        sys.exit()
+    else:
+        fh.close()   
+    try:
+        fh = open(paras['mim_adultonset'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            if len(cls2[0])>1:
+                mim_adultonset_dict[cls2[0]]='1'
+    except IOError:
+        print("Error: can\'t read the OMIM adult onset disorder file %s" % paras['mim_adultonset'])
+        print("Error: Please download it from the source website")
+        sys.exit()
+    else:
+        fh.close()   
+
+
+
+
 #10. knownGeneCanonical exon file  # caution the build ver, now it is hg19
     try:
         fh = open(paras['knowngenecanonical'], "r")
@@ -273,10 +336,95 @@ def read_datasets():
             if len(cls2)>1:
                 keys=cls2[0]
                 knownGeneCanonical_dict[keys]=cls2[1]
+                knownGeneCanonical_st_dict[keys]=cls2[2]
+                knownGeneCanonical_ed_dict[keys]=cls2[3]
                 #print("%s %s" %(keys,knownGeneCanonical_dict[keys]))
     except IOError:
         print("Error: can\'t read the knownGeneCanonical  file %s" % paras['knowngenecanonical'])
         print("Error: Please download it from the source website")
+        sys.exit()
+    else:
+        fh.close()   
+
+#11.BS2 variants of recessive homo, domin heter
+    try:              
+        with myGzipFile(paras['bs2_snps'], "rb") as fh:
+
+            #fh = open(paras['bs2_snps'], "r")
+            str = fh.read()
+            for line2 in str.split('\n'):
+                cls2=line2.split(' ')
+                # PS4_snps_dict
+                if len(cls2[0])>=1:  #
+                    keys=cls2[0]+"_"+cls2[1]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]
+                    #keys=re.sub("[Cc][Hh][Rr]","",keys)
+                    BS2_snps_recess_dict[ keys ]=cls2[4]  # key as snp info
+                    BS2_snps_domin_dict[ keys ]=cls2[5]  # key as snp info
+                    keys=cls2[0]+"_"+cls2[1]+"_"+cls2[1]+"_"+flip_ACGT(cls2[2])+"_"+flip_ACGT(cls2[3])
+                    #keys=re.sub("[Cc][Hh][Rr]","",keys)
+                    BS2_snps_recess_dict[ keys ]=cls2[4]  # key as snp info
+                    BS2_snps_domin_dict[ keys ]=cls2[5]  # key as snp info
+
+    except IOError:
+        print("Error: can\'t read the snp list file for BS2 %s" % paras['bs2_snps'])
+        print("Error: Please download it from the source website")
+        sys.exit()
+    else:
+        fh.close()    
+
+#12. OMIM mim_pheno.txt file
+#mim_pheno = %(database_intervar)s/mim_pheno.txt
+#mim_orpha = %(database_intervar)s/mim_orpha.txt
+ 
+    try:
+        fh = open(paras['mim_pheno'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split(' ')
+            if len(cls2)>1:
+                keys=cls2[0]
+                mim_pheno_dict[keys]=cls2[1]
+                #print("%s %s" %(keys,mim_pheno_dict[keys]))
+    except IOError:
+        print("Error: can\'t read the MIM  file %s" % paras['mim_pheno'])
+        print("Error: Please download it from InterVar source website")
+        sys.exit()
+    else:
+        fh.close()   
+
+
+
+
+#13. OMIM mim_orpha.txt file 
+    try:
+        fh = open(paras['mim_orpha'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split(' ')
+            if len(cls2)>1:
+                keys=cls2[0]
+                mim_orpha_dict[keys]=cls2[1]
+                #print("%s %s" %(keys,mim_orpha_dict[keys]))
+    except IOError:
+        print("Error: can\'t read the MIM  file %s" % paras['mim_orpha'])
+        print("Error: Please download it from InterVar source website")
+        sys.exit()
+    else:
+        fh.close()   
+
+#14.  orpha.txt file 
+    try:
+        fh = open(paras['orpha'], "r")
+        str = fh.read()
+        for line2 in str.split('\n'):
+            cls2=line2.split('\t')
+            if len(cls2)>1:
+                keys=cls2[0]
+                orpha_dict[keys]=cls2[1]
+                #print("%s %s" %(keys,mim_orpha_dict[keys]))
+    except IOError:
+        print("Error: can\'t read the Orpha  file %s" % paras['orpha'])
+        print("Error: Please download it from InterVar source website")
         sys.exit()
     else:
         fh.close()   
@@ -456,7 +604,9 @@ def check_genes(anvfile):
 #some with multiple genes, so one gene by one gene  to annote
                 sum=sum+1
                 for gg in gene_name.split(','):
-                    line_out=line+"\t"+gg
+                    line_out=re.sub("^[Cc][Hh][Rr]","",line)+"\t"+gg
+                    #line_out=line+"\t"+gg
+                    # re.sub("[Cc][Hh][Rr]","",keys)
                     fw.write("%s\t\n" % line_out)
 
     except IOError:
@@ -478,7 +628,7 @@ def sum_of_list(list):
         sum=sum+i
     return(sum)
 
-def classfy(PVS1,PS,PM,PP,BA1,BS,BP):
+def classfy(PVS1,PS,PM,PP,BA1,BS,BP,Allels_flgs,cls):
     BPS=["Pathogenic","Likely pathogenic","Benign","Likely benign","Uncertain significance"]
     PAS_out=-1
     BES_out=-1
@@ -489,6 +639,86 @@ def classfy(PVS1,PS,PM,PP,BA1,BS,BP):
     PP_sum=sum_of_list(PP)
     BS_sum=sum_of_list(BS)
     BP_sum=sum_of_list(BP)
+
+    #print("Before up/down grade, the sum of PS %s, PM %s,PP %s,BS %s,BP %s" %(PS_sum,PM_sum,PP_sum,BS_sum,BP_sum));
+    #begin process the user's flexible grade  to get the final interpretation
+    if os.path.isfile(paras['evidence_file']):
+        keys=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['Ref']]+"_"+cls[Allels_flgs['Alt']]
+        keys=re.sub("[Cc][Hh][Rr]","",keys)
+        try:
+            evds=user_evidence_dict[keys] #PS1=1;PM1=1;BA1=1;PVS1 PP BS BP
+            for evd in evds.split(';'):
+                evd_t=evd.split('=')
+                if(len(evd_t)>1 and  re.findall('grade', evd_t[0], flags=re.IGNORECASE) ):
+                    #10  104353782   G   A   PVS1=1;PP1=1;PM3=1;grade_PP1=2;
+                    if int(evd_t[1])<=3:
+                        #print ("%s %s %s " %(keys,evd_t[1],evd_t[0]))
+                        if(evd_t[0].find('PS')!=-1): 
+                            t=evd_t[0].find('PS'); 
+                            tt=evd_t[0];
+                            tt3=int(tt[t+2:t+3])
+                            PS_sum=PS_sum-1
+                            if(t<len(evd_t[0])-2 and tt3<=5 ):
+                                if int(evd_t[1]) ==1 :
+                                    PS_sum=PS_sum+1
+                                if int(evd_t[1]) ==2 :
+                                    PM_sum=PM_sum+1
+                                if int(evd_t[1]) ==3 :
+                                    PP_sum=PP_sum+1
+                        if(evd_t[0].find('PM')!=-1):
+                            t=evd_t[0].find('PM'); 
+                            tt=evd_t[0];
+                            tt3=int(tt[t+2:t+3])
+                            PM_sum=PM_sum-1
+                            if(t<len(evd_t[0])-2 and tt3<=7 ):
+                                if int(evd_t[1]) ==1 :
+                                    PS_sum=PS_sum+1
+                                if int(evd_t[1]) ==2 :
+                                    PM_sum=PM_sum+1
+                                if int(evd_t[1]) ==3 :
+                                    PP_sum=PP_sum+1
+                        if(evd_t[0].find('PP')!=-1): 
+                            t=evd_t[0].find('PP'); 
+                            tt=evd_t[0];
+                            tt3=int(tt[t+2:t+3])
+                            PP_sum=PP_sum-1
+                            if(t<len(evd_t[0])-2 and tt3<=6 ):
+                                if int(evd_t[1]) ==1 :
+                                    PS_sum=PS_sum+1
+                                if int(evd_t[1]) ==2 :
+                                    PM_sum=PM_sum+1
+                                if int(evd_t[1]) ==3 :
+                                    PP_sum=PP_sum+1
+                        if(evd_t[0].find('BS')!=-1): 
+                            t=evd_t[0].find('BS'); 
+                            tt=evd_t[0];
+                            tt3=int(tt[t+2:t+3])
+                            BS_sum=BS_sum-1
+                            if(t<len(evd_t[0])-2 and tt3<=5 ):
+                                if int(evd_t[1]) ==1 :
+                                    BS_sum=BS_sum+1
+                                if int(evd_t[1]) ==3 :
+                                    BP_sum=BP_sum+1
+                        if(evd_t[0].find('BP')!=-1):
+                            t=evd_t[0].find('BP'); 
+                            tt=evd_t[0];
+                            tt3=int(tt[t+2:t+3])
+                            BP_sum=BP_sum-1
+                            if(t<len(evd_t[0])-2 and tt3<=8 ):
+                                if int(evd_t[1]) ==1 :
+                                    BS_sum=BS_sum+1
+                                if int(evd_t[1]) ==3 :
+                                    BP_sum=BP_sum+1
+                    
+        except KeyError:
+            pass
+        else:
+            pass
+
+    # end process the user's flexible grade
+
+    #print("After up/down grade, the sum of PS %s, PM %s,PP %s,BS %s,BP %s" %(PS_sum,PM_sum,PP_sum,BS_sum,BP_sum));
+
     #print("%d %d %d %d %d " %(PS_sum,PM_sum,PP_sum,BS_sum, BP_sum))
     if PS_sum ==1: 
         if PM_sum ==1 or PM_sum ==2: PAS_out=1
@@ -544,9 +774,6 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
             PVS_t1=1
             break
     # wait to check LOF genes use the LoFtool_percentile,but  how to know is the disese mechanism
-#    lofscore_cutoff=0.1 
-#    if cls[Funcanno_flgs['LoFtool_percentile']]>0.1:
-#        PVS_t2=1
     try:
         if lof_genes_dict[ cls[Funcanno_flgs['Gene']] ] == '1' :
             PVS_t2=1
@@ -578,6 +805,15 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
             exon_lth="exon"+knownGeneCanonical_dict[trans_id]
             if exon==exon_lth or exon =="exon1": # not 1 or last exon
                 PVS=0
+                try:
+                    if (float(knownGeneCanonical_ed_dict[trans_id])-float( cls[Allels_flgs['Start']]  ))<50: # means close  3' of gene 50 bp.
+                        PVS=0
+                except ValueError:
+                    pass
+                else:
+                    pass
+
+
         except KeyError:
             pass
         else:
@@ -614,12 +850,10 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
             cls0_1=cls0[0].split(':')
             aa=cls0_1[4]
             aa_last=aa[len(aa)-1:]
-            #keys_tmp2=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+cls[Allels_flgs['Ref']]+"_"+cls[Allels_flgs['Alt']]
             keys_tmp2=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+cls[Allels_flgs['Alt']]
             try:
                 if  aa_changes_dict[keys_tmp2]:
                     PS1_t2=0
-                    #print("%s %s" %(aa_changes_dict[keys_tmp2],aa_last))
             except KeyError:
                 for nt in ACGTs:
                     if nt != cls[Allels_flgs['Alt']]:
@@ -714,10 +948,8 @@ def check_PM1(line,Funcanno_flgs,Allels_flgs,domain_benign_dict):
         try:
             if domain_benign_dict[keys_tmp2] =="1":
                 PM1_t2=0
-                #print("PM1=0 %s" %keys_tmp2)
         except KeyError:
             PM1_t2=1
-            #print("PM1=1 %s" %keys_tmp2)
         else:
             pass
 
@@ -726,54 +958,52 @@ def check_PM1(line,Funcanno_flgs,Allels_flgs,domain_benign_dict):
 
     return(PM1)
 
+
 def check_PM2(line,Freqs_flgs,Allels_flgs,Funcanno_flgs,mim2gene_dict,mim2gene_dict2):
     '''
     Absent from controls (or at extremely low frequency if recessive) (Table 6) in Exome Sequencing Project,
     1000 Genomes Project, or Exome Aggregation Consortium
     '''
     PM2=0
-    #Freqs_flgs={'1000g2015aug_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
-    cutoff_maf=0.005  # extremely low frequency
-    #cutoff_maf=0.5  # extremely low frequency
+    cutoff_maf=0.001  # extremely low frequency
     cls=line.split('\t')
-    #mims_id="1256"
+    tt=1;
+    for key in Freqs_flgs.keys():
+        if(cls[Freqs_flgs[key]]!='.'): # absent in all three controls
+            tt=tt*0;
+    if tt==1:
+        PM2=1
 
-    #mim2gene_dict[keys] mim_recessive_dict
-    try:
-        mim1=mim2gene_dict[ cls[Funcanno_flgs['Gene.ensGene']] ]
-        mim2=mim2gene_dict2[cls[Funcanno_flgs['Gene']]]
-        #if  mims_id.find(mim1[0])!=-1 or  mims_id.find(mim2[0])!=-1:
+    if tt==0:  # means some controls has frequency and it is not absent; then need to check it is recessive or not
+        tt2=1;
         try:
-            if  mim_recessive_dict[mim1]=="1" or  mim_recessive_dict[mim2]=="1":  # means it is in recessive
-                #print("PM2 %s %s " % (mim1,mim2))
-                for key in Freqs_flgs.keys():
-                    if(cls[Freqs_flgs[key]]=='.' or float(cls[Freqs_flgs[key]])<=cutoff_maf): 
-                        PM2=1;
-        except KeyError: # means it is not recessive
-                tt=1;
-                for key in Freqs_flgs.keys():
-                    if(cls[Freqs_flgs[key]]!='.'):   # means absent and it is dom
-                        tt=tt*0;
-                if tt==1:
-                    PM2=1
-        else:
-            pass
-                    #print("PM2 =1  ab and dom")
-    except KeyError:  # means it has no mim, also treat as recessive
-        for key in Freqs_flgs.keys():
+            mim2=mim2gene_dict2[cls[Funcanno_flgs['Gene']]]
+            mim1=mim2gene_dict[ cls[Funcanno_flgs['Gene.ensGene']] ]
+
             try:
-                #if float(cls[Freqs_flgs[key]])<=cutoff_maf or float(cls[Freqs_flgs[key]])>=(1.0-cutoff_maf): 
-                if float(cls[Freqs_flgs[key]])<=cutoff_maf  : 
-                    PM2=1
-                    #print("PM2 =1  mf and res")
-            except ValueError:
-                PM2=1 # means absent and it is  recessive
+                if mim_recessive_dict[mim2]=="1" or mim_recessive_dict[mim1]=="1": # it is recessive
+                    for key in Freqs_flgs.keys():
+                        if(cls[Freqs_flgs[key]]!='.' and float(cls[Freqs_flgs[key]])>=cutoff_maf): 
+                            tt2=tt2*0;
+                    if tt2==1:
+                        PM2=1
+                    if tt2==0:
+                        PM2=0
+            except KeyError: # means it is not recessive
+                PM2=0
             else:
                 pass
-    else:
-        pass
+        except KeyError: # it has no mim, also treat as dom and not absent
+            PM2=0
+        else:
+            pass
+
+
 
     return(PM2)
+
+
+
 
 def check_PM3(line,Funcanno_flgs,Allels_flgs):
     '''
@@ -906,6 +1136,7 @@ def check_PP3(line,Funcanno_flgs,Allels_flgs):
     PP3_t2=0
     PP3_t3=0
     sift_cutoff=0.05 #SIFT_score,SIFT_pred, The smaller the score the more likely the SNP has damaging effect
+    metasvm_cutoff=0.0 # greater scores indicating more likely deleterious effects
     PhyloP_cutoff=1.6  # phyloP46way_placental >  , The larger the score, the more conserved the site
     cutoff_conserv=2 # for GERP++_RS
     dbscSNV_cutoff=0.6    #either score(ada and rf) >0.6 as splicealtering
@@ -913,7 +1144,8 @@ def check_PP3(line,Funcanno_flgs,Allels_flgs):
     cls=line.split('\t')
    
     try:
-        if float(cls[Funcanno_flgs['SIFT_score']]) < sift_cutoff:
+        #if float(cls[Funcanno_flgs['SIFT_score']]) < sift_cutoff:
+        if float(cls[Funcanno_flgs['MetaSVM_score']]) >  metasvm_cutoff:
             PP3_t1=1
     except ValueError:  # the sift absent means many:  synonymous indel  stop, but synonymous also is no impact
         funcs_tmp=["synon","coding-synon"]
@@ -974,13 +1206,10 @@ def check_BA1(line,Freqs_flgs,Allels_flgs):
     BA1 Allele frequency is >5% in Exome Sequencing Project, 1000 Genomes Project, or Exome Aggregation Consortium
     '''
     BA1=0
-    #Freqs_flgs={'1000g2015aug_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
     cls=line.split('\t')
     for key in Freqs_flgs.keys():
         try:
-            #if float(cls[Freqs_flgs[key]])>=0.05 and float(cls[Freqs_flgs[key]])<=0.5: BA1=1
-            #if float(cls[Freqs_flgs[key]])>0.5 and float(cls[Freqs_flgs[key]])<=0.95: BA1=1
-            if float(cls[Freqs_flgs[key]])>0.5: BA1=1
+            if float(cls[Freqs_flgs[key]])>0.05: BA1=1
 
         except ValueError:
             pass
@@ -995,27 +1224,26 @@ def check_BS1(line,Freqs_flgs,Allels_flgs):
     > 1% in ESP6500all ExAc? need to check more 
     '''
     BS1=0
-    cutoff=0.01 # disorder cutoff
+    cutoff=0.005 # disorder cutoff
     try:
         cutoff=float(paras['disorder_cutoff']) # user's disorder cutoff
     except ValueError:
-        cutoff=0.01
+        cutoff=0.005
     else:
-        cutoff=0.01
+        cutoff=0.005
     cls=line.split('\t')
-    try:
-        if cls[Freqs_flgs['ExAC_ALL']] !='.':
-            #if float(cls[Freqs_flgs['ExAC_ALL']])>=cutoff and float(cls[Freqs_flgs['ExAC_ALL']])<0.5: BS1=1
-            #if (1.0-float(cls[Freqs_flgs['ExAC_ALL']]))>=cutoff and float(cls[Freqs_flgs['ExAC_ALL']])>=0.5: BS1=1
-            if float(cls[Freqs_flgs['ExAC_ALL']])>=cutoff : BS1=1
-    except ValueError:
-        pass
-    else:
-        pass
+    for key in Freqs_flgs.keys():
+        try:
+            if cls[Freqs_flgs[key]] !='.':
+                if float(cls[Freqs_flgs[key]]  )>=cutoff : BS1=1
+        except ValueError:
+            pass
+        else:
+            pass
 
     return(BS1)
 
-def check_BS2(line,Freqs_flgs,Allels_flgs):
+def check_BS2(line,Freqs_flgs,Allels_flgs,Funcanno_flgs):
     '''
     Observed in a healthy adult individual for a recessive (homozygous), dominant (heterozygous), or X-linked
     (hemizygous) disorder, with full penetrance expected at an early age
@@ -1023,15 +1251,54 @@ def check_BS2(line,Freqs_flgs,Allels_flgs):
     '''
     BS2=0
     cls=line.split('\t')
+    keys=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+cls[Allels_flgs['Ref']]+"_"+cls[Allels_flgs['Alt']]
     try:
-        if cls[Freqs_flgs['ExAC_ALL']] !='.':  # means the variants showed in EXAC
-            # need to wait check the  disorder, with full penetrance expected at an early age?
-                BS2=1
-    except ValueError:
-        pass
+        mim1=mim2gene_dict[ cls[Funcanno_flgs['Gene.ensGene']] ]
+        try:
+            if mim_adultonset_dict[mim1] == "1": # means adult oneset disorder
+                BS2=0;
+        except KeyError: # means not adult onset, begin to check recessive or domiant ,the genotype from 1000 genome
+            try:
+                if mim_recessive_dict[mim1] == "1": # means recessive disorder: check snps as homo
+                    try:
+                        if BS2_snps_recess_dict[ keys ]=="1":  # key as snp info
+                            BS2=1
+                    except KeyError:
+                        pass
+                    else:
+                        pass
+            except KeyError:
+                pass
+            else:
+                pass
+
+
+            try:
+                if mim_domin_dict[mim1] == "1": # means dominant disorder: check snps as heter
+                    BS2=0
+                    try:
+                        if BS2_snps_domin_dict[ keys ]=="1":  # key as snp info
+                            BS2=1
+                    except KeyError:
+                        pass
+                    else:
+                        pass
+            except KeyError:
+                pass
+            else:
+                pass
+
+
+
+
+        else:
+
+            pass
+
+    except KeyError: # means no information of recessive or domiant so BS2=0
+        BS2=0
     else:
         pass
-
 
     return(BS2)
 
@@ -1092,20 +1359,20 @@ def check_BP2(line,Funcanno_flgs,Allels_flgs):
 def check_BP3(line,Funcanno_flgs,Allels_flgs):
     '''
     In-frame deletions/insertions in a repetitive region without a known function
+    if the repetitive region is in the domain, this BP3 should not be applied.
     '''
     BP3=0
     BP3_t1=0
     BP3_t2=0
     cls=line.split('\t')
     #funcs_tmp=["cds-indel","stop-loss"]
-    #funcs_tmp=["nonframeshift insertion","nonframeshift insertion","nonframeshift substitution","stoploss"]
     funcs_tmp=["nonframeshift insertion","nonframeshift deletion","nonframeshift substitution"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 :
             BP3_t1=1;
         # need to wait to check  in a repeat region
-    if cls[Funcanno_flgs['rmsk']] != '.':
+    if cls[Funcanno_flgs['rmsk']] != '.' and  cls[Funcanno_flgs['Interpro_domain']]== '.' : # repeat and not in domain
         BP3_t2=1
 
     if BP3_t1 !=0 and BP3_t2 != 0 :
@@ -1122,13 +1389,15 @@ def check_BP4(line,Funcanno_flgs,Allels_flgs):
     BP4_t2=0
     BP4_t3=0
     sift_cutoff=0.05 #SIFT_score,SIFT_pred, The smaller the score the more likely the SNP has damaging effect
+    metasvm_cutoff=0 # greater scores indicating more likely deleterious effects
     PhyloP_cutoff=1.6  # phyloP46way_placental >  , The larger the score, the more conserved the site
     cutoff_conserv=2 # for GERP++_RS
     dbscSNV_cutoff=0.6    #either score(ada and rf) >0.6 as splicealtering
     
     cls=line.split('\t')
     try: 
-        if float(cls[Funcanno_flgs['SIFT_score']]) >= sift_cutoff:
+        #if float(cls[Funcanno_flgs['SIFT_score']]) >= sift_cutoff:
+        if float(cls[Funcanno_flgs['MetaSVM_score']]) <  metasvm_cutoff:
             BP4_t1=1
     except ValueError:  # the sift absent means many:  synonymous indel  stop, but synonymous also is no impact
         funcs_tmp=["synon","coding-synon"]
@@ -1170,7 +1439,6 @@ def check_BP5(line,Funcanno_flgs,Allels_flgs,morbidmap_dict):
     '''
     BP5=0
     cls=line.split('\t')
-    '''
     try:
         if morbidmap_dict[ cls[Funcanno_flgs['Gene']] ] == '1' :
             BP5=1
@@ -1178,9 +1446,7 @@ def check_BP5(line,Funcanno_flgs,Allels_flgs,morbidmap_dict):
         BP5=0
     else:
         pass
-    '''
-    #diable BP5
-    BP5=0
+    BP5=0; 
     return(BP5)
 
 def check_BP6(line,Funcanno_flgs,Allels_flgs):
@@ -1235,13 +1501,13 @@ def check_BP7(line,Funcanno_flgs,Allels_flgs):
 
 def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
     PVS1=0
-    PS=[0,0,0,0]
-    PM=[0,0,0,0,0,0]
-    PP=[0,0,0,0,0]
+    PS=[0,0,0,0,0]
+    PM=[0,0,0,0,0,0,0]
+    PP=[0,0,0,0,0,0]
 
     BA1=0
-    BS=[0,0,0,0]
-    BP=[0,0,0,0,0,0,0]
+    BS=[0,0,0,0,0]
+    BP=[0,0,0,0,0,0,0,0]
 
 
     PVS1=check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict)
@@ -1285,7 +1551,7 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
     
     BS1=check_BS1(line,Freqs_flgs,Allels_flgs)
     BS[0]=BS1
-    BS2=check_BS2(line,Freqs_flgs,Allels_flgs)
+    BS2=check_BS2(line,Freqs_flgs,Allels_flgs,Funcanno_flgs)
     BS[1]=BS2
     BS3=check_BS3(line,Funcanno_flgs,Allels_flgs)
     BS[2]=BS3
@@ -1331,7 +1597,7 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
             evds=user_evidence_dict[keys] #PS1=1;PM1=1;BA1=1;PVS1 PP BS BP
             for evd in evds.split(';'):
                 evd_t=evd.split('=')
-                if(len(evd_t)>1):
+                if(len(evd_t)>1 and (not re.findall('grade', evd_t[0], flags=re.IGNORECASE)) ):
                     if int(evd_t[1])<=1:
                         #print ("%s %s %s " %(keys,evd_t[1],evd_t[0]))
                         if(evd_t[0]=="PVS1"): PVS1=evd_t[1]
@@ -1340,27 +1606,27 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
                             t=evd_t[0].find('PS'); 
                             tt=evd_t[0];
                             tt3=int(tt[t+2:t+3])
-                            if(t<len(evd_t[0])-2 and tt3<=4 ): PS[tt3-1]=int(evd_t[1])
+                            if(t<len(evd_t[0])-2 and tt3<=5 ): PS[tt3-1]=int(evd_t[1])
                         if(evd_t[0].find('PM')!=-1):
                             t=evd_t[0].find('PM'); 
                             tt=evd_t[0];
                             tt3=int(tt[t+2:t+3])
-                            if(t<len(evd_t[0])-2 and tt3<=6 ): PM[tt3-1]=int(evd_t[1])
+                            if(t<len(evd_t[0])-2 and tt3<=7 ): PM[tt3-1]=int(evd_t[1])
                         if(evd_t[0].find('PP')!=-1): 
                             t=evd_t[0].find('PP'); 
                             tt=evd_t[0];
                             tt3=int(tt[t+2:t+3])
-                            if(t<len(evd_t[0])-2 and tt3<=5 ): PP[tt3-1]=int(evd_t[1])
+                            if(t<len(evd_t[0])-2 and tt3<=6 ): PP[tt3-1]=int(evd_t[1])
                         if(evd_t[0].find('BS')!=-1): 
                             t=evd_t[0].find('BS'); 
                             tt=evd_t[0];
                             tt3=int(tt[t+2:t+3])
-                            if(t<len(evd_t[0])-2 and tt3<=4 ): BS[tt3-1]=int(evd_t[1])
+                            if(t<len(evd_t[0])-2 and tt3<=5 ): BS[tt3-1]=int(evd_t[1])
                         if(evd_t[0].find('BP')!=-1):
                             t=evd_t[0].find('BP'); 
                             tt=evd_t[0];
                             tt3=int(tt[t+2:t+3])
-                            if(t<len(evd_t[0])-2 and tt3<=7 ): BP[tt3-1]=int(evd_t[1])
+                            if(t<len(evd_t[0])-2 and tt3<=8 ): BP[tt3-1]=int(evd_t[1])
 
                     
         except KeyError:
@@ -1372,7 +1638,7 @@ def assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs):
 
     cls=line.split('\t')
     if len(cls)>1:#esp6500siv2_all 1000g2015aug_all ExAC_ALL    
-        BP_out=classfy(PVS1,PS,PM,PP,BA1,BS,BP)
+        BP_out=classfy(PVS1,PS,PM,PP,BA1,BS,BP,Allels_flgs,cls)
         line_t="%s PVS1=%s PS=%s PM=%s PP=%s BA1=%s BS=%s BP=%s" %(BP_out,PVS1,PS,PM,PP,BA1,BS,BP)
 
         #print("%s " % BP_out)
@@ -1396,8 +1662,8 @@ def my_inter_var(annovar_outfile):
     newoutfile=annovar_outfile+".grl_p"
     newoutfile2=annovar_outfile+".intervar"
 
-    Freqs_flgs={'1000g2015aug_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
-    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'CLNDBN':0,'CLNACC':0,'CLNDSDB':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0,'SIFT_score':0,'phyloP46way_placental':0,'Gene.ensGene':0,'CLINSIG':0,'CADD_raw':0,'CADD_phred':0,'avsnp144':0,'AAChange.ensGene':0,'AAChange.knownGene':0}
+    Freqs_flgs={'1000g2015aug_all':0,'esp6500siv2_all':0,'ExAC_ALL':0,'ExAC_AFR':0,'ExAC_AMR':0,'ExAC_EAS':0,'ExAC_FIN':0,'ExAC_NFE':0,'ExAC_OTH':0,'ExAC_SAS':0}
+    Funcanno_flgs={'Func.refGene':0,'ExonicFunc.refGene':0,'AAChange.refGene':0,'Gene':0,'Gene damage prediction (all disease-causing genes)':0,'CLNDBN':0,'CLNACC':0,'CLNDSDB':0,'dbscSNV_ADA_SCORE':0,'dbscSNV_RF_SCORE':0,'GERP++_RS':0,'LoFtool_percentile':0,'Interpro_domain':0,'rmsk':0,'SIFT_score':0,'phyloP46way_placental':0,'Gene.ensGene':0,'CLINSIG':0,'CADD_raw':0,'CADD_phred':0,'avsnp144':0,'AAChange.ensGene':0,'AAChange.knownGene':0,'MetaSVM_score':0}
     Allels_flgs={'Chr':0,'Start':0,'End':0,'Ref':0,'Alt':0}
 # ExAC_ALL esp6500siv2_all   1000g2015aug_all  SIFT_score    CADD_raw    CADD_phred  GERP++_RS   phyloP46way_placental  dbscSNV_ADA_SCORE   dbscSNV_RF_SCORE   Interpro_domain
 
@@ -1407,7 +1673,7 @@ def my_inter_var(annovar_outfile):
         str=fh.read()
         line_sum=0;
         print("Notice: Begin the variants interpretation by InterVar ")
-        fw.write("#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("Chr","Start","End","Ref","Alt","Ref.Gene","Func.refGene","ExonicFunc.refGene", "Gene.ensGene","avsnp144","AAChange.ensGene","AAChange.refGene","Clinvar","InterVar and Evidence","Freq_ExAC_ALL", "Freq_esp6500siv2_all","Freq_1000g2015aug_all", "CADD_raw","CADD_phred","SIFT_score","GERP++_RS","phyloP46way_placental","dbscSNV_ADA_SCORE", "dbscSNV_RF_SCORE", "Interpro_domain","AAChange.knownGene","rmsk"  ))
+        fw.write("#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("Chr","Start","End","Ref","Alt","Ref.Gene","Func.refGene","ExonicFunc.refGene", "Gene.ensGene","avsnp144","AAChange.ensGene","AAChange.refGene","Clinvar","InterVar and Evidence","Freq_ExAC_ALL", "Freq_esp6500siv2_all","Freq_1000g2015aug_all", "CADD_raw","CADD_phred","SIFT_score","GERP++_RS","phyloP46way_placental","dbscSNV_ADA_SCORE", "dbscSNV_RF_SCORE", "Interpro_domain","AAChange.knownGene","rmsk","MetaSVM_score","Freq_ExAC_POPs","OMIM","Phenotype_MIM","OrphaNumber","Orpha"  ))
         for line in str.split('\n'):
             BP="UNK" # the inter of pathogenetic/benign
             clinvar_bp="UNK"
@@ -1426,7 +1692,29 @@ def my_inter_var(annovar_outfile):
                     clinvar_bp=cls3[0]
                     
                 intervar_bp=assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs)
-                fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']], cls[Funcanno_flgs['Gene.ensGene']],cls[Funcanno_flgs['avsnp144']],cls[Funcanno_flgs['AAChange.ensGene']],cls[Funcanno_flgs['AAChange.refGene']],clinvar_bp,intervar_bp,cls[Freqs_flgs['ExAC_ALL']], cls[Freqs_flgs['esp6500siv2_all']], cls[Freqs_flgs['1000g2015aug_all']], cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],cls[Funcanno_flgs['SIFT_score']],  cls[Funcanno_flgs['GERP++_RS']],cls[Funcanno_flgs['phyloP46way_placental']], cls[Funcanno_flgs['dbscSNV_ADA_SCORE']], cls[Funcanno_flgs['dbscSNV_RF_SCORE']], cls[Funcanno_flgs['Interpro_domain']],cls[Funcanno_flgs['AAChange.knownGene']],cls[Funcanno_flgs['rmsk']]   ))
+		Freq_ExAC_POPs="AFR:"+cls[Freqs_flgs['ExAC_AFR']]+",AMR:"+cls[Freqs_flgs['ExAC_AMR']]+",EAS:"+cls[Freqs_flgs['ExAC_EAS']]+",FIN:"+cls[Freqs_flgs['ExAC_FIN']]+",NFE:"+cls[Freqs_flgs['ExAC_NFE']]+",OTH:"+cls[Freqs_flgs['ExAC_OTH']]+",SAS:"+cls[Freqs_flgs['ExAC_SAS']]
+                OMIM="." 
+                mim2=mim2gene_dict2.get(cls[Funcanno_flgs['Gene']],".")
+                mim1=mim2gene_dict.get(cls[Funcanno_flgs['Gene.ensGene']],".")
+                if(mim1 !="."):
+                   OMIM=mim1
+                if(mim2 !="."):
+                   OMIM=mim2
+                Pheno_MIM=mim_pheno_dict.get(OMIM,".")
+                orpha="";
+                orpha_details="";
+                # .;442835;;306;;.;
+                for ort2 in Pheno_MIM.split(';'):
+                    ort3=mim_orpha_dict.get(ort2,".")
+                    if(ort3 !="."):
+                        orpha=ort3+orpha
+                for ort4 in orpha.split(';'):
+                    if len(ort4)>0:
+                         orpha_details=orpha_details+orpha_dict.get(ort4,".")+"~"
+                        
+
+
+                fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']], cls[Funcanno_flgs['Gene.ensGene']],cls[Funcanno_flgs['avsnp144']],cls[Funcanno_flgs['AAChange.ensGene']],cls[Funcanno_flgs['AAChange.refGene']],clinvar_bp,intervar_bp,cls[Freqs_flgs['ExAC_ALL']], cls[Freqs_flgs['esp6500siv2_all']], cls[Freqs_flgs['1000g2015aug_all']], cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],cls[Funcanno_flgs['SIFT_score']],  cls[Funcanno_flgs['GERP++_RS']],cls[Funcanno_flgs['phyloP46way_placental']], cls[Funcanno_flgs['dbscSNV_ADA_SCORE']], cls[Funcanno_flgs['dbscSNV_RF_SCORE']], cls[Funcanno_flgs['Interpro_domain']],cls[Funcanno_flgs['AAChange.knownGene']],cls[Funcanno_flgs['rmsk']],cls[Funcanno_flgs['MetaSVM_score']],Freq_ExAC_POPs,OMIM,Pheno_MIM,orpha,orpha_details   ))
                 #print("%s\t%s %s" % (line,clinvar_bp,intervar_bp))
 
             line_sum=line_sum+1
@@ -1484,7 +1772,10 @@ def main():
     parser.add_option_group(group)
     group = optparse.OptionGroup(parser, "   How to add your own Evidence for each Variant",
     """ Prepare your own evidence  file as tab-delimited,the line format:
-            Chr Pos Ref_allele Alt_allele  PM1=1;BS2=1;BP3=0
+         (The code for additional evidence should be as: PS5/PM7/PP6/BS5/BP8 ;
+         The format for upgrad/downgrade of criteria should be like: grade_PS1=2; 
+         1 for Strong; 2 for Moderate; 3 for Supporting)   
+            Chr Pos Ref_allele Alt_allele  PM1=1;BS2=1;BP3=0;PS5=1;grade_PM1=1
                                 """)
     parser.add_option_group(group)
 
@@ -1557,6 +1848,7 @@ def main():
 
     paras['ps1_aa'] = paras['ps1_aa']+'.'+paras['buildver']
     paras['ps4_snps'] = paras['ps4_snps']+'.'+paras['buildver']
+    paras['bs2_snps'] = paras['bs2_snps']+'.'+paras['buildver']
     paras['exclude_snps'] = paras['exclude_snps']+'.'+paras['buildver']
 
     if options.table_annovar != None:
@@ -1596,7 +1888,7 @@ def main():
     print ("INFO: The options are %s " % paras)
     check_downdb()
     check_input()
-    #check_annovar_result() #  to obtain myanno.hg19_multianno.csv
+    check_annovar_result() #  to obtain myanno.hg19_multianno.csv
     annovar_outfile=paras['outfile']+"."+paras['buildver']+"_multianno.txt"
     read_datasets()
     #sum1=check_gdi_rvis_LOF(annovar_outfile)
