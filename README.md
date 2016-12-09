@@ -77,6 +77,9 @@ InterVar takes either pre-annotated files, or unannotated input files in VCF for
 
 We also developed a web server of InterVar called wInterVar, which can be accessed at [http://wintervar.wglab.org](http://wintervar.wglab.org). The user can directly input their missense variants in wInterVar by chromosomal position, by dbSNP identifier, or by gene name with nucleic acid change information. The wInterVar server will provide full details on the variants, including all the evidence codes for the variants. The user then has the ability to manually adjust these evidence codes and resubmit to the server to perform re-interpretation. Since all evidence codes for all possible non-synonymous variants have been pre-computed by us, the execution of wInterVar is very fast, typically less than 1 second to obtain the results. However, the wInterVar server cannot process other types of variants (such as indels), and the user will need to use InterVar instead.
 
+## Webserver
+wInterVar:[http://wintervar.wglab.org](http://wintervar.wglab.org)
+
 ## LICENSE
 
 InterVar is free for non-commercial use without warranty. Users need to obtain licenses such as OMIM and ANNOVAR by themselves. Please contact the authors for commercial use.
