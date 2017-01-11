@@ -1207,7 +1207,8 @@ def check_BA1(line,Freqs_flgs,Allels_flgs):
     '''
     BA1=0
     cls=line.split('\t')
-    for key in Freqs_flgs.keys():
+    Freqs_3pops={'1000g2015aug_all':0,'esp6500siv2_all':0,'ExAC_ALL':0}
+    for key in Freqs_3pops.keys():
         try:
             if float(cls[Freqs_flgs[key]])>0.05: BA1=1
 
