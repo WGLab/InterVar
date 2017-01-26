@@ -85,7 +85,7 @@ wInterVar:  [http://wintervar.wglab.org](http://wintervar.wglab.org)
 InterVar is free for non-commercial use without warranty. Users need to obtain licenses such as OMIM and ANNOVAR by themselves. Please contact the authors for commercial use.
 
 ## REFERENCE
-Li Q, Wang K. InterVar: clinical interpretation of genetic variants by the ACMG/AMP 2015 guidelines.
+Quan Li and Kai Wang. InterVar: Clinical interpretation of genetic variants by ACMG-AMP 2015 guideline. The American Journal of Human Genetics 100, 1-14, February 2, 2017,[http://dx.doi.org/10.1016/j.ajhg.2017.01.004]http://dx.doi.org/10.1016/j.ajhg.2017.01.004
 
 [The ACMG 2015 guide](http://www.ncbi.nlm.nih.gov/pubmed/25741868)
 Richards, S. et al. Standards and guidelines for the interpretation of sequence variants: a joint consensus recommendation of the American College of Medical Genetics and Genomics and the Association for Molecular Pathology. Genetics in medicine : official journal of the American College of Medical Genetics 17, 405-424 (2015).
