@@ -12,11 +12,10 @@ import copy,logging,os,io,re,time,sys,platform,optparse,gzip
 prog="InterVar"
 
 version = """%prog 0.1
-Copyright (C) 2016 Wang Genomic Lab
-Lisense GPL: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html>.
-This is free software: you are free to change and redistribute it.
-There is NO WARRENTY, to the extent permittable by law.
 Written by Quan LI,leequan@gmail.com. 
+InterVar is free for non-commercial use without warranty.
+Please contact the authors for commercial use.
+Copyright (C) 2016 Wang Genomic Lab
 ============================================================================
 """
 
