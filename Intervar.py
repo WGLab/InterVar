@@ -454,7 +454,7 @@ def check_downdb():
         if dbs=="1000g2014oct":
             file_name="ALL.sites.2014_10"
         if dbs=="1000g2015aug":
-            file_name="ALL.sites.2015_08"
+            file_name="1000g2015aug"
 
         dataset_file=paras['database_locat']+"/"+paras['buildver']+"_"+file_name+".txt"
         if dbs != 'rmsk':
