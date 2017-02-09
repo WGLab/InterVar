@@ -17,6 +17,6 @@ Please click the menu items to navigate through this website. Check [here](misc/
 
 ## Reference
 
-- Li Q, Wang K. InterVar: Interpretation of genetic variants by ACMG2015 guideline 
+- Li Q, Wang K. InterVar: Clinical Interpretation of Genetic Variants by the 2015 ACMG-AMP Guidelines. _American Journal of Human Genetics_, 2:267-280, 2017 
 
 
