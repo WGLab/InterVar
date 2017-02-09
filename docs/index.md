@@ -6,10 +6,11 @@ InterVar is a bioinformatics software tool for clinical interpretation of geneti
 
 Description of the pipeline here
 
-
 Please click the menu items to navigate through this website. Check [here](misc/whatsnew.md) to see what is new in InterVar.
 
 ---
+
+![new](img/new.png) 2017Jan26: The InterVar paper is published online now [here](http://www.sciencedirect.com/science/article/pii/S0002929717300046).
 
 ![new](img/new.png) 2015Nov16: The GitHub repository for InterVar is created.
 
