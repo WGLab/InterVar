@@ -1845,6 +1845,24 @@ def main():
         print("Warning: You provided your own evidence file [ %s ] for the InterVar." % options.evidence_file)
     if options.database_intervar != None:
         paras['database_intervar']=options.database_intervar
+        paras['lof_genes'] = paras['database_intervar']+'/PVS1.LOF.genes'
+        paras['pm1_domain'] = paras['database_intervar']+'/PM1_domains_with_benigns'
+        paras['mim2gene'] =paras['database_intervar']+'/mim2gene.txt'
+        paras['morbidmap'] = paras['database_intervar']+'/morbidmap'
+        paras['mim_recessive'] = paras['database_intervar']+'/mim_recessive.txt'
+        paras['mim_domin'] = paras['database_intervar']+'/mim_domin.txt'
+        paras['mim_adultonset'] = paras['database_intervar']+'/mim_adultonset.txt'
+        paras['mim_pheno'] = paras['database_intervar']+'/mim_pheno.txt'
+        paras['mim_orpha'] = paras['database_intervar']+'/mim_orpha.txt'
+        paras['orpha'] = paras['database_intervar']+'/orpha.txt'
+        paras['knowngenecanonical'] = paras['database_intervar']+'/knownGeneCanonical.txt'
+        paras['pp2_genes'] = paras['database_intervar']+'/PP2.genes'
+        paras['bp1_genes'] = paras['database_intervar']+'/BP1.genes'
+        paras['ps1_aa'] = paras['database_intervar']+'/PS1.AA.change.patho'
+        paras['ps4_snps'] = paras['database_intervar']+'/PS4.variants'
+        paras['bs2_snps'] = paras['database_intervar']+'/BS2_hom_het'
+        paras['exclude_snps'] = paras['database_intervar']+'/ext.variants'
+
 
     paras['ps1_aa'] = paras['ps1_aa']+'.'+paras['buildver']
     paras['ps4_snps'] = paras['ps4_snps']+'.'+paras['buildver']
