@@ -12,6 +12,8 @@ Please click the menu items to navigate through this website. Check [here](misc/
 
 ![new](img/new.png) 2017Jan26: The InterVar paper is published online now [here](http://www.sciencedirect.com/science/article/pii/S0002929717300046).
 
+![new](img/new.png) 2016Jan24: The web server of InterVar as wInterVar is  online now [here](http://wintervar.wglab.org).
+
 ![new](img/new.png) 2015Nov16: The GitHub repository for InterVar is created.
 
 ---
