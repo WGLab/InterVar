@@ -11,6 +11,7 @@ For beginners, the easiest way to use InterVar is to annotate a VCF file by ANNO
 ## EXAMPLE
 
     ./InterVar.py -c config.ini  # Run the examples in config.ini
+
     ./InterVar.py  -b hg19 -i your_input  --input_type=VCF  -o your_output
 
 
