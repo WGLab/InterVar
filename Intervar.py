@@ -451,10 +451,10 @@ def check_downdb():
     for dbs in ds.split():
         # os.path.isfile(options.table_annovar)
         file_name=dbs
-        if dbs=="1000g2014oct":
-            file_name="ALL.sites.2014_10"
+        #if dbs=="1000g2014oct":
+        #    file_name="ALL.sites.2014_10"
         if dbs=="1000g2015aug":
-            file_name="1000g2015aug"
+            file_name="ALL.sites.2015_08" # hg19_ALL.sites.2015_08.txt
 
         dataset_file=paras['database_locat']+"/"+paras['buildver']+"_"+file_name+".txt"
         if dbs != 'rmsk':
@@ -462,6 +462,10 @@ def check_downdb():
         if dbs == 'rmsk':
             cmd="perl "+paras['annotate_variation']+" -buildver "+paras['buildver']+" -downdb "+file_name+" "+paras['database_locat']
         if  not os.path.isfile(dataset_file):
+            if dbs=="1000g2015aug":
+                file_name="1000g2015aug"
+                dataset_file=paras['database_locat']+"/"+paras['buildver']+"_"+file_name+".txt"
+                cmd="perl "+paras['annotate_variation']+" -buildver "+paras['buildver']+" -downdb -webfrom annovar "+file_name+" "+paras['database_locat']
             print("Warning: The Annovar dataset file of %s is not in %s,begin to download this %s ..." %(dbs,paras['database_locat'],dataset_file))
             print("%s" %cmd)
             os.system(cmd)
