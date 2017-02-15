@@ -4,9 +4,7 @@ InterVar is a bioinformatics software tool for clinical interpretation of geneti
 
 # Pipeline
 
-Description of the pipeline here
-
-Please click the menu items to navigate through this website. Check [here](misc/whatsnew.md) to see what is new in InterVar.
+ Check [here](misc/whatsnew.md) to see what is new in InterVar.
 
 ---
 
