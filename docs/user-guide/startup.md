@@ -8,6 +8,7 @@ For beginners, the easiest way to use InterVar is to annotate a VCF file by ANNO
 4. Downlad all necessary datasets from ANNOVAR( InterVar also will download automatically)
 5. Prepare your input file, it can be VCF file or AVinput as ANNOVAR's input,actually the input file only need information of Chr,Position start,Position end, Reference_allele,Alternative_allele 
 6. Run the InterVar!
+
 ## EXAMPLE
 
     ./InterVar.py -c config.ini  # Run the examples in config.ini

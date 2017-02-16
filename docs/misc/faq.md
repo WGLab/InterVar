@@ -8,6 +8,9 @@
 
 3. **What is the difference between the pre-built InterVar scores in ANNOVAR versus using InterVar?**
 
-    To facilitate people with quick-and-dirty analysis of variants, we pre-computed InterVar step 1 (automated interpretation) scores for ~80 million missense/nonsense variants (based on refGene definition) and provide this database through ANNOVAR. However, please note that these scores are only for missense/nonsense variants, so you cannot interpret indels by this database. Furthermore, the variant definitions were purely based on RefSeq and it may miss some genuine missense/nonsense variants not defined in that particular version of RefSeq. Finally, the results are generated using all default parameters in InterVar, and they may not suit the specific needs of a user. For these reasons, caution should be exercised when using these results.
+    To facilitate people with quick-and-dirty analysis of variants, we pre-computed InterVar step 1 (automated interpretation) scores for ~80 million missense/nonsense variants (based on refGene definition) and provide this database through ANNOVAR. However, please note that these scores are only for missense/nonsense variants based on 18 criteria, also  you cannot interpret indels by this database. Furthermore, the variant definitions were purely based on RefSeq and it may miss some genuine missense/nonsense variants not defined in that particular version of RefSeq. Finally, the results are generated using all default parameters in InterVar, and they may not suit the specific needs of a user. For these reasons, caution should be exercised when using these results.
+4. **I get error of "IndexError: list index out of range"**
+   
+    Make sure all your datasets are updated such as OMIM(mim2gene and morbidmap), outdated file will bring these errors.
 
 
