@@ -100,10 +100,6 @@ Quan Li and Kai Wang. InterVar: Clinical interpretation of genetic variants by A
 [The ACMG 2015 guide](http://www.ncbi.nlm.nih.gov/pubmed/25741868)
 Richards, S. et al. Standards and guidelines for the interpretation of sequence variants: a joint consensus recommendation of the American College of Medical Genetics and Genomics and the Association for Molecular Pathology. Genetics in medicine : official journal of the American College of Medical Genetics 17, 405-424 (2015).
 
-
-
-
-
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
