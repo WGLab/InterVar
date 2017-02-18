@@ -11,7 +11,7 @@ import copy,logging,os,io,re,time,sys,platform,optparse,gzip,glob
 
 prog="InterVar"
 
-version = """%prog 0.1
+version = """%prog 0.1.5
 Written by Quan LI,leequan@gmail.com. 
 InterVar is free for non-commercial use without warranty.
 Please contact the authors for commercial use.
@@ -508,8 +508,6 @@ def check_annovar_result():
 # table_annovar.pl example/ex1.avinput humandb/ -buildver hg19 -out myanno -remove -protocol refGene,esp6500siv2_all,1000g2015aug_all,avsnp144,ljb26_all,CLINSIG,exac03   -operation  g,f,f,f,f,f,f   -nastring . -csvout
     inputft= paras['inputfile_type']
     annovar_options=" "
-    #  re.findall('grade', evd_t[0], flags=re.IGNORECASE) )
-    #if re.findall('true',paras['otherinfo'], flags=re.IGNORECASE) and inputft.lower() == 'avinput' :
     if re.findall('true',paras['otherinfo'], flags=re.IGNORECASE)  :
         annovar_options=annovar_options+"--otherinfo " 
     if re.findall('true',paras['onetranscript'], flags=re.IGNORECASE) :
