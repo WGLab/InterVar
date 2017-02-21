@@ -281,8 +281,7 @@ public_dev = https://github.com/WGLab/InterVar/releases
 ## Prepare your input files:
 The format of input file can be VCF or AVinput as ANNOVAR input,actually the input file only need information of Chr,Position start,Position end, Reference_allele,Alternative_allele.
 ```
-qli@sched1|:~/work/InterVar/InterVar>head -5  example/ex1.avinput
-chr1    115828756 115828756  G   A
+qli@sched1|:~/work/InterVar/InterVar>head -4  example/ex1.avinput
 1       948921  948921  T       C       comments: rs15842, a SNP in 5' UTR of ISG15
 1       984971  984971  G       A       comments: rs111818381
 1       984971  984971  G       C       comments: rs111818381
@@ -397,11 +396,24 @@ qli@sched1|:~/InterVar-master>head -3 example/myanno.hg19_multianno.txt.intervar
 1       984971  984971  G       A       AGRN    exonic  nonsynonymous SNV       ENSG00000188157 rs111818381     ENSG00000188157:ENST00000379370:exon26:c.G4540A:p.A1514T       AGRN:NM_198576:exon26:c.G4540A:p.A1514T clinvar: Likely benign   InterVar: Likely benign PVS1=0 PS=[0, 0, 0, 0, 0] PM=[0, 0, 0, 0, 0, 0, 0] PP=[0, 0, 0, 0, 0, 0] BA1=0 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 1, 0, 1, 0, 0]         0.01270.0079   0.00439297      -0.923  0.023   0.594   -1.43   .       .       .       Concanavalin A-like lectin/glucanase domain;Laminin G domain   AGRN:uc001ack.2:exon26:c.G4540A:p.A1514T        .       -1.041  AFR:0.0034,AMR:0.0160,EAS:0,FIN:0.0162,NFE:0.0191,OTH:0.0174,SAS:0.0033        103320  615120; 590;98913;98914;        590|CMS|1-9 / 1 000 000|Autosomal dominant<br>or&nbsp;Autosomal recessive|Infancy<br>Neonatal|254190 254210 254300 601462 603034 605809 608930 608931 610542 614198 614750 615120 616040 616227 616228 616304 616313 616314 616321 616322 616323 616324 616325 616326 616330 616720 617143 ~98913|-|-|-|-|254300 601462 605809 608930 608931 614198 615120 616304 616313 616314 616321 616322 616323 616324 616325 616326 616720 ~98914|-|-|Autosomal dominant<br>or&nbsp;Autosomal recessive|-|254210 615120 616040 616330 616720 617143 ~
 
 ```
-The resutl is tab-delimited,you can import this file into EXcel, The colunm of "InterVar: InterVar and Evidence" give the InterVar inpretation result with the criteria.
+The resutl is tab-delimited,you can import this file into Excel, The colunm of "InterVar: InterVar and Evidence" give the InterVar interpretation result with all the criteria.
 
 
 
-## SYNOPSIS
+## Advance usage: 
+
+* How to add own Evidence 
+
+* How to change the strength of criteria
+
+* 
+
+## Tips:
+
+
+
+
+## Following is the full synopsis and options of InterVar
 
 Intervar.py [options]
 
