@@ -419,7 +419,7 @@ For one variant in the example:
 
 `1   67705958    67705958    G   A   IL23R   exonic  nonsynonymous SNV`
 
-Firtly, we need to check the automated interpretation information in the `example/myanno.hg19_multianno.txt.intervar ` by `grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'`
+Firstly, we need to check the automated interpretation information in the `example/myanno.hg19_multianno.txt.intervar ` by `grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'`
 
 ```
 qli@sched1|:~/InterVar-master>grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
@@ -431,7 +431,9 @@ This variant is annotated by InterVar as `Uncertain significance`, and the crite
 
 `PVS1=0 PS=[0, 0, 0, 0, 0] PM=[0, 0, 0, 0, 0, 0, 0] PP=[0, 0, 0, 0, 0, 0] BA1=0 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 0, 0, 0, 0, 0]`
 
-We want add two criteria  as PS3=1 for "Well-established in vitro or in vivo functional studies supportive of a damaging effect " and  PM6=1 for "PM6: Assumed de novo, but without confirmation of paternity and maternity".
+Only BS1=1, all other criterai is 0;
+
+We want add two criteria  as PS3=1 for "Well-established in vitro or in vivo functional studies supportive of a damaging effect " and  PM6=1 for "Assumed de novo, but without confirmation of paternity and maternity".
 
 Please vim a tab-delimited text file with name as "evdience.txt". The format should be like:
 
@@ -441,14 +443,14 @@ Chr Position Ref_allele Alt_allele evidence_list
 
 it will like this:
 
-'''
+```
 qli@sched1|:~/InterVar-master>cat evdience.txt
 1       67705958        G       A       PS3=1;PM6=1
 
-'''
+```
 Re-run the annotation and add the option of --evidence_file by `python Intervar.py  -i example/ex1.avinput  -o example/myanno --evidence_file=evdience.txt`
 
-'''
+```
 qli@sched1|:~/InterVar-master>python Intervar.py  -i example/ex1.avinput  -o example/myanno --evidence_file=evdience.txt               =============================================================================
 InterVar
 Interpretation of Pathogenic/Benign for variants using python scripts of InterVar.
@@ -475,17 +477,17 @@ Report bugs to leequan@gmail.com;
 InterVar homepage: <https://wInterVar.wglab.org>
 =============================================================================
 
-'''
+```
 
 Then we check the new result of `example/myanno.hg19_multianno.txt.intervar`, by `grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
 
-'''
+```
 qli@sched1|:~/InterVar-master>grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
 1       67705958        67705958        G       A       IL23R   exonic  nonsynonymous SNV        InterVar: Likely pathogenic PVS1=0 PS=[0, 0, 1, 0, 0] PM=[0, 0, 0, 0, 0, 1, 0] PP=[0, 0, 0, 0, 0, 0] BA1=0 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 0, 0, 0, 0, 0]
 
-'''
+```
 
-The annotation results change to `Likely pathogenic`, and also you can find the PS3=1 and PM6=1;
+The annotation results change to `Likely pathogenic`, and also you can find that  PS3 change to 1 and PM6 change to 1;
 
 
 
