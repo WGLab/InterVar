@@ -489,6 +489,8 @@ qli@sched1|:~/InterVar-master> grep "67705958"  example/myanno.hg19_multianno.tx
 
 The annotation results change to `Likely pathogenic`, and also you can find that  PS3 change to 1 and PM6 change to 1;
 
+So, one strong pathogenic criteria(PS3) and one moderate pathogenic criteria(PM6) will make the clinical interpretation as `Likely pathogenic`.
+
 
 
 
