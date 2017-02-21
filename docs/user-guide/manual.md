@@ -95,7 +95,7 @@ drwxr-x---  5 qli qli  4096 Feb 17 22:40 .
 drwx------ 33 qli qli  4096 Feb 21 11:13 ..
 
 ```
-Now you can find the main python program as `Intervar.py`, and test the main program of InterVar can run properly by `python Intervar.py` or not:
+Now you can find the main python program as `Intervar.py`, and test the main program of InterVar can run properly or not by `python Intervar.py` :
 
 ```
 qli@sched1|:~/InterVar-master> python Intervar.py
@@ -178,7 +178,7 @@ Several third-party researchers have provided additional annotation program and 
 
 Now,assume that we have downloaded ANNOVAR package and used `tar xvfz annovar.latest.tar.gz` to unpack the package. You will see that the `bin/` directory contains several Perl programs with .pl suffix. 
 
-Also Download the mim2gene.txt by using `wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt`, and copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
+Also Download the mim2gene.txt by using `wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt`.
 
 ```
 qli@sched1|:~/InterVar-master> wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt
@@ -194,7 +194,9 @@ Saving to: "mim2gene.txt"
 2017-02-21 11:47:06 (2.31 MB/s) - "mim2gene.txt" saved [1090455/1090455]
 ```
 
-Then please copy or link three ANNOVAR perl files: `annotate_variation.pl` `table_annovar.pl` `convert2annovar.pl` to InterVar's folder of `InterVar-master`. Please move or copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
+Then please copy or link three ANNOVAR perl files: `annotate_variation.pl` `table_annovar.pl` `convert2annovar.pl` to InterVar's folder of `InterVar-master`.
+ 
+Also please move or copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
 
 ```
 qli@sched1|:~/tools/annovar> cp -f annotate_variation.pl table_annovar.pl convert2annovar.pl ~/InterVar-master/
@@ -410,6 +412,7 @@ The resutl is tab-delimited,you can import this file into Excel, The colunm of "
 ## Advanced usage: 
 
 * How to add your own evidence 
+
 In this section, I will give the example of how to add the user's own evidence for the variants.
 
 
