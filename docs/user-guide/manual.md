@@ -2,7 +2,7 @@
 
 ## download and  unzip the main package
 
-Download the InterVar zip package at [here](https://github.com/WGLab/InterVar/archive/master.zip) using wget:
+Download the InterVar zip package at [here](https://github.com/WGLab/InterVar/archive/master.zip) using `wget https://github.com/WGLab/InterVar/archive/master.zip -O InterVar.zip`:
 
 ```
 qli@sched1|:~>wget https://github.com/WGLab/InterVar/archive/master.zip -O InterVar.zip
@@ -76,10 +76,11 @@ Archive:  InterVar.zip
   inflating: InterVar-master/intervardb/orpha.txt
   inflating: InterVar-master/mkdocs.yml
 ```
-Go to the folder `InterVar-master` and check the files using `ls -al *`
+Go to the folder `InterVar-master` and check the files using `ls -alrt .`
 
 ```
-qli@sched1|:~/InterVar-master>ls -alrt
+qli@sched1|:~>cd InterVar-master/
+qli@sched1|:~/InterVar-master>ls -alrt .
 total 128
 -rw-r-----  1 qli qli  5613 Feb 17 22:40 README.md
 -rw-r-----  1 qli qli   752 Feb 17 22:40 mkdocs.yml
@@ -94,7 +95,7 @@ drwxr-x---  5 qli qli  4096 Feb 17 22:40 .
 drwx------ 33 qli qli  4096 Feb 21 11:13 ..
 
 ```
-Now you can test whether the main program of InterVar by `python Intervar.py` 
+Now you can find the main python program as `Intervar.py`, and test whether the main program of InterVar can run properly by `python Intervar.py`
 
 ```
 qli@sched1|:~/InterVar-master>python Intervar.py
@@ -159,8 +160,138 @@ Options:
     ./InterVar.py  -b hg19 -i your_input  --input_type=VCF  -o your_output
 
 ```
+The python of `Intervar.py` can run  with python version > 2.6 .
+If you can see above screen output, that mean the InterVar can run on your system without problem.
+Otherwise, please check your python version using `env python --version`
+
+Next you need to download the ANNOVAR and  OMIM datasets.
 
 
+## Download Third-party Program and datasets
+
+Several third-party researchers have provided additional annotation datasets that can be used by InterVar directly. However, users need to agree to specific license terms set forth by the third parties:
+
+
+* ANNOVAR main package : Please join the ANNOVAR mailing list at google groups [here](https://groups.google.com/forum/#!forum/annovar) to receive announcements on software updates. The latest version of ANNOVAR (2016Feb01) can be downloaded [here](http://www.openbioinformatics.org/annovar/annovar_download_form.php) (registration required). A patch to table_annovar.pl can be downloaded [here](http://www.openbioinformatics.org/annovar/download/table_annovar.pl) that fixed an error when `-separate` is used within `-arg` argument. ANNOVAR is written in Perl and can be run as a standalone application on diverse hardware systems where standard Perl modules are installed.
+
+* OMIM dataset: Please download the  mim2gene.txt  from OMIM at [here](http://www.omim.org/downloads),Please use the updated files from OMIM, outdated files will bring problems of InterVar.
+
+
+Assume that we have downloaded ANNOVAR package and used `tar xvfz annovar.latest.tar.gz` to unpack the package. You will see that the `bin/` directory contains several Perl programs with .pl suffix. 
+Then please copy or link these three perl files: `annotate_variation.pl` `table_annovar.pl` `convert2annovar.pl` to InterVar's folder of `InterVar-master`.
+
+Also Download the mim2gene.txt by using `wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt`, and copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
+
+'''
+@sched1|:~/InterVar-master>wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt
+--2017-02-21 11:47:05--  https://www.omim.org/static/omim/data/mim2gene.txt
+Resolving www.omim.org... 54.84.223.11
+Connecting to www.omim.org|54.84.223.11|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 1090455 (1.0M) [text/plain]
+Saving to: "mim2gene.txt"
+
+100%[=============================================================================================>] 1,090,455   2.31M/s   in 0.4s
+
+2017-02-21 11:47:06 (2.31 MB/s) - "mim2gene.txt" saved [1090455/1090455]
+'''
+
+Then please copy or link these three perl files: `annotate_variation.pl` `table_annovar.pl` `convert2annovar.pl` to InterVar's folder of `InterVar-master`. move or copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
+
+
+'''
+qli@sched1|:~/tools/annovar>cp -f annotate_variation.pl table_annovar.pl convert2annovar.pl ~/InterVar-master/
+
+qli@sched1|:~/InterVar-master>cp -f mim2gene.txt ~/InterVar-master/intervardb/
+
+'''
+
+Please go to  InterVar's folder of `InterVar-master`,check and edit the config.ini using `vim config.ini`, check these lines in the config.ini . The names and locations in config.ini  should match with your downloaded files:
+`mim2gene = %(database_intervar)s/mim2gene.txt` 
+`convert2annovar = ./convert2annovar.pl`
+`table_annovar = ./table_annovar.pl`
+`annotate_variation = ./annotate_variation.pl`
+
+'''
+[InterVar]
+buildver = hg19
+# hg19
+inputfile = example/ex1.avinput
+# the inputfile and the path  example/ex1.avinput hg19_clinvar_20151201.avinput
+# tab-delimited will be better for including the other information
+inputfile_type = AVinput
+# the input file type VCF(vcf file with single sample),AVinput,VCF_m(vcf file with multiple samples)
+outfile = example/myanno
+# the output file location and prefix of output file
+database_intervar = intervardb
+# the database location/dir for Intervar
+lof_genes = %(database_intervar)s/PVS1.LOF.genes
+pm1_domain = %(database_intervar)s/PM1_domains_with_benigns
+mim2gene = %(database_intervar)s/mim2gene.txt
+#morbidmap = %(database_intervar)s/morbidmap.txt
+mim_recessive = %(database_intervar)s/mim_recessive.txt
+mim_domin = %(database_intervar)s/mim_domin.txt
+mim_adultonset = %(database_intervar)s/mim_adultonset.txt
+mim_pheno = %(database_intervar)s/mim_pheno.txt
+mim_orpha = %(database_intervar)s/mim_orpha.txt
+orpha = %(database_intervar)s/orpha.txt
+knowngenecanonical = %(database_intervar)s/knownGeneCanonical.txt
+pp2_genes = %(database_intervar)s/PP2.genes
+bp1_genes = %(database_intervar)s/BP1.genes
+ps1_aa = %(database_intervar)s/PS1.AA.change.patho
+# do not add the builder version
+ps4_snps = %(database_intervar)s/PS4.variants
+# do not add the builder version
+bs2_snps = %(database_intervar)s/BS2_hom_het
+# do not add the builder version
+exclude_snps = %(database_intervar)s/ext.variants
+# do not add the builder version,the variant in this list will not check the frequency, it is causal.
+# the list should be tab-delimited,format like this:
+# Chr Pos Ref_allele Alt_allele
+evidence_file = None
+# add your own Evidence file for each Variant:
+# evidence file as tab-delimited,format like this:
+# Chr Pos Ref_allele Alt_allele  PM1=1;BS2=1;PP2=0
+disorder_cutoff = 0.01
+#It is for BS1: Allele frequency is greater than expected for disorder
+[InterVar_Bool]
+onetranscript = FALSE
+# TRUE or FALSE: print out only one transcript for exonic variants (default: FALSE/all transcripts)
+otherinfo = FALSE
+# TRUE or FALSE: print out otherinfo (infomration in fifth column in queryfile,default: FALSE)
+# this option only perform well with AVinput file,and the other information only can be put in the fifth column.  The information in >5th column will be lost.
+# When input as  VCF or VCF_m files with otherinfo option, only het/hom will be kept, depth and qual will be lost.
+[Annovar]
+convert2annovar = ./convert2annovar.pl
+#convert input file to annovar format
+table_annovar = ./table_annovar.pl
+# table_annovar.pl of file location
+annotate_variation = ./annotate_variation.pl
+# annotate_variation of file location
+database_locat = humandb
+# the database location/dir from annnovar   check if database file exists
+database_names = refGene esp6500siv2_all 1000g2015aug avsnp144 dbnsfp30a clinvar_20160302 exac03 dbscsnv11 dbnsfp31a_interpro rmsk ensGene knownGene
+# specify the database_names from ANNOVAR or UCSC
+[Other]
+current_version = Intervar_20170217
+# pipeline version
+public_dev = https://github.com/WGLab/InterVar/releases
+
+'''
+
+
+## Prepare you input files:
+The format of input file can be VCF or AVinput as ANNOVAR input,actually the input file only need information of Chr,Position start,Position end, Reference_allele,Alternative_allele.
+'''
+qli@sched1|:~/work/InterVar/InterVar>head -5  example/ex1.avinput
+chr1    115828756 115828756  G   A
+1       948921  948921  T       C       comments: rs15842, a SNP in 5' UTR of ISG15
+1       984971  984971  G       A       comments: rs111818381
+1       984971  984971  G       C       comments: rs111818381
+1       1404001 1404001 G       T       comments: rs149123833, a SNP in 3' UTR of ATAD3C
+
+'''
+The input file type can be specified by option of  `--input_type`, there are three types:  AVinput(Annovar''sformat),VCF(VCF with single sample),VCF_m(VCF with multiple samples)
 
 
 
@@ -185,7 +316,7 @@ if you use this options,you can ignore all the other options bellow.
 input file of  variants for analysis
 
 - --input_type=AVinput
-The input file type, it can be  AVinput(Annovar''sformat),VCF
+The input file type, it can be  AVinput(Annovar''sformat),VCF(VCF with single sample),VCF_m(VCF with multiple samples)
 
 - -o OUTPUTFILE, --output=OUTPUTFILE
 prefix the output file (default:output)
