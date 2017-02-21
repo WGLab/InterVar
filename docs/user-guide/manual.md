@@ -1,6 +1,6 @@
 ## Warning: All the following steps are in the Linux system
 
-## download and  unzip the main package
+## Download and  unzip the main package
 
 Download the InterVar zip package at [here](https://github.com/WGLab/InterVar/archive/master.zip) using `wget https://github.com/WGLab/InterVar/archive/master.zip -O InterVar.zip`:
 
@@ -290,6 +290,250 @@ chr1    115828756 115828756  G   A
 ```
 
 The input file type can be specified by option of  `--input_type`, there are three types:  AVinput(Annovar''sformat),VCF(VCF with single sample),VCF_m(VCF with multiple samples)
+
+## Run the Annotation on you files.
+Please be advice that for the first time of running InterVar, the InterVar will use the `perl ./annotate_variation.pl` to download the necessary ANNOVAR datasests,it will take some time.(If you are ANNOVAR's user before, you can specify the annovar's database_location by option `--database_locat`, you also can edit the config.ini, find the line `database_locat = humandb` and replace with your location  , InterVar will check if all database file exist in you provided location).But next time you run the InterVar, you  will no need to wait to download ANNOVAR's dataset again.
+
+```
+qli@sched1|:~/InterVar-master>python Intervar.py  -i example/ex1.avinput  -o example/myanno
+=============================================================================
+InterVar
+Interpretation of Pathogenic/Benign for variants using python scripts of InterVar.
+=============================================================================
+
+%prog 0.1.5
+Written by Quan LI,leequan@gmail.com.
+InterVar is free for non-commercial use without warranty.
+Please contact the authors for commercial use.
+Copyright (C) 2016 Wang Genomic Lab
+============================================================================
+
+Notice: Your command of InterVar is ['Intervar.py', '-i', 'example/ex1.avinput', '-o', 'example/myanno']
+INFO: The options are {'pp2_genes': 'intervardb/PP2.genes', 'inputfile': 'example/ex1.avinput', 'exclude_snps': 'intervardb/ext.variants.hg19', 'annotate_variation': './annotate_variation.pl', 'ps4_snps': 'intervardb/PS4.variants.hg19', 'mim_recessive': 'intervardb/mim_recessive.txt', 'current_version': 'Intervar_20170217', 'bs2_snps': 'intervardb/BS2_hom_het.hg19', 'evidence_file': 'None', 'public_dev': 'https://github.com/WGLab/InterVar/releases', 'otherinfo': 'FALSE', 'database_names': 'refGene esp6500siv2_all 1000g2015aug avsnp144 dbnsfp30a clinvar_20160302 exac03 dbscsnv11 dbnsfp31a_interpro rmsk ensGene knownGene', 'mim_pheno': 'intervardb/mim_pheno.txt', 'table_annovar': './table_annovar.pl', 'buildver': 'hg19', 'inputfile_type': 'AVinput', 'onetranscript': 'FALSE', 'mim2gene': 'intervardb/mim2gene.txt', 'orpha': 'intervardb/orpha.txt', 'ps1_aa': 'intervardb/PS1.AA.change.patho.hg19', 'mim_adultonset': 'intervardb/mim_adultonset.txt', 'morbidmap': 'intervardb/morbidmap.txt', 'outfile': 'example/myanno', 'knowngenecanonical': 'intervardb/knownGeneCanonical.txt', 'convert2annovar': './convert2annovar.pl', 'database_locat': 'humandb', 'database_intervar': 'intervardb', 'lof_genes': 'intervardb/PVS1.LOF.genes', 'disorder_cutoff': '0.01', 'mim_domin': 'intervardb/mim_domin.txt', 'pm1_domain': 'intervardb/PM1_domains_with_benigns', 'mim_orpha': 'intervardb/mim_orpha.txt', 'bp1_genes': 'intervardb/BP1.genes'}
+Notice: the folder of humandb is created!
+Warning: The Annovar dataset file of refGene is not in humandb,begin to download this humandb/hg19_refGene.txt ...
+perl ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb
+NOTICE: Web-based checking to see whether ANNOVAR new version is available ... Done
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_refGene.txt.gz ... OK
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_refGeneMrna.fa.gz ... OK
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_refGeneVersion.txt.gz ... OK
+NOTICE: Uncompressing downloaded files
+NOTICE: Finished downloading annotation files for hg19 build version, with files saved at the 'humandb' directory
+Warning: The Annovar dataset file of esp6500siv2_all is not in humandb,begin to download this humandb/hg19_esp6500siv2_all.txt ...
+perl ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar esp6500siv2_all humandb
+NOTICE: Web-based checking to see whether ANNOVAR new version is available ... Done
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_esp6500siv2_all.txt.gz ... OK
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_esp6500siv2_all.txt.idx.gz ... OK
+NOTICE: Uncompressing downloaded files
+NOTICE: Finished downloading annotation files for hg19 build version, with files saved at the 'humandb' directory
+Warning: The Annovar dataset file of 1000g2015aug is not in humandb,begin to download this humandb/hg19_1000g2015aug.txt ...
+perl ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar 1000g2015aug humandb
+NOTICE: Web-based checking to see whether ANNOVAR new version is available ... Done
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_1000g2015aug.zip ... OK
+NOTICE: Uncompressing downloaded files
+NOTICE: Finished downloading annotation files for hg19 build version, with files saved at the 'humandb' directory
+Warning: The Annovar dataset file of avsnp144 is not in humandb,begin to download this humandb/hg19_avsnp144.txt ...
+perl ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar avsnp144 humandb
+NOTICE: Web-based checking to see whether ANNOVAR new version is available ... Done
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_avsnp144.txt.gz ... OK
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_avsnp144.txt.idx.gz ... OK
+NOTICE: Uncompressing downloaded files
+NOTICE: Finished downloading annotation files for hg19 build version, with files saved at the 'humandb' directory
+Warning: The Annovar dataset file of dbnsfp30a is not in humandb,begin to download this humandb/hg19_dbnsfp30a.txt ...
+perl ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp30a humandb
+NOTICE: Web-based checking to see whether ANNOVAR new version is available ... Done
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_dbnsfp30a.txt.gz ... OK
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_dbnsfp30a.txt.idx.gz ... OK
+NOTICE: Uncompressing downloaded files
+NOTICE: Finished downloading annotation files for hg19 build version, with files saved at the 'humandb' directory
+Warning: The Annovar dataset file of clinvar_20160302 is not in humandb,begin to download this humandb/hg19_clinvar_20160302.txt ...
+perl ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20160302 humandb
+NOTICE: Web-based checking to see whether ANNOVAR new version is available ... Done
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_clinvar_20160302.txt.gz ... OK
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_clinvar_20160302.txt.idx.gz ... OK
+NOTICE: Uncompressing downloaded files
+NOTICE: Finished downloading annotation files for hg19 build version, with files saved at the 'humandb' directory
+Warning: The Annovar dataset file of exac03 is not in humandb,begin to download this humandb/hg19_exac03.txt ...
+perl ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar exac03 humandb
+NOTICE: Web-based checking to see whether ANNOVAR new version is available ... Done
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_exac03.txt.gz ... OK
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_exac03.txt.idx.gz ... OK
+NOTICE: Uncompressing downloaded files
+NOTICE: Finished downloading annotation files for hg19 build version, with files saved at the 'humandb' directory
+Warning: The Annovar dataset file of dbscsnv11 is not in humandb,begin to download this humandb/hg19_dbscsnv11.txt ...
+perl ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbscsnv11 humandb
+NOTICE: Web-based checking to see whether ANNOVAR new version is available ... Done
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_dbscsnv11.txt.gz ... OK
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_dbscsnv11.txt.idx.gz ... OK
+NOTICE: Uncompressing downloaded files
+NOTICE: Finished downloading annotation files for hg19 build version, with files saved at the 'humandb' directory
+Warning: The Annovar dataset file of dbnsfp31a_interpro is not in humandb,begin to download this humandb/hg19_dbnsfp31a_interpro.txt ...
+perl ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp31a_interpro humandb
+NOTICE: Web-based checking to see whether ANNOVAR new version is available ... Done
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_dbnsfp31a_interpro.txt.gz ... OK
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_dbnsfp31a_interpro.txt.idx.gz ... OK
+NOTICE: Uncompressing downloaded files
+NOTICE: Finished downloading annotation files for hg19 build version, with files saved at the 'humandb' directory
+Warning: The Annovar dataset file of rmsk is not in humandb,begin to download this humandb/hg19_rmsk.txt ...
+perl ./annotate_variation.pl -buildver hg19 -downdb rmsk humandb
+NOTICE: Web-based checking to see whether ANNOVAR new version is available ... Done
+NOTICE: Downloading annotation database http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/rmsk.txt.gz ... OK
+NOTICE: Uncompressing downloaded files
+NOTICE: Finished downloading annotation files for hg19 build version, with files saved at the 'humandb' directory
+Warning: The Annovar dataset file of ensGene is not in humandb,begin to download this humandb/hg19_ensGene.txt ...
+perl ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar ensGene humandb
+NOTICE: Web-based checking to see whether ANNOVAR new version is available ... Done
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_ensGene.txt.gz ... OK
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_ensGeneMrna.fa.gz ... OK
+NOTICE: Uncompressing downloaded files
+NOTICE: Finished downloading annotation files for hg19 build version, with files saved at the 'humandb' directory
+Warning: The Annovar dataset file of knownGene is not in humandb,begin to download this humandb/hg19_knownGene.txt ...
+perl ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar knownGene humandb
+NOTICE: Web-based checking to see whether ANNOVAR new version is available ... Done
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_knownGene.txt.gz ... OK
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_kgXref.txt.gz ... OK
+NOTICE: Downloading annotation database http://www.openbioinformatics.org/annovar/download/hg19_knownGeneMrna.fa.gz ... OK
+NOTICE: Uncompressing downloaded files
+NOTICE: Finished downloading annotation files for hg19 build version, with files saved at the 'humandb' directory
+perl ./table_annovar.pl example/ex1.avinput humandb -buildver hg19 -remove -out example/myanno -protocol refGene,esp6500siv2_all,1000g2015aug_all,avsnp144,dbnsfp30a,clinvar_20160302,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk,ensGene,knownGene  -operation  g,f,f,f,f,f,f,f,f,r,g,g   -nastring .
+-----------------------------------------------------------------
+```
+Then beigin to annotate the variants:
+```
+
+NOTICE: Processing operation=g protocol=refGene
+
+NOTICE: Running with system command <annotate_variation.pl -geneanno -buildver hg19 -dbtype refGene -outfile example/myanno.refGene -exonsort example/ex1.avinput humandb>
+NOTICE: Output files were written to example/myanno.refGene.variant_function, example/myanno.refGene.exonic_variant_function
+NOTICE: Reading gene annotation from humandb/hg19_refGene.txt ... Done with 52068 transcripts (including 11837 without coding sequence annotation) for 26464 unique genes
+NOTICE: Processing next batch with 18 unique variants in 18 input lines
+NOTICE: Reading FASTA sequences from humandb/hg19_refGeneMrna.fa ... Done with 17 sequences
+WARNING: A total of 356 sequences will be ignored due to lack of correct ORF annotation
+-----------------------------------------------------------------
+NOTICE: Processing operation=f protocol=esp6500siv2_all
+
+NOTICE: Running system command <annotate_variation.pl -filter -dbtype esp6500siv2_all -buildver hg19 -outfile example/myanno example/ex1.avinput humandb>
+NOTICE: the --dbtype esp6500siv2_all is assumed to be in generic ANNOVAR database format
+NOTICE: Variants matching filtering criteria are written to example/myanno.hg19_esp6500siv2_all_dropped, other variants are written to example/myanno.hg19_esp6500siv2_all_filtered
+NOTICE: Processing next batch with 18 unique variants in 18 input lines
+NOTICE: Database index loaded. Total number of bins is 594771 and the number of bins to be scanned is 12
+NOTICE: Scanning filter database humandb/hg19_esp6500siv2_all.txt...Done
+-----------------------------------------------------------------
+NOTICE: Processing operation=f protocol=1000g2015aug_all
+
+NOTICE: Running system command <annotate_variation.pl -filter -dbtype 1000g2015aug_all -buildver hg19 -outfile example/myanno example/ex1.avinput humandb>
+NOTICE: Variants matching filtering criteria are written to example/myanno.hg19_ALL.sites.2015_08_dropped, other variants are written to example/myanno.hg19_ALL.sites.2015_08_filtered
+NOTICE: Processing next batch with 18 unique variants in 18 input lines
+NOTICE: Database index loaded. Total number of bins is 2824642 and the number of bins to be scanned is 17
+NOTICE: Scanning filter database humandb/hg19_ALL.sites.2015_08.txt...Done
+-----------------------------------------------------------------
+NOTICE: Processing operation=f protocol=avsnp144
+
+NOTICE: Running system command <annotate_variation.pl -filter -dbtype avsnp144 -buildver hg19 -outfile example/myanno example/ex1.avinput humandb>
+NOTICE: Variants matching filtering criteria are written to example/myanno.hg19_avsnp144_dropped, other variants are written to example/myanno.hg19_avsnp144_filtered
+NOTICE: Processing next batch with 18 unique variants in 18 input lines
+NOTICE: Database index loaded. Total number of bins is 27170585 and the number of bins to be scanned is 17
+NOTICE: Scanning filter database humandb/hg19_avsnp144.txt...Done
+-----------------------------------------------------------------
+NOTICE: Processing operation=f protocol=dbnsfp30a
+NOTICE: Finished reading 34 column headers for '-dbtype dbnsfp30a'
+
+NOTICE: Running system command <annotate_variation.pl -filter -dbtype dbnsfp30a -buildver hg19 -outfile example/myanno example/ex1.avinput humandb -otherinfo>
+NOTICE: the --dbtype dbnsfp30a is assumed to be in generic ANNOVAR database format
+NOTICE: Variants matching filtering criteria are written to example/myanno.hg19_dbnsfp30a_dropped, other variants are written to example/myanno.hg19_dbnsfp30a_filtered
+NOTICE: Processing next batch with 18 unique variants in 18 input lines
+NOTICE: Database index loaded. Total number of bins is 548895 and the number of bins to be scanned is 11
+NOTICE: Scanning filter database humandb/hg19_dbnsfp30a.txt...Done
+-----------------------------------------------------------------
+NOTICE: Processing operation=f protocol=clinvar_20160302
+NOTICE: Finished reading 5 column headers for '-dbtype clinvar_20160302'
+
+NOTICE: Running system command <annotate_variation.pl -filter -dbtype clinvar_20160302 -buildver hg19 -outfile example/myanno example/ex1.avinput humandb -otherinfo>
+NOTICE: the --dbtype clinvar_20160302 is assumed to be in generic ANNOVAR database format
+NOTICE: Variants matching filtering criteria are written to example/myanno.hg19_clinvar_20160302_dropped, other variants are written to example/myanno.hg19_clinvar_20160302_filtered
+NOTICE: Processing next batch with 18 unique variants in 18 input lines
+NOTICE: Database index loaded. Total number of bins is 22881 and the number of bins to be scanned is 10
+NOTICE: Scanning filter database humandb/hg19_clinvar_20160302.txt...Done
+-----------------------------------------------------------------
+NOTICE: Processing operation=f protocol=exac03
+NOTICE: Finished reading 8 column headers for '-dbtype exac03'
+
+NOTICE: Running system command <annotate_variation.pl -filter -dbtype exac03 -buildver hg19 -outfile example/myanno example/ex1.avinput humandb -otherinfo>
+NOTICE: the --dbtype exac03 is assumed to be in generic ANNOVAR database format
+NOTICE: Variants matching filtering criteria are written to example/myanno.hg19_exac03_dropped, other variants are written to example/myanno.hg19_exac03_filtered
+NOTICE: Processing next batch with 18 unique variants in 18 input lines
+NOTICE: Database index loaded. Total number of bins is 749886 and the number of bins to be scanned is 12
+NOTICE: Scanning filter database humandb/hg19_exac03.txt...Done
+-----------------------------------------------------------------
+NOTICE: Processing operation=f protocol=dbscsnv11
+NOTICE: Finished reading 2 column headers for '-dbtype dbscsnv11'
+
+NOTICE: Running system command <annotate_variation.pl -filter -dbtype dbscsnv11 -buildver hg19 -outfile example/myanno example/ex1.avinput humandb -otherinfo>
+NOTICE: the --dbtype dbscsnv11 is assumed to be in generic ANNOVAR database format
+NOTICE: Variants matching filtering criteria are written to example/myanno.hg19_dbscsnv11_dropped, other variants are written to example/myanno.hg19_dbscsnv11_filtered
+NOTICE: Processing next batch with 18 unique variants in 18 input lines
+NOTICE: Database index loaded. Total number of bins is 421415 and the number of bins to be scanned is 7
+NOTICE: Scanning filter database humandb/hg19_dbscsnv11.txt...Done
+-----------------------------------------------------------------
+NOTICE: Processing operation=f protocol=dbnsfp31a_interpro
+NOTICE: Finished reading 1 column headers for '-dbtype dbnsfp31a_interpro'
+
+NOTICE: Running system command <annotate_variation.pl -filter -dbtype dbnsfp31a_interpro -buildver hg19 -outfile example/myanno example/ex1.avinput humandb -otherinfo>
+NOTICE: the --dbtype dbnsfp31a_interpro is assumed to be in generic ANNOVAR database format
+NOTICE: Variants matching filtering criteria are written to example/myanno.hg19_dbnsfp31a_interpro_dropped, other variants are written to example/myanno.hg19_dbnsfp31a_interpro_filtered
+NOTICE: Processing next batch with 18 unique variants in 18 input lines
+NOTICE: Database index loaded. Total number of bins is 275326 and the number of bins to be scanned is 5
+NOTICE: Scanning filter database humandb/hg19_dbnsfp31a_interpro.txt...Done
+-----------------------------------------------------------------
+NOTICE: Processing operation=r protocol=rmsk
+
+NOTICE: Running with system command <annotate_variation.pl -regionanno -dbtype rmsk -buildver hg19 -outfile example/myanno example/ex1.avinput humandb>
+NOTICE: Output file is written to example/myanno.hg19_rmsk
+NOTICE: Reading annotation database humandb/hg19_rmsk.txt ... Done with 5298130 regions
+NOTICE: Finished region-based annotation on 18 genetic variants
+-----------------------------------------------------------------
+NOTICE: Processing operation=g protocol=ensGene
+
+NOTICE: Running with system command <annotate_variation.pl -geneanno -buildver hg19 -dbtype ensGene -outfile example/myanno.ensGene -exonsort example/ex1.avinput humandb>
+NOTICE: Output files were written to example/myanno.ensGene.variant_function, example/myanno.ensGene.exonic_variant_function
+NOTICE: Reading gene annotation from humandb/hg19_ensGene.txt ... Done with 196501 transcripts (including 101155 without coding sequence annotation) for 57905 unique genes
+NOTICE: Processing next batch with 18 unique variants in 18 input lines
+NOTICE: Reading FASTA sequences from humandb/hg19_ensGeneMrna.fa ... Done with 22 sequences
+WARNING: A total of 6780 sequences will be ignored due to lack of correct ORF annotation
+-----------------------------------------------------------------
+NOTICE: Processing operation=g protocol=knownGene
+
+NOTICE: Running with system command <annotate_variation.pl -geneanno -buildver hg19 -dbtype knownGene -outfile example/myanno.knownGene -exonsort example/ex1.avinput humandb>
+NOTICE: Output files were written to example/myanno.knownGene.variant_function, example/myanno.knownGene.exonic_variant_function
+NOTICE: Reading gene annotation from humandb/hg19_knownGene.txt ... Done with 78963 transcripts (including 18502 without coding sequence annotation) for 28495 unique genes
+NOTICE: Processing next batch with 18 unique variants in 18 input lines
+NOTICE: Reading FASTA sequences from humandb/hg19_knownGeneMrna.fa ... Done with 47 sequences
+WARNING: A total of 43 sequences will be ignored due to lack of correct ORF annotation
+-----------------------------------------------------------------
+NOTICE: Multianno output file is written to example/myanno.hg19_multianno.txt
+
+Notice: Begin the variants interpretation by InterVar
+Notice: About 18 lines in your variant file!
+Notice: About 22 variants has been processed by InterVar
+Notice: The InterVar is finished, the output file is [ example/myanno.hg19_multianno.txt.intervar ]
+=============================================================================
+Thanks for using InterVar!
+Report bugs to leequan@gmail.com;
+InterVar homepage: <https://wInterVar.wglab.org>
+=============================================================================
+
+
+```
+Then you can check your result file `example/myanno.hg19_multianno.txt.intervar`.
+
+```
+qli@sched1|:~/InterVar-master>head -3 example/myanno.hg19_multianno.txt.intervar
+#Chr    Start   End     Ref     Alt     Ref.Gene        Func.refGene    ExonicFunc.refGene      Gene.ensGene    avsnp144        AAChange.ensGene       AAChange.refGene        clinvar: Clinvar         InterVar: InterVar and Evidence        Freq_ExAC_ALL   Freq_esp6500siv2_all   Freq_1000g2015aug_all   CADD_raw        CADD_phred      SIFT_score      GERP++_RS       phyloP46way_placental   dbscSNV_ADA_SCORE      dbscSNV_RF_SCORE        Interpro_domain AAChange.knownGene      rmsk    MetaSVM_score   Freq_ExAC_POPs  OMIM    Phenotype_MIM OrphaNumber      Orpha
+1       948921  948921  T       C       ISG15   UTR5    .       ENSG00000187608 rs15842 .       .       clinvar: UNK     InterVar: Benign PVS1=0 PS=[0, 0, 0, 0, 0] PM=[0, 0, 0, 0, 0, 0, 0] PP=[0, 0, 0, 0, 0, 0] BA1=1 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 0, 0, 0, 0, 0]      0.9416   0.8858  0.903155        .       .       .       .       .       .       .       .       .       .       .       AFR:0.7386,AMR:0.9632,EAS:0.9998,FIN:0.9681,NFE:0.9543,OTH:0.9410,SAS:0.9617   147571  616126; 319563; 319563|MSMD due to complete ISG15 deficiency|<1 / 1 000 000|Autosomal recessive|Childhood|616126 ~
+1       984971  984971  G       A       AGRN    exonic  nonsynonymous SNV       ENSG00000188157 rs111818381     ENSG00000188157:ENST00000379370:exon26:c.G4540A:p.A1514T       AGRN:NM_198576:exon26:c.G4540A:p.A1514T clinvar: Likely benign   InterVar: Likely benign PVS1=0 PS=[0, 0, 0, 0, 0] PM=[0, 0, 0, 0, 0, 0, 0] PP=[0, 0, 0, 0, 0, 0] BA1=0 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 1, 0, 1, 0, 0]         0.01270.0079   0.00439297      -0.923  0.023   0.594   -1.43   .       .       .       Concanavalin A-like lectin/glucanase domain;Laminin G domain   AGRN:uc001ack.2:exon26:c.G4540A:p.A1514T        .       -1.041  AFR:0.0034,AMR:0.0160,EAS:0,FIN:0.0162,NFE:0.0191,OTH:0.0174,SAS:0.0033        103320  615120; 590;98913;98914;        590|CMS|1-9 / 1 000 000|Autosomal dominant<br>or&nbsp;Autosomal recessive|Infancy<br>Neonatal|254190 254210 254300 601462 603034 605809 608930 608931 610542 614198 614750 615120 616040 616227 616228 616304 616313 616314 616321 616322 616323 616324 616325 616326 616330 616720 617143 ~98913|-|-|-|-|254300 601462 605809 608930 608931 614198 615120 616304 616313 616314 616321 616322 616323 616324 616325 616326 616720 ~98914|-|-|Autosomal dominant<br>or&nbsp;Autosomal recessive|-|254210 615120 616040 616330 616720 617143 ~
+
+```
+
 
 
 
