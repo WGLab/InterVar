@@ -501,11 +501,11 @@ we will use the same variant as before:
 
 `1   67705958    67705958    G   A   IL23R   exonic  nonsynonymous SNV`
 
-we already add more evidence "PS3=1;PM6=1", and we also want increase the PM6 from moderate to strong:
+we already add more evidence `PS3=1;PM6=11, and we also want to increase the PM6 from moderate to strong:
 
 The format for upgrad/downgrade of criteria should be like:    
 
-grade_PXX=2;grade_BXX=3           1 for Strong; 2 for Moderate; 3 for Supporting
+`grade_PXX=2;grade_BXX=3`           `1 for Strong; 2 for Moderate; 3 for Supporting`
 
 so we need add a `grade_PM6=1`, then the finally user own evidence file of evdience.txt will like this:
 
@@ -532,7 +532,7 @@ InterVar homepage: <https://wInterVar.wglab.org>
 
 ```
 
-Then we check the new result of `example/myanno.hg19_multianno.txt.intervar`, by `grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'`
+Check the new result of `example/myanno.hg19_multianno.txt.intervar`, by `grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'`
 
 ```
 qli@sched1|:~/InterVar-master> grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
