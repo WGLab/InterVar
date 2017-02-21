@@ -116,8 +116,8 @@ def read_datasets():
     if os.path.isfile(paras['evidence_file']):
         try:
             fh=open(paras['evidence_file'], "r")
-            str = fh.read()
-            for line2 in str.split('\n'):
+            strs = fh.read()
+            for line2 in strs.split('\n'):
                 cls2=line2.split('\t')
                 if len(cls2)>1:
                     keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]
@@ -148,8 +148,8 @@ def read_datasets():
 #2. AA change list
     try:
         fh = open(paras['ps1_aa'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split('\t')
             if len(cls2)>1 :
                 keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[4]
@@ -165,8 +165,8 @@ def read_datasets():
 #3. Domain with benign 
     try:
         fh = open(paras['pm1_domain'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split('\t')
             if len(cls2)>1:
                 keys=cls2[0]+"_"+cls2[1]+": "+cls2[2]
@@ -181,8 +181,8 @@ def read_datasets():
 #4. OMIM mim2gene.txt file 
     try:
         fh = open(paras['mim2gene'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split('\t')
             if len(cls2)>1:
                 cls0=cls2[4].split(',')
@@ -201,8 +201,8 @@ def read_datasets():
 #5.PP2 gene list       
     try:               
         fh = open(paras['pp2_genes'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split('\t')
             if len(cls2[0])>1:
                 PP2_genes_dict[cls2[0]]='1'
@@ -217,8 +217,8 @@ def read_datasets():
 #5.BP1 gene list       
     try:               
         fh = open(paras['bp1_genes'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split('\t')
             if len(cls2[0])>1:
                 BP1_genes_dict[cls2[0]]='1'
@@ -230,11 +230,13 @@ def read_datasets():
     else:
         fh.close()    
 
-#6.morbidmap from OMIM  for BP5 ,  multifactorial disorders  list       
+#6.morbidmap from OMIM  for BP5 ,  multifactorial disorders  list
+#The reviewers suggeset to disable the OMIM morbidmap for BP5 
+    '''
     try:               
         fh = open(paras['morbidmap'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split('\t')
             #print("%s %s %d" % (cls2[0], cls[Funcanno_flgs['Gene']], len(cls2[0])) )
             #{Tuberculosis, protection against}, 607948 (3)|TIRAP, BACTS1|606252|11q24.2
@@ -249,6 +251,7 @@ def read_datasets():
         sys.exit()
     else:
         fh.close()    
+    '''
 
 #7.prevalence of the variant with OR>5 for PS4 ,  the dataset is from gwasdb jjwanglab.org/gwasdb
     try:               
@@ -272,8 +275,8 @@ def read_datasets():
     if os.path.isfile(paras['exclude_snps']):
         try:
             fh=open(paras['exclude_snps'], "r")
-            str = fh.read()
-            for line2 in str.split('\n'):
+            strs = fh.read()
+            for line2 in strs.split('\n'):
                 cls2=line2.split('\t')
                 if len(cls2)>1:
                     keys=cls2[0]+"_"+cls2[1]+"_"+cls2[2]+"_"+cls2[3]
@@ -286,8 +289,8 @@ def read_datasets():
 #9. OMIM mim_recessive.txt file mim_domin  mim_adultonset 
     try:
         fh = open(paras['mim_recessive'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split('\t')
             if len(cls2[0])>1:
                 mim_recessive_dict[cls2[0]]='1'
@@ -299,8 +302,8 @@ def read_datasets():
         fh.close()   
     try:
         fh = open(paras['mim_domin'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split('\t')
             if len(cls2[0])>1:
                 mim_domin_dict[cls2[0]]='1'
@@ -312,8 +315,8 @@ def read_datasets():
         fh.close()   
     try:
         fh = open(paras['mim_adultonset'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split('\t')
             if len(cls2[0])>1:
                 mim_adultonset_dict[cls2[0]]='1'
@@ -330,8 +333,8 @@ def read_datasets():
 #10. knownGeneCanonical exon file  # caution the build ver, now it is hg19
     try:
         fh = open(paras['knowngenecanonical'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split(' ')
             if len(cls2)>1:
                 keys=cls2[0]
@@ -351,8 +354,8 @@ def read_datasets():
         with myGzipFile(paras['bs2_snps'], "rb") as fh:
 
             #fh = open(paras['bs2_snps'], "r")
-            str = fh.read()
-            for line2 in str.split('\n'):
+            strs = fh.read()
+            for line2 in strs.split('\n'):
                 cls2=line2.split(' ')
                 # PS4_snps_dict
                 if len(cls2[0])>=1:  #
@@ -378,8 +381,8 @@ def read_datasets():
  
     try:
         fh = open(paras['mim_pheno'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split(' ')
             if len(cls2)>1:
                 keys=cls2[0]
@@ -398,8 +401,8 @@ def read_datasets():
 #13. OMIM mim_orpha.txt file 
     try:
         fh = open(paras['mim_orpha'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split(' ')
             if len(cls2)>1:
                 keys=cls2[0]
@@ -415,8 +418,8 @@ def read_datasets():
 #14.  orpha.txt file 
     try:
         fh = open(paras['orpha'], "r")
-        str = fh.read()
-        for line2 in str.split('\n'):
+        strs = fh.read()
+        for line2 in strs.split('\n'):
             cls2=line2.split('\t')
             if len(cls2)>1:
                 keys=cls2[0]
@@ -535,7 +538,7 @@ def check_annovar_result():
         
     
     return
-
+'''
 def get_gdi_rvis_lof(gene_name,line_out,dicts,temple):
     try:
         line_out=line_out+"\t"+'\t'.join(str(e) for e in dicts[gene_name])
@@ -632,6 +635,9 @@ def check_gdi_rvis_LOF(anvfile):
         fw.close()
 
     return(sum)
+'''
+
+
 
 def check_genes(anvfile):
 #check with multiple genes, so one gene by one gene  to annote
@@ -639,10 +645,10 @@ def check_genes(anvfile):
     try:
         fh = open(anvfile, "r")
         fw = open(newoutfile, "w")
-        str = fh.read()
+        strs = fh.read()
         sum=0
         otherinf_pos=1
-        for line in str.split('\n'):
+        for line in strs.split('\n'):
             cls=line.split('\t')
             if len(cls)>1:
                 if sum==0 and re.findall('true',paras['otherinfo'], flags=re.IGNORECASE) :
@@ -1500,6 +1506,8 @@ def check_BP5(line,Funcanno_flgs,Allels_flgs,morbidmap_dict):
     '''
     Variant found in a case with an alternate molecular basis for disease
     check the genes whether are for mutilfactor disorder
+    The reviewers suggeset to disable the OMIM morbidmap for BP5
+    '''
     '''
     BP5=0
     cls=line.split('\t')
@@ -1510,6 +1518,7 @@ def check_BP5(line,Funcanno_flgs,Allels_flgs,morbidmap_dict):
         BP5=0
     else:
         pass
+    '''
     BP5=0; 
     return(BP5)
 
@@ -1734,7 +1743,7 @@ def my_inter_var(annovar_outfile):
     try:
         fh=open(newoutfile, "r")
         fw=open(newoutfile2, "w")
-        str=fh.read()
+        strs=fh.read()
         line_sum=0;
         print("Notice: Begin the variants interpretation by InterVar ")
         if re.findall('true',paras['otherinfo'], flags=re.IGNORECASE)  :
@@ -1742,7 +1751,7 @@ def my_inter_var(annovar_outfile):
         else:
             fw.write("#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % ("Chr","Start","End","Ref","Alt","Ref.Gene","Func.refGene","ExonicFunc.refGene", "Gene.ensGene","avsnp144","AAChange.ensGene","AAChange.refGene","Clinvar","InterVar and Evidence","Freq_ExAC_ALL", "Freq_esp6500siv2_all","Freq_1000g2015aug_all", "CADD_raw","CADD_phred","SIFT_score","GERP++_RS","phyloP46way_placental","dbscSNV_ADA_SCORE", "dbscSNV_RF_SCORE", "Interpro_domain","AAChange.knownGene","rmsk","MetaSVM_score","Freq_ExAC_POPs","OMIM","Phenotype_MIM","OrphaNumber","Orpha"  ))
 
-        for line in str.split('\n'):
+        for line in strs.split('\n'):
             BP="UNK" # the inter of pathogenetic/benign
             clinvar_bp="UNK"
             cls=line.split('\t')
@@ -1976,7 +1985,7 @@ def main():
     print ("INFO: The options are %s " % paras)
     check_downdb()
     check_input()
-    check_annovar_result() #  to obtain myanno.hg19_multianno.csv
+    #check_annovar_result() #  to obtain myanno.hg19_multianno.csv
 
     read_datasets()
     
