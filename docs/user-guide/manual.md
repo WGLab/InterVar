@@ -300,7 +300,7 @@ qli@sched1|:~/work/InterVar/InterVar> head -4  example/ex1.avinput
 The input file type can be specified by option of  `--input_type`, there are three types:  AVinput(Annovar''sformat),VCF(VCF with single sample),VCF_m(VCF with multiple samples)
 
 ## Run the Annotation on the  file `example/ex1.avinput`.
-Please be advice that for the first time of running InterVar, the InterVar will use the `perl ./annotate_variation.pl` to download the necessary ANNOVAR datasests,it will take some time.(If you are ANNOVAR's user before, you can specify the annovar's database_location by option `--database_locat`, you also can edit the config.ini, find the line `database_locat = humandb` and replace with your location  , InterVar will check if all database file exist in you provided location).But next time you run the InterVar, you  will no need to wait to download ANNOVAR's dataset again.
+Please be advice that for the first running, the InterVar will use the `perl ./annotate_variation.pl` to download the necessary ANNOVAR datasests,it will take some time.(If you also were ANNOVAR user before, you can specify the ANNOVAR's database_location by option `--database_locat`, you also can edit the config.ini, find the line `database_locat = humandb` and replace with your location  , InterVar will check if all database file exist in you provided location).From second  running of the InterVar, you  will not  download the same ANNOVAR's datasets again.
 
 ```
 qli@sched1|:~/InterVar-master> python Intervar.py  -i example/ex1.avinput  -o example/myanno
