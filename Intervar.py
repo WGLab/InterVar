@@ -1985,7 +1985,7 @@ def main():
     print ("INFO: The options are %s " % paras)
     check_downdb()
     check_input()
-    #check_annovar_result() #  to obtain myanno.hg19_multianno.csv
+    check_annovar_result() #  to obtain myanno.hg19_multianno.csv
 
     read_datasets()
     
