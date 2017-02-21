@@ -422,7 +422,7 @@ For one variant in the example:
 Firstly, we need to check the automated interpretation information in the `example/myanno.hg19_multianno.txt.intervar ` by `grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'`
 
 ```
-qli@sched1|:~/InterVar-master>grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
+qli@sched1|:~/InterVar-master> grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
 1       67705958        67705958        G       A       IL23R   exonic  nonsynonymous SNV        InterVar: Uncertain significance PVS1=0 PS=[0, 0, 0, 0, 0] PM=[0, 0, 0, 0, 0, 0, 0] PP=[0, 0, 0, 0, 0, 0] BA1=0 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 0, 0, 0, 0, 0]
 
 ```
@@ -444,14 +444,14 @@ Chr Position Ref_allele Alt_allele evidence_list
 it will like this:
 
 ```
-qli@sched1|:~/InterVar-master>cat evdience.txt
+qli@sched1|:~/InterVar-master> cat evdience.txt
 1       67705958        G       A       PS3=1;PM6=1
 
 ```
 Re-run the annotation and add the option of --evidence_file by `python Intervar.py  -i example/ex1.avinput  -o example/myanno --evidence_file=evdience.txt`
 
 ```
-qli@sched1|:~/InterVar-master>python Intervar.py  -i example/ex1.avinput  -o example/myanno --evidence_file=evdience.txt               =============================================================================
+qli@sched1|:~/InterVar-master> python Intervar.py  -i example/ex1.avinput  -o example/myanno --evidence_file=evdience.txt               =============================================================================
 InterVar
 Interpretation of Pathogenic/Benign for variants using python scripts of InterVar.
 =============================================================================
@@ -479,10 +479,10 @@ InterVar homepage: <https://wInterVar.wglab.org>
 
 ```
 
-Then we check the new result of `example/myanno.hg19_multianno.txt.intervar`, by `grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
+Then we check the new result of `example/myanno.hg19_multianno.txt.intervar`, by `grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'`
 
 ```
-qli@sched1|:~/InterVar-master>grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
+qli@sched1|:~/InterVar-master> grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
 1       67705958        67705958        G       A       IL23R   exonic  nonsynonymous SNV        InterVar: Likely pathogenic PVS1=0 PS=[0, 0, 1, 0, 0] PM=[0, 0, 0, 0, 0, 1, 0] PP=[0, 0, 0, 0, 0, 0] BA1=0 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 0, 0, 0, 0, 0]
 
 ```
@@ -496,6 +496,53 @@ The annotation results change to `Likely pathogenic`, and also you can find that
 * How to change the strength of criteria
 
 In this section, I will give the example of how to change the strength of  criteria.
+
+we will use the same variant as before:
+
+`1   67705958    67705958    G   A   IL23R   exonic  nonsynonymous SNV`
+
+we already add more evidence "PS3=1;PM6=1", and we also want increase the PM6 from moderate to strong:
+
+The format for upgrad/downgrade of criteria should be like:    
+
+grade_PXX=2;grade_BXX=3           1 for Strong; 2 for Moderate; 3 for Supporting
+
+so we need add a `grade_PM6=1`, then the finally user own evidence file of evdience.txt will like this:
+
+```
+qli@sched1|:~/InterVar-master> cat evdience.txt
+1       67705958        G       A       PS3=1;PM6=1;grade_PM6=1;
+
+```
+
+Then we re-interpret the variants:
+
+```
+qli@sched1|:~/InterVar-master> python Intervar.py  -i example/ex1.avinput  -o example/myanno --evidence_file=evdience.txt 
+......
+......
+Notice: About 18 lines in your variant file!
+Notice: About 22 variants has been processed by InterVar
+Notice: The InterVar is finished, the output file is [ example/myanno.hg19_multianno.txt.intervar ]
+=============================================================================
+Thanks for using InterVar!
+Report bugs to leequan@gmail.com;
+InterVar homepage: <https://wInterVar.wglab.org>
+=============================================================================
+
+```
+
+Then we check the new result of `example/myanno.hg19_multianno.txt.intervar`, by `grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'`
+
+```
+qli@sched1|:~/InterVar-master> grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
+1       67705958        67705958        G       A       IL23R   exonic  nonsynonymous SNV        InterVar: Pathogenic PVS1=0 PS=[0, 0, 1, 0, 0] PM=[0, 0, 0, 0, 0, 1, 0] PP=[0, 0, 0, 0, 0, 0] BA1=0 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 0, 0, 0, 0, 0]
+
+```
+You can find that now the interpretation changed as `Pathogenic`.  Two strong pathogenic criteria will make clinical significance to `pathogenic`.
+
+
+
 
 * 
 
