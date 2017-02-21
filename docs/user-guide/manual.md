@@ -1,11 +1,11 @@
 ## Warning: All the following steps are in the Linux system
 
-## Download and  unzip the main package
+## Download and unzip the main package
 
 Download the InterVar zip package at [here](https://github.com/WGLab/InterVar/archive/master.zip) using `wget https://github.com/WGLab/InterVar/archive/master.zip -O InterVar.zip`:
 
 ```
-qli@sched1|:~>wget https://github.com/WGLab/InterVar/archive/master.zip -O InterVar.zip
+qli@sched1|:~> wget https://github.com/WGLab/InterVar/archive/master.zip -O InterVar.zip
 --2017-02-21 11:09:52--  https://github.com/WGLab/InterVar/archive/master.zip
 Resolving github.com... 192.30.253.112, 192.30.253.113
 Connecting to github.com|192.30.253.112|:443... connected.
@@ -28,7 +28,7 @@ Saving to: "InterVar.zip"
 Assume that we have successfully  downloaded the InterVar package as `InterVar.zip` and used `unzip InterVar.zip` to unpack the package.
 
 ```
-qli@sched1|:~>unzip InterVar.zip
+qli@sched1|:~> unzip InterVar.zip
 Archive:  InterVar.zip
 7182a4e6e4d01349dd699d2aa55fa955028fc0b4
    creating: InterVar-master/
@@ -79,8 +79,8 @@ Archive:  InterVar.zip
 Go to the folder `InterVar-master` and check the files using `ls -alrt .`
 
 ```
-qli@sched1|:~>cd InterVar-master/
-qli@sched1|:~/InterVar-master>ls -alrt .
+qli@sched1|:~> cd InterVar-master/
+qli@sched1|:~/InterVar-master> ls -alrt .
 total 128
 -rw-r-----  1 qli qli  5613 Feb 17 22:40 README.md
 -rw-r-----  1 qli qli   752 Feb 17 22:40 mkdocs.yml
@@ -95,10 +95,10 @@ drwxr-x---  5 qli qli  4096 Feb 17 22:40 .
 drwx------ 33 qli qli  4096 Feb 21 11:13 ..
 
 ```
-Now you can find the main python program as `Intervar.py`, and test whether the main program of InterVar can run properly by `python Intervar.py`
+Now you can find the main python program as `Intervar.py`, and test the main program of InterVar can run properly by `python Intervar.py` or not:
 
 ```
-qli@sched1|:~/InterVar-master>python Intervar.py
+qli@sched1|:~/InterVar-master> python Intervar.py
 Usage: Intervar.py [OPTION] -i  INPUT -o  OUTPUT ...
        Intervar.py  --config=config.ini ...
 
@@ -160,29 +160,28 @@ Options:
     ./InterVar.py  -b hg19 -i your_input  --input_type=VCF  -o your_output
 
 ```
-The python of `Intervar.py` can run  with python version > 2.6 .
-If you can see above screen output, that mean the InterVar can run on your system without problem.
+The `Intervar.py` can run when python version > 2.6 .
+If you see above screen output after `python Intervar.py` , that mean the InterVar can run on your system without problem.
 Otherwise, please check your python version using `env python --version`
 
-Next you need to download the ANNOVAR and  OMIM datasets.
-
+Next we need to download the ANNOVAR and  OMIM dataset.
 
 ## Download Third-party Program and datasets
 
-Several third-party researchers have provided additional annotation datasets that can be used by InterVar directly. However, users need to agree to specific license terms set forth by the third parties:
+Several third-party researchers have provided additional annotation program and datasets that can be used by InterVar directly. However, users need to agree to specific license terms set forth by the third parties:
 
 
-* ANNOVAR main package : Please join the ANNOVAR mailing list at google groups [here](https://groups.google.com/forum/#!forum/annovar) to receive announcements on software updates. The latest version of ANNOVAR (2016Feb01) can be downloaded [here](http://www.openbioinformatics.org/annovar/annovar_download_form.php) (registration required). A patch to table_annovar.pl can be downloaded [here](http://www.openbioinformatics.org/annovar/download/table_annovar.pl) that fixed an error when `-separate` is used within `-arg` argument. ANNOVAR is written in Perl and can be run as a standalone application on diverse hardware systems where standard Perl modules are installed.
+* ANNOVAR main package : The latest version of ANNOVAR (2016Feb01) can be downloaded [here](http://www.openbioinformatics.org/annovar/annovar_download_form.php) (registration required).  ANNOVAR is written in Perl and can be run as a standalone application on diverse hardware systems where standard Perl modules are installed.
 
 * OMIM dataset: Please download the  mim2gene.txt  from OMIM at [here](http://www.omim.org/downloads),Please use the updated files from OMIM, outdated files will bring problems of InterVar.
 
 
-Assume that we have downloaded ANNOVAR package and used `tar xvfz annovar.latest.tar.gz` to unpack the package. You will see that the `bin/` directory contains several Perl programs with .pl suffix. 
+Now,assume that we have downloaded ANNOVAR package and used `tar xvfz annovar.latest.tar.gz` to unpack the package. You will see that the `bin/` directory contains several Perl programs with .pl suffix. 
 
 Also Download the mim2gene.txt by using `wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt`, and copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
 
 ```
-qli@sched1|:~/InterVar-master>wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt
+qli@sched1|:~/InterVar-master> wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt
 --2017-02-21 11:47:05--  https://www.omim.org/static/omim/data/mim2gene.txt
 Resolving www.omim.org... 54.84.223.11
 Connecting to www.omim.org|54.84.223.11|:443... connected.
@@ -195,21 +194,29 @@ Saving to: "mim2gene.txt"
 2017-02-21 11:47:06 (2.31 MB/s) - "mim2gene.txt" saved [1090455/1090455]
 ```
 
-Then please copy or link these three perl files: `annotate_variation.pl` `table_annovar.pl` `convert2annovar.pl` to InterVar's folder of `InterVar-master`. move or copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
-
-
-```
-qli@sched1|:~/tools/annovar>cp -f annotate_variation.pl table_annovar.pl convert2annovar.pl ~/InterVar-master/
-
-qli@sched1|:~/InterVar-master>cp -f mim2gene.txt ~/InterVar-master/intervardb/
+Then please copy or link three ANNOVAR perl files: `annotate_variation.pl` `table_annovar.pl` `convert2annovar.pl` to InterVar's folder of `InterVar-master`. Please move or copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
 
 ```
+qli@sched1|:~/tools/annovar> cp -f annotate_variation.pl table_annovar.pl convert2annovar.pl ~/InterVar-master/
 
-Please go to  InterVar's folder of `InterVar-master`,check and edit the config.ini using `vim config.ini`, check these lines in the config.ini . The names and locations in config.ini  should match with your downloaded files:
-`mim2gene = %(database_intervar)s/mim2gene.txt` 
+qli@sched1|:~/InterVar-master> cp -f mim2gene.txt ~/InterVar-master/intervardb/
+
+```
+
+Please go to InterVar's install folder of `InterVar-master`,check and edit the config.ini using `vim config.ini`, please check these lines in the config.ini . The names and locations in config.ini  should match with your downloaded files:
+ 
+ `mim2gene = %(database_intervar)s/mim2gene.txt` 
+This line is for location of the OMIM's mim2gene file
+
 `convert2annovar = ./convert2annovar.pl`
+This line is for location of ANNOVAR's `convert2annovar.pl` file
+
 `table_annovar = ./table_annovar.pl`
+This line is for location of ANNOVAR's `table_annovar.pl` file
+
 `annotate_variation = ./annotate_variation.pl`
+This line is for location of ANNOVAR's `table_annovar.pl` file
+
 
 ```
 [InterVar]
@@ -281,7 +288,7 @@ public_dev = https://github.com/WGLab/InterVar/releases
 ## Prepare your input files:
 The format of input file can be VCF or AVinput as ANNOVAR input,actually the input file only need information of Chr,Position start,Position end, Reference_allele,Alternative_allele.
 ```
-qli@sched1|:~/work/InterVar/InterVar>head -4  example/ex1.avinput
+qli@sched1|:~/work/InterVar/InterVar> head -4  example/ex1.avinput
 1       948921  948921  T       C       comments: rs15842, a SNP in 5' UTR of ISG15
 1       984971  984971  G       A       comments: rs111818381
 1       984971  984971  G       C       comments: rs111818381
@@ -294,7 +301,7 @@ The input file type can be specified by option of  `--input_type`, there are thr
 Please be advice that for the first time of running InterVar, the InterVar will use the `perl ./annotate_variation.pl` to download the necessary ANNOVAR datasests,it will take some time.(If you are ANNOVAR's user before, you can specify the annovar's database_location by option `--database_locat`, you also can edit the config.ini, find the line `database_locat = humandb` and replace with your location  , InterVar will check if all database file exist in you provided location).But next time you run the InterVar, you  will no need to wait to download ANNOVAR's dataset again.
 
 ```
-qli@sched1|:~/InterVar-master>python Intervar.py  -i example/ex1.avinput  -o example/myanno
+qli@sched1|:~/InterVar-master> python Intervar.py  -i example/ex1.avinput  -o example/myanno
 =============================================================================
 InterVar
 Interpretation of Pathogenic/Benign for variants using python scripts of InterVar.
@@ -390,7 +397,7 @@ InterVar homepage: <https://wInterVar.wglab.org>
 Then you can check your result file `example/myanno.hg19_multianno.txt.intervar`.
 
 ```
-qli@sched1|:~/InterVar-master>head -3 example/myanno.hg19_multianno.txt.intervar
+qli@sched1|:~/InterVar-master> head -3 example/myanno.hg19_multianno.txt.intervar
 #Chr    Start   End     Ref     Alt     Ref.Gene        Func.refGene    ExonicFunc.refGene      Gene.ensGene    avsnp144        AAChange.ensGene       AAChange.refGene        clinvar: Clinvar         InterVar: InterVar and Evidence        Freq_ExAC_ALL   Freq_esp6500siv2_all   Freq_1000g2015aug_all   CADD_raw        CADD_phred      SIFT_score      GERP++_RS       phyloP46way_placental   dbscSNV_ADA_SCORE      dbscSNV_RF_SCORE        Interpro_domain AAChange.knownGene      rmsk    MetaSVM_score   Freq_ExAC_POPs  OMIM    Phenotype_MIM OrphaNumber      Orpha
 1       948921  948921  T       C       ISG15   UTR5    .       ENSG00000187608 rs15842 .       .       clinvar: UNK     InterVar: Benign PVS1=0 PS=[0, 0, 0, 0, 0] PM=[0, 0, 0, 0, 0, 0, 0] PP=[0, 0, 0, 0, 0, 0] BA1=1 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 0, 0, 0, 0, 0]      0.9416   0.8858  0.903155        .       .       .       .       .       .       .       .       .       .       .       AFR:0.7386,AMR:0.9632,EAS:0.9998,FIN:0.9681,NFE:0.9543,OTH:0.9410,SAS:0.9617   147571  616126; 319563; 319563|MSMD due to complete ISG15 deficiency|<1 / 1 000 000|Autosomal recessive|Childhood|616126 ~
 1       984971  984971  G       A       AGRN    exonic  nonsynonymous SNV       ENSG00000188157 rs111818381     ENSG00000188157:ENST00000379370:exon26:c.G4540A:p.A1514T       AGRN:NM_198576:exon26:c.G4540A:p.A1514T clinvar: Likely benign   InterVar: Likely benign PVS1=0 PS=[0, 0, 0, 0, 0] PM=[0, 0, 0, 0, 0, 0, 0] PP=[0, 0, 0, 0, 0, 0] BA1=0 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 1, 0, 1, 0, 0]         0.01270.0079   0.00439297      -0.923  0.023   0.594   -1.43   .       .       .       Concanavalin A-like lectin/glucanase domain;Laminin G domain   AGRN:uc001ack.2:exon26:c.G4540A:p.A1514T        .       -1.041  AFR:0.0034,AMR:0.0160,EAS:0,FIN:0.0162,NFE:0.0191,OTH:0.0174,SAS:0.0033        103320  615120; 590;98913;98914;        590|CMS|1-9 / 1 000 000|Autosomal dominant<br>or&nbsp;Autosomal recessive|Infancy<br>Neonatal|254190 254210 254300 601462 603034 605809 608930 608931 610542 614198 614750 615120 616040 616227 616228 616304 616313 616314 616321 616322 616323 616324 616325 616326 616330 616720 617143 ~98913|-|-|-|-|254300 601462 605809 608930 608931 614198 615120 616304 616313 616314 616321 616322 616323 616324 616325 616326 616720 ~98914|-|-|Autosomal dominant<br>or&nbsp;Autosomal recessive|-|254210 615120 616040 616330 616720 617143 ~
@@ -400,16 +407,20 @@ The resutl is tab-delimited,you can import this file into Excel, The colunm of "
 
 
 
-## Advance usage: 
+## Advanced usage: 
 
-* How to add own Evidence 
+* How to add your own evidence 
+In this section, I will give the example of how to add the user's own evidence for the variants.
+
 
 * How to change the strength of criteria
+
+In this section, I will give the example of how to change the strength of  criteria.
 
 * 
 
 ## Tips:
-
+There are  some tips for quickly running InterVar.
 
 
 
