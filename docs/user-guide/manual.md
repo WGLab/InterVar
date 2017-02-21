@@ -178,7 +178,7 @@ Several third-party researchers have provided additional annotation program and 
 
 Now,assume that we have downloaded ANNOVAR package and used `tar xvfz annovar.latest.tar.gz` to unpack the package. You will see that the `bin/` directory contains several Perl programs with .pl suffix. 
 
-Also Download the mim2gene.txt by using `wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt`.
+Also download the mim2gene.txt by using `wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt`.
 
 ```
 qli@sched1|:~/InterVar-master> wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt
@@ -194,9 +194,9 @@ Saving to: "mim2gene.txt"
 2017-02-21 11:47:06 (2.31 MB/s) - "mim2gene.txt" saved [1090455/1090455]
 ```
 
-Then please copy or link three ANNOVAR perl files: `annotate_variation.pl` `table_annovar.pl` `convert2annovar.pl` to InterVar's folder of `InterVar-master`.
+Then please copy  three ANNOVAR perl files: `annotate_variation.pl` `table_annovar.pl` `convert2annovar.pl` to InterVar's folder of `InterVar-master`.
  
-Also please move or copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
+Also please copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
 
 ```
 qli@sched1|:~/tools/annovar> cp -f annotate_variation.pl table_annovar.pl convert2annovar.pl ~/InterVar-master/
@@ -349,7 +349,7 @@ NOTICE: Finished downloading annotation files for hg19 build version, with files
 perl ./table_annovar.pl example/ex1.avinput humandb -buildver hg19 -remove -out example/myanno -protocol refGene,esp6500siv2_all,1000g2015aug_all,avsnp144,dbnsfp30a,clinvar_20160302,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk,ensGene,knownGene  -operation  g,f,f,f,f,f,f,f,f,r,g,g   -nastring .
 -----------------------------------------------------------------
 ```
-After download all the ANNOVAR datasets, then beigin to annotate the variants:
+After download all the ANNOVAR datasets, then begin to annotate the variants:
 ```
 
 NOTICE: Processing operation=g protocol=refGene
@@ -396,7 +396,7 @@ InterVar homepage: <https://wInterVar.wglab.org>
 
 
 ```
-Then you can check your result file `example/myanno.hg19_multianno.txt.intervar`.
+Then you can check the result file `example/myanno.hg19_multianno.txt.intervar`.
 
 ```
 qli@sched1|:~/InterVar-master> head -3 example/myanno.hg19_multianno.txt.intervar
@@ -405,7 +405,7 @@ qli@sched1|:~/InterVar-master> head -3 example/myanno.hg19_multianno.txt.interva
 1       984971  984971  G       A       AGRN    exonic  nonsynonymous SNV       ENSG00000188157 rs111818381     ENSG00000188157:ENST00000379370:exon26:c.G4540A:p.A1514T       AGRN:NM_198576:exon26:c.G4540A:p.A1514T clinvar: Likely benign   InterVar: Likely benign PVS1=0 PS=[0, 0, 0, 0, 0] PM=[0, 0, 0, 0, 0, 0, 0] PP=[0, 0, 0, 0, 0, 0] BA1=0 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 1, 0, 1, 0, 0]         0.01270.0079   0.00439297      -0.923  0.023   0.594   -1.43   .       .       .       Concanavalin A-like lectin/glucanase domain;Laminin G domain   AGRN:uc001ack.2:exon26:c.G4540A:p.A1514T        .       -1.041  AFR:0.0034,AMR:0.0160,EAS:0,FIN:0.0162,NFE:0.0191,OTH:0.0174,SAS:0.0033        103320  615120; 590;98913;98914;        590|CMS|1-9 / 1 000 000|Autosomal dominant<br>or&nbsp;Autosomal recessive|Infancy<br>Neonatal|254190 254210 254300 601462 603034 605809 608930 608931 610542 614198 614750 615120 616040 616227 616228 616304 616313 616314 616321 616322 616323 616324 616325 616326 616330 616720 617143 ~98913|-|-|-|-|254300 601462 605809 608930 608931 614198 615120 616304 616313 616314 616321 616322 616323 616324 616325 616326 616720 ~98914|-|-|Autosomal dominant<br>or&nbsp;Autosomal recessive|-|254210 615120 616040 616330 616720 617143 ~
 
 ```
-The resutl is tab-delimited,you can import this file into Excel, The colunm of "InterVar: InterVar and Evidence" give the InterVar interpretation result with all the criteria.
+The result is tab-delimited,you can import this file into Excel. The colunm of "InterVar: InterVar and Evidence" give the InterVar interpretation result with all the criteria.
 
 
 
@@ -433,7 +433,7 @@ This variant is annotated by InterVar as `Uncertain significance`, and the crite
 
 Only BS1=1, all other criterai is 0;
 
-We want add two criteria  as PS3=1 for "Well-established in vitro or in vivo functional studies supportive of a damaging effect " and  PM6=1 for "Assumed de novo, but without confirmation of paternity and maternity".
+We want to add two criteria  as PS3=1 for "Well-established in vitro or in vivo functional studies supportive of a damaging effect " and  PM6=1 for "Assumed de novo, but without confirmation of paternity and maternity".
 
 Please vim a tab-delimited text file with name as "evdience.txt". The format should be like:
 
@@ -503,7 +503,7 @@ we will use the same variant as before:
 
 `1   67705958    67705958    G   A   IL23R   exonic  nonsynonymous SNV`
 
-we already add more evidence `PS3=1;PM6=11, and we also want to increase the PM6 from moderate to strong:
+we already add more evidence `PS3=1;PM6=1`, and we also want to increase the PM6 from moderate to strong:
 
 The format for upgrad/downgrade of criteria should be like:    
 
