@@ -178,11 +178,10 @@ Several third-party researchers have provided additional annotation datasets tha
 
 
 Assume that we have downloaded ANNOVAR package and used `tar xvfz annovar.latest.tar.gz` to unpack the package. You will see that the `bin/` directory contains several Perl programs with .pl suffix. 
-Then please copy or link these three perl files: `annotate_variation.pl` `table_annovar.pl` `convert2annovar.pl` to InterVar's folder of `InterVar-master`.
 
 Also Download the mim2gene.txt by using `wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt`, and copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
 
-'''
+```
 qli@sched1|:~/InterVar-master>wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt
 --2017-02-21 11:47:05--  https://www.omim.org/static/omim/data/mim2gene.txt
 Resolving www.omim.org... 54.84.223.11
@@ -194,17 +193,17 @@ Saving to: "mim2gene.txt"
 100%[=============================================================================================>] 1,090,455   2.31M/s   in 0.4s
 
 2017-02-21 11:47:06 (2.31 MB/s) - "mim2gene.txt" saved [1090455/1090455]
-'''
+```
 
 Then please copy or link these three perl files: `annotate_variation.pl` `table_annovar.pl` `convert2annovar.pl` to InterVar's folder of `InterVar-master`. move or copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
 
 
-'''
+```
 qli@sched1|:~/tools/annovar>cp -f annotate_variation.pl table_annovar.pl convert2annovar.pl ~/InterVar-master/
 
 qli@sched1|:~/InterVar-master>cp -f mim2gene.txt ~/InterVar-master/intervardb/
 
-'''
+```
 
 Please go to  InterVar's folder of `InterVar-master`,check and edit the config.ini using `vim config.ini`, check these lines in the config.ini . The names and locations in config.ini  should match with your downloaded files:
 `mim2gene = %(database_intervar)s/mim2gene.txt` 
@@ -212,7 +211,7 @@ Please go to  InterVar's folder of `InterVar-master`,check and edit the config.i
 `table_annovar = ./table_annovar.pl`
 `annotate_variation = ./annotate_variation.pl`
 
-'''
+```
 [InterVar]
 buildver = hg19
 # hg19
@@ -276,21 +275,20 @@ database_names = refGene esp6500siv2_all 1000g2015aug avsnp144 dbnsfp30a clinvar
 current_version = Intervar_20170217
 # pipeline version
 public_dev = https://github.com/WGLab/InterVar/releases
-
-'''
+```
 
 
 ## Prepare you input files:
 The format of input file can be VCF or AVinput as ANNOVAR input,actually the input file only need information of Chr,Position start,Position end, Reference_allele,Alternative_allele.
-'''
+```
 qli@sched1|:~/work/InterVar/InterVar>head -5  example/ex1.avinput
 chr1    115828756 115828756  G   A
 1       948921  948921  T       C       comments: rs15842, a SNP in 5' UTR of ISG15
 1       984971  984971  G       A       comments: rs111818381
 1       984971  984971  G       C       comments: rs111818381
 1       1404001 1404001 G       T       comments: rs149123833, a SNP in 3' UTR of ATAD3C
+```
 
-'''
 The input file type can be specified by option of  `--input_type`, there are three types:  AVinput(Annovar''sformat),VCF(VCF with single sample),VCF_m(VCF with multiple samples)
 
 
