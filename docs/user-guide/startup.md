@@ -5,7 +5,7 @@ For beginners, the easiest way to use InterVar is to annotate a VCF file by ANNO
 1. You need install Python.
 2. You need install [ANNOVAR](http://annovar.openbioinformatics.org/en/latest/)
 3. You need download [InterVar](https://github.com/WGLab/InterVar/archive/master.zip) or git clone using URL  https://github.com/WGLab/InterVar.git
-4. You need download other files such as mim2gene.txt and morbidmap from [OMIM](http://www.omim.org/downloads).Please use the updated files from OMIM, outdated files will bring problems of InterVar.
+4. You need download other file such as mim2gene.txt from [OMIM](http://www.omim.org/downloads).Please use the updated files from OMIM, outdated files will bring problems of InterVar.
 5. Downlad all necessary datasets from ANNOVAR( InterVar also will download automatically)
 6. Prepare your input file, it can be VCF file or AVinput as ANNOVAR input,actually the input file only need information of Chr,Position start,Position end, Reference_allele,Alternative_allele 
 7. Run the InterVar!
