@@ -183,7 +183,7 @@ Then please copy or link these three perl files: `annotate_variation.pl` `table_
 Also Download the mim2gene.txt by using `wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt`, and copy the `mim2gene.txt` to intervardb folder of `InterVar-master/intervardb`
 
 '''
-@sched1|:~/InterVar-master>wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt
+qli@sched1|:~/InterVar-master>wget https://www.omim.org/static/omim/data/mim2gene.txt -O mim2gene.txt
 --2017-02-21 11:47:05--  https://www.omim.org/static/omim/data/mim2gene.txt
 Resolving www.omim.org... 54.84.223.11
 Connecting to www.omim.org|54.84.223.11|:443... connected.
