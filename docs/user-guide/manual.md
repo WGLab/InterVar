@@ -297,10 +297,10 @@ qli@sched1|:~/work/InterVar/InterVar> head -4  example/ex1.avinput
 1       1404001 1404001 G       T       comments: rs149123833, a SNP in 3' UTR of ATAD3C
 ```
 
-The input file type can be specified by option of  `--input_type`, there are three types:  AVinput(Annovar''sformat),VCF(VCF with single sample),VCF_m(VCF with multiple samples)
+The input file type can be specified by option of  `--input_type`, there are three types:  AVinput(Annovar's format),VCF(VCF with single sample),VCF_m(VCF with multiple samples)
 
 ## Run the Annotation on the  file `example/ex1.avinput`.
-Please be advice that for the first running, the InterVar will use the `perl ./annotate_variation.pl` to download the necessary ANNOVAR datasests,it will take some time.(If you also were ANNOVAR user before, you can specify the ANNOVAR's database_location by option `--database_locat`, you also can edit the config.ini, find the line `database_locat = humandb` and replace with your location  , InterVar will check if all database file exist in you provided location).From second  running of the InterVar, you  will not  download the same ANNOVAR's datasets again.
+Please be advice that for the first running, the InterVar will use the `perl ./annotate_variation.pl` to download the necessary ANNOVAR datasests,it will take some time.(If you also were ANNOVAR user before, you can specify the ANNOVAR's database_location by option `--database_locat`, you also can edit the config.ini, find the line `database_locat = humandb` and replace with your location  , InterVar will check if all database file exist in you provided location).From second running , InterVar will not  download the same ANNOVAR's datasets again.
 
 ```
 qli@sched1|:~/InterVar-master> python Intervar.py  -i example/ex1.avinput  -o example/myanno
@@ -414,6 +414,81 @@ The resutl is tab-delimited,you can import this file into Excel, The colunm of "
 * How to add your own evidence 
 
 In this section, I will give the example of how to add the user's own evidence for the variants.
+
+For one variant in the example:
+
+`1   67705958    67705958    G   A   IL23R   exonic  nonsynonymous SNV`
+
+Firtly, we need to check the automated interpretation information in the `example/myanno.hg19_multianno.txt.intervar ` by `grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'`
+
+```
+qli@sched1|:~/InterVar-master>grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
+1       67705958        67705958        G       A       IL23R   exonic  nonsynonymous SNV        InterVar: Uncertain significance PVS1=0 PS=[0, 0, 0, 0, 0] PM=[0, 0, 0, 0, 0, 0, 0] PP=[0, 0, 0, 0, 0, 0] BA1=0 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 0, 0, 0, 0, 0]
+
+```
+
+This variant is annotated by InterVar as `Uncertain significance`, and the criteria is 
+
+`PVS1=0 PS=[0, 0, 0, 0, 0] PM=[0, 0, 0, 0, 0, 0, 0] PP=[0, 0, 0, 0, 0, 0] BA1=0 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 0, 0, 0, 0, 0]`
+
+We want add two criteria  as PS3=1 for "Well-established in vitro or in vivo functional studies supportive of a damaging effect " and  PM6=1 for "PM6: Assumed de novo, but without confirmation of paternity and maternity".
+
+Please vim a tab-delimited text file with name as "evdience.txt". The format should be like:
+
+Chr Position Ref_allele Alt_allele evidence_list
+
+(If you want to add more than one  criteria ,it should be semicolon-delimited in the evidence_list column.)
+
+it will like this:
+
+'''
+qli@sched1|:~/InterVar-master>cat evdience.txt
+1       67705958        G       A       PS3=1;PM6=1
+
+'''
+Re-run the annotation and add the option of --evidence_file by `python Intervar.py  -i example/ex1.avinput  -o example/myanno --evidence_file=evdience.txt`
+
+'''
+qli@sched1|:~/InterVar-master>python Intervar.py  -i example/ex1.avinput  -o example/myanno --evidence_file=evdience.txt               =============================================================================
+InterVar
+Interpretation of Pathogenic/Benign for variants using python scripts of InterVar.
+=============================================================================
+
+%prog 0.1.5
+Written by Quan LI,leequan@gmail.com.
+InterVar is free for non-commercial use without warranty.
+Please contact the authors for commercial use.
+Copyright (C) 2016 Wang Genomic Lab
+============================================================================
+
+Notice: Your command of InterVar is ['Intervar.py', '-i', 'example/ex1.avinput', '-o', 'example/myanno', '--evidence_file=evdience.txt']
+Warning: You provided your own evidence file [ evdience.txt ] for the InterVar.
+INFO: The options are {'pp2_genes': 'intervardb/PP2.genes', 'inputfile': 'example/ex1.avinput', 'exclude_snps': 'intervardb/ext.variants.hg19', 'annotate_variation': './annotate_variation.pl', 'ps4_snps': 'intervardb/PS4.variants.hg19', 'mim_domin': 'intervardb/mim_domin.txt', 'current_version': 'Intervar_20170217', 'bs2_snps': 'intervardb/BS2_hom_het.hg19', 'evidence_file': 'evdience.txt', 'public_dev': 'https://github.com/WGLab/InterVar/releases', 'otherinfo': 'FALSE', 'database_names': 'refGene esp6500siv2_all 1000g2015aug avsnp144 dbnsfp30a clinvar_20160302 exac03 dbscsnv11 dbnsfp31a_interpro rmsk ensGene knownGene', 'mim_pheno': 'intervardb/mim_pheno.txt', 'table_annovar': './table_annovar.pl', 'buildver': 'hg19', 'inputfile_type': 'AVinput', 'onetranscript': 'FALSE', 'mim2gene': 'intervardb/mim2gene.txt', 'orpha': 'intervardb/orpha.txt', 'ps1_aa': 'intervardb/PS1.AA.change.patho.hg19', 'mim_adultonset': 'intervardb/mim_adultonset.txt', 'knowngenecanonical': 'intervardb/knownGeneCanonical.txt', 'outfile': 'example/myanno', 'convert2annovar': './convert2annovar.pl', 'database_locat': 'humandb', 'database_intervar': 'intervardb', 'lof_genes': 'intervardb/PVS1.LOF.genes', 'disorder_cutoff': '0.01', 'mim_recessive': 'intervardb/mim_recessive.txt', 'pm1_domain': 'intervardb/PM1_domains_with_benigns', 'mim_orpha': 'intervardb/mim_orpha.txt', 'bp1_genes': 'intervardb/BP1.genes'}
+Warning: the folder of humandb is already created!
+Notice: Begin the variants interpretation by InterVar
+Notice: About 18 lines in your variant file!
+Notice: About 22 variants has been processed by InterVar
+Notice: The InterVar is finished, the output file is [ example/myanno.hg19_multianno.txt.intervar ]
+=============================================================================
+Thanks for using InterVar!
+Report bugs to leequan@gmail.com;
+InterVar homepage: <https://wInterVar.wglab.org>
+=============================================================================
+
+'''
+
+Then we check the new result of `example/myanno.hg19_multianno.txt.intervar`, by `grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
+
+'''
+qli@sched1|:~/InterVar-master>grep "67705958"  example/myanno.hg19_multianno.txt.intervar | awk -F '\t' '{OFS=FS;print $1,$2,$3,$4,$5,$6,$7,$8,$14}'
+1       67705958        67705958        G       A       IL23R   exonic  nonsynonymous SNV        InterVar: Likely pathogenic PVS1=0 PS=[0, 0, 1, 0, 0] PM=[0, 0, 0, 0, 0, 1, 0] PP=[0, 0, 0, 0, 0, 0] BA1=0 BS=[1, 0, 0, 0, 0] BP=[0, 0, 0, 0, 0, 0, 0, 0]
+
+'''
+
+The annotation results change to `Likely pathogenic`, and also you can find the PS3=1 and PM6=1;
+
+
+
 
 
 * How to change the strength of criteria
