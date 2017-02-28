@@ -1862,7 +1862,7 @@ def main():
 
 
     group = optparse.OptionGroup(parser, "Annovar Options",
-                                "Caution: check these options from manual of Annovar.")
+                                "Caution: check these options from manual of Annovar. The ANNOVAR version should be >=  2016-02-01, older verions of ANNOVAR will bring problems.")
     group.add_option("--table_annovar", action="store", help="The Annovar perl script of table_annovar.pl",metavar="./table_annovar.pl",dest="table_annovar")
     group.add_option("--convert2annovar", action="store", help="The Annovar perl script of convert2annovar.pl",metavar="./convert2annovar.pl",dest="convert2annovar")
     group.add_option("--annotate_variation", action="store", help="The Annovar perl script of annotate_variation.pl",metavar="./annotate_variation.pl",dest="annotate_variation")
@@ -1985,7 +1985,7 @@ def main():
     print ("INFO: The options are %s " % paras)
     check_downdb()
     check_input()
-    check_annovar_result() #  to obtain myanno.hg19_multianno.csv
+    #check_annovar_result() #  to obtain myanno.hg19_multianno.csv
 
     read_datasets()
     
