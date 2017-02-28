@@ -31,7 +31,7 @@ Interpretation of Pathogenic/Benign for variants using python scripts of InterVa
 end = """=============================================================================
 Thanks for using InterVar!
 Report bugs to leequan@gmail.com;
-InterVar homepage: <https://wInterVar.wglab.org>
+InterVar homepage: <http://wInterVar.wglab.org>
 =============================================================================
 """
 
