@@ -107,7 +107,7 @@ def flip_ACGT(acgt):
         nt="C"
     if acgt=="N":
         nt="N"
-    #if acgt=="X":
+    if acgt=="X":
         nt="X"
     return(nt)
 
