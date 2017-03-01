@@ -874,13 +874,13 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
             exon_lth="exon"+knownGeneCanonical_dict[trans_id]
             if exon==exon_lth or exon =="exon1": # not 1 or last exon
                 PVS=0
-                try:
-                    if (float(knownGeneCanonical_ed_dict[trans_id])-float( cls[Allels_flgs['Start']]  ))<50: # means close  3' of gene 50 bp.
-                        PVS=0
-                except ValueError:
-                    pass
-                else:
-                    pass
+            try:
+                if (float(knownGeneCanonical_ed_dict[trans_id])-float( cls[Allels_flgs['Start']]  ))<50: # means close  3' of gene 50 bp.
+                 PVS=0
+            except ValueError:
+                pass
+            else:
+                pass
 
 
         except KeyError:
@@ -2023,9 +2023,9 @@ def main():
         if some_file_fail>=1:    
             print ("Warning: The InterVar seems not run correctly for your %d samples in the VCF, please check your inputs and options in configure file" %  some_file_fail )
     if out_annf==0:
-         print ("Warning: The InterVar seems not run correctly, please check your inputs and options in configure file")
+         print ("Warning: The InterVar seems not run correctly, please check your inputs , options and configure file!")
          print ("ERROR: The InterVar did not find the annotation result file from ANNOVAR!")
-         print ("ERROR: The name of annotation result fileshould be like %s*.%s__multianno.txt" % (paras['outfile'],paras['buildver']))
+         print ("ERROR: The name of annotation result file should be like %s*.%s__multianno.txt" % (paras['outfile'],paras['buildver']))
     print("%s" %end)
 
 
