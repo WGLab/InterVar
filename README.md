@@ -12,9 +12,9 @@ InterVar is a python script for variant interpretation of clinical significance.
 ## PREREQUISITE
 
 1. You need install Python >=2.6.6.
-2. You need install [ANNOVAR](http://annovar.openbioinformatics.org/en/latest/)
+2. You need install [ANNOVAR](http://annovar.openbioinformatics.org/en/latest/) version >=  2016-02-01.
 3. You need download other files such as mim2gene.txt from [OMIM](http://www.omim.org/downloads).
-4. Please use the updated files from OMIM, outdated files will bring problems of InterVar.
+4. Please use the updated files(should be generated: >= 2016-09) from OMIM, outdated files will bring problems of InterVar.
 
 ## OPTIONS
 
