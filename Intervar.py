@@ -11,7 +11,7 @@ import copy,logging,os,io,re,time,sys,platform,optparse,gzip,glob
 
 prog="InterVar"
 
-version = """%prog 0.1.5
+version = """%prog 0.1.7
 Written by Quan LI,leequan@gmail.com. 
 InterVar is free for non-commercial use without warranty.
 Please contact the authors for commercial use.
@@ -107,7 +107,7 @@ def flip_ACGT(acgt):
         nt="C"
     if acgt=="N":
         nt="N"
-    if acgt=="X":
+    #if acgt=="X":
         nt="X"
     return(nt)
 
@@ -1052,8 +1052,15 @@ def check_PM2(line,Freqs_flgs,Allels_flgs,Funcanno_flgs,mim2gene_dict,mim2gene_d
             try:
                 if mim_recessive_dict[mim2]=="1" or mim_recessive_dict[mim1]=="1": # it is recessive
                     for key in Freqs_flgs.keys():
-                        if(cls[Freqs_flgs[key]]!='.' and float(cls[Freqs_flgs[key]])>=cutoff_maf): 
-                            tt2=tt2*0;
+                        #print "test PM2 not really absent"
+                        try:
+                            if(cls[Freqs_flgs[key]]!='.' and float(cls[Freqs_flgs[key]])>=cutoff_maf): 
+                                tt2=tt2*0;
+                        except ValueError:
+                            pass
+                        else:
+                            pass
+
                     if tt2==1:
                         PM2=1
                     if tt2==0:
@@ -1990,10 +1997,12 @@ def main():
     read_datasets()
     
     inputft= paras['inputfile_type']
-    some_file_fail=0 
+    some_file_fail=0
+    out_annf=0; 
     for annovar_outfile  in glob.iglob(paras['outfile']+"*."+paras['buildver']+"_multianno.txt"):
         sum1=check_genes(annovar_outfile)
         sum2=my_inter_var(annovar_outfile)
+        out_annf=out_annf+1; 
 
         outfile=annovar_outfile+".intervar"
         if os.path.isfile(outfile):
@@ -2013,6 +2022,10 @@ def main():
             sum_sample=sum_sample+1;
         if some_file_fail>=1:    
             print ("Warning: The InterVar seems not run correctly for your %d samples in the VCF, please check your inputs and options in configure file" %  some_file_fail )
+    if out_annf==0:
+         print ("Warning: The InterVar seems not run correctly, please check your inputs and options in configure file")
+         print ("ERROR: The InterVar did not find the annotation result file from ANNOVAR!")
+         print ("ERROR: The name of annotation result fileshould be like %s*.%s__multianno.txt" % (paras['outfile'],paras['buildver']))
     print("%s" %end)
 
 
