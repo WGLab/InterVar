@@ -57,11 +57,11 @@ The database location/dir for the InterVar dataset files
     The format for upgrad/downgrade of criteria should be like:
 
     grade_PS1=2;           1 for Strong; 2 for Moderate; 3 for Supporting)
-
+'''
  Chr Pos Ref_allele Alt_allele  evidence_list
 
  1 123456 A G PM1=1;BS2=1;BP3=0;PS5=1;grade_PM1=1
-
+'''
 - --table_annovar=./table_annovar.pl
 The Annovar perl script of table_annovar.pl
 
