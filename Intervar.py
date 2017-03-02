@@ -946,6 +946,7 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
         pass
 
     if PS1_t1 !=0 and PS1_t2 != 0 :
+        PS1=0
         if PS1_t3 ==1: # remove the splicing affect 
             PS1=0
     return(PS1)
