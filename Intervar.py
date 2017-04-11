@@ -909,7 +909,6 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
     funcs_tmp=["missense","nonsynony"]
     ACGTs=["A","C","G","T"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
-
     for fc in funcs_tmp:
         if line_tmp.find(fc)>=0 :
             PS1_t1=1;
@@ -922,10 +921,10 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
             keys_tmp2=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+cls[Allels_flgs['Alt']]
             try:
                 if  aa_changes_dict[keys_tmp2]:
-                    PS1_t2=0
+                    PS1_t2=1
             except KeyError:
                 for nt in ACGTs:
-                    if nt != cls[Allels_flgs['Alt']]:
+                    if nt != cls[Allels_flgs['Alt']] and nt != cls[Allels_flgs['Ref']]:
                         keys_tmp3=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+nt
                         try:
                             if aa_changes_dict[keys_tmp3] == aa_last:
@@ -940,6 +939,8 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
     try:
         if float(cls[Funcanno_flgs['dbscSNV_RF_SCORE']])>dbscSNV_cutoff or float(cls[Funcanno_flgs['dbscSNV_ADA_SCORE']])>dbscSNV_cutoff: # means alter the splicing
             PS1_t3=1
+	if cls[Funcanno_flgs['dbscSNV_RF_SCORE']] == "." or cls[Funcanno_flgs['dbscSNV_ADA_SCORE']] == ".": # absent also means not in splicing
+            PS1_t3=0
     except ValueError:
         pass
     else:
@@ -1035,7 +1036,7 @@ def check_PM2(line,Freqs_flgs,Allels_flgs,Funcanno_flgs,mim2gene_dict,mim2gene_d
     1000 Genomes Project, or Exome Aggregation Consortium
     '''
     PM2=0
-    cutoff_maf=0.001  # extremely low frequency
+    cutoff_maf=0.005  # extremely low frequency
     cls=line.split('\t')
     tt=1;
     for key in Freqs_flgs.keys():
@@ -1049,7 +1050,6 @@ def check_PM2(line,Freqs_flgs,Allels_flgs,Funcanno_flgs,mim2gene_dict,mim2gene_d
         try:
             mim2=mim2gene_dict2[cls[Funcanno_flgs['Gene']]]
             mim1=mim2gene_dict[ cls[Funcanno_flgs['Gene.ensGene']] ]
-
             try:
                 if mim_recessive_dict[mim2]=="1" or mim_recessive_dict[mim1]=="1": # it is recessive
                     for key in Freqs_flgs.keys():
@@ -1061,6 +1061,7 @@ def check_PM2(line,Freqs_flgs,Allels_flgs,Funcanno_flgs,mim2gene_dict,mim2gene_d
                             pass
                         else:
                             pass
+
 
                     if tt2==1:
                         PM2=1
@@ -1146,7 +1147,7 @@ def check_PM5(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
                     #print("PM5 %s %s" %(aa_changes_dict[keys_tmp2],aa_last))
             except KeyError:
                 for nt in ACGTs:
-                    if nt != cls[Allels_flgs['Alt']]:
+                    if nt != cls[Allels_flgs['Alt']] and  nt != cls[Allels_flgs['Ref']]:
                         keys_tmp3=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+nt
                         try:
                             if aa_changes_dict[keys_tmp3]:
@@ -1249,9 +1250,9 @@ def check_PP3(line,Funcanno_flgs,Allels_flgs):
     else:
         pass
 
-
-    if (PP3_t1+PP3_t2+PP3_t3)>=3:
+    if (PP3_t1+PP3_t2+PP3_t3)>=2:
         PP3=1
+    
     return(PP3)
 
 def check_PP4(line,Funcanno_flgs,Allels_flgs):
