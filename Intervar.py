@@ -921,7 +921,7 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
             keys_tmp2=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+cls[Allels_flgs['Alt']]
             try:
                 if  aa_changes_dict[keys_tmp2]:
-                    PS1_t2=1
+                    PS1_t2=0
             except KeyError:
                 for nt in ACGTs:
                     if nt != cls[Allels_flgs['Alt']] and nt != cls[Allels_flgs['Ref']]:
@@ -939,7 +939,7 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
     try:
         if float(cls[Funcanno_flgs['dbscSNV_RF_SCORE']])>dbscSNV_cutoff or float(cls[Funcanno_flgs['dbscSNV_ADA_SCORE']])>dbscSNV_cutoff: # means alter the splicing
             PS1_t3=1
-	if cls[Funcanno_flgs['dbscSNV_RF_SCORE']] == "." or cls[Funcanno_flgs['dbscSNV_ADA_SCORE']] == ".": # absent also means not in splicing
+        if cls[Funcanno_flgs['dbscSNV_RF_SCORE']] == "." or cls[Funcanno_flgs['dbscSNV_ADA_SCORE']] == ".": # absent also means not in splicing
             PS1_t3=0
     except ValueError:
         pass
@@ -1124,6 +1124,7 @@ def check_PM5(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
     PM5=0
     PM5_t1=0
     PM5_t2=0
+    PM5_t3=0
     cls=line.split('\t')
     funcs_tmp=["missense","nonsynony"]
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
@@ -1146,14 +1147,16 @@ def check_PM5(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
                     PM5_t2=0
                     #print("PM5 %s %s" %(aa_changes_dict[keys_tmp2],aa_last))
             except KeyError:
+                PM5_t2=1
+                PM5_t3=0
                 for nt in ACGTs:
                     if nt != cls[Allels_flgs['Alt']] and  nt != cls[Allels_flgs['Ref']]:
                         keys_tmp3=cls[Allels_flgs['Chr']]+"_"+cls[Allels_flgs['Start']]+"_"+cls[Allels_flgs['End']]+"_"+nt
                         try:
                             if aa_changes_dict[keys_tmp3]:
-                                PM5_t2=1
+                                PM5_t3=1
                             if aa_changes_dict[keys_tmp3] == aa_last:
-                                PM5_t2=0
+                                PM5_t2=0*PM5_t2
                         except KeyError:
                             pass
                         else:
@@ -1162,7 +1165,7 @@ def check_PM5(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
             else:
                 pass
 
-    if PM5_t1 !=0 and PM5_t2 != 0 :
+    if PM5_t1 !=0 and PM5_t2 != 0 and PM5_t3 !=0 :
         PM5=1
     return(PM5)
 
@@ -1778,7 +1781,7 @@ def my_inter_var(annovar_outfile):
                     clinvar_bp=cls3[0]
                     
                 intervar_bp=assign(BP,line,Freqs_flgs,Funcanno_flgs,Allels_flgs)
-		Freq_ExAC_POPs="AFR:"+cls[Freqs_flgs['ExAC_AFR']]+",AMR:"+cls[Freqs_flgs['ExAC_AMR']]+",EAS:"+cls[Freqs_flgs['ExAC_EAS']]+",FIN:"+cls[Freqs_flgs['ExAC_FIN']]+",NFE:"+cls[Freqs_flgs['ExAC_NFE']]+",OTH:"+cls[Freqs_flgs['ExAC_OTH']]+",SAS:"+cls[Freqs_flgs['ExAC_SAS']]
+                Freq_ExAC_POPs="AFR:"+cls[Freqs_flgs['ExAC_AFR']]+",AMR:"+cls[Freqs_flgs['ExAC_AMR']]+",EAS:"+cls[Freqs_flgs['ExAC_EAS']]+",FIN:"+cls[Freqs_flgs['ExAC_FIN']]+",NFE:"+cls[Freqs_flgs['ExAC_NFE']]+",OTH:"+cls[Freqs_flgs['ExAC_OTH']]+",SAS:"+cls[Freqs_flgs['ExAC_SAS']]
                 OMIM="." 
                 mim2=mim2gene_dict2.get(cls[Funcanno_flgs['Gene']],".")
                 mim1=mim2gene_dict.get(cls[Funcanno_flgs['Gene.ensGene']],".")
@@ -1877,6 +1880,8 @@ def main():
     group.add_option("--annotate_variation", action="store", help="The Annovar perl script of annotate_variation.pl",metavar="./annotate_variation.pl",dest="annotate_variation")
     group.add_option("-d", "--database_locat", dest="database_locat", action="store",
             help="The  database location/dir for the annotation datasets", metavar="humandb")
+
+    group.add_option("--skip_annovar", action="store_true", help="Skip the Annovar annotation, this can be true only after you  already got the annovar's annotation results",dest="skip_annovar")
 
     parser.add_option_group(group)
     group = optparse.OptionGroup(parser, "Examples",
@@ -1994,7 +1999,11 @@ def main():
     print ("INFO: The options are %s " % paras)
     check_downdb()
     check_input()
-    check_annovar_result() #  to obtain myanno.hg19_multianno.csv
+    if  options.skip_annovar != True   :
+        check_annovar_result() #  to obtain myanno.hg19_multianno.csv
+    else:
+         print ("Warning: You activated the option of --skip_annovar, the Annovar will not run!")
+         print ("Warning: The InterVar will interpret the variants based on your old annotation information!")
 
     read_datasets()
     
