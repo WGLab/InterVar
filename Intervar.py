@@ -11,7 +11,7 @@ import copy,logging,os,io,re,time,sys,platform,optparse,gzip,glob
 
 prog="InterVar"
 
-version = """%prog 0.1.7 20170420
+version = """%prog 0.1.7 20170608
 Written by Quan LI,leequan@gmail.com. 
 InterVar is free for non-commercial use without warranty.
 Please contact the authors for commercial use.
@@ -661,7 +661,8 @@ def check_genes(anvfile):
                     gene_name='Gene'
 #some with multiple genes, so one gene by one gene  to annote
                 sum=sum+1
-                for gg in gene_name.split(','):
+                #for gg in gene_name.split(','):
+                for gg in re.split("[,;]",gene_name):
                     if not re.findall('true',paras['otherinfo'], flags=re.IGNORECASE) :
                         line_out=line+"\t"+gg
                     else:
@@ -865,28 +866,28 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
     #begin check it in the AAChange.knownGene for the major/Canonical isoform, not 1/last exon
     #SUFU:uc001kvy.2:exon6:c.G716A:p.R239Q
     line_tmp2=cls[Funcanno_flgs['AAChange.knownGene']]
-    cls0=line_tmp2.split(',')
-    cls0_1=cls0[0].split(':')
-    if len(cls0_1)>1:
-        trans_id=cls0_1[1]
-        exon=cls0_1[2]
-        try:
-            exon_lth="exon"+knownGeneCanonical_dict[trans_id]
-            if exon==exon_lth or exon =="exon1": # not 1 or last exon
-                PVS=0
+    #for cls0 in line_tmp2.split(','):
+    for cls0 in re.split("[,;]",line_tmp2):
+        cls0_1=cls0.split(':')
+        if len(cls0_1)>1:
+            trans_id=cls0_1[1]
+            exon=cls0_1[2]
             try:
-                if (float(knownGeneCanonical_ed_dict[trans_id])-float( cls[Allels_flgs['Start']]  ))<50: # means close  3' of gene 50 bp.
-                 PVS=0
-            except ValueError:
+                exon_lth="exon"+knownGeneCanonical_dict[trans_id]
+                if exon==exon_lth or exon =="exon1": # not 1 or last exon
+                    PVS=0
+                try:
+                    if (float(knownGeneCanonical_ed_dict[trans_id])-float( cls[Allels_flgs['Start']]  ))<50: # means close  3' of gene 50 bp.
+                        PVS=0
+                except ValueError:
+                    pass
+                else:
+                    pass
+
+            except KeyError:
                 pass
             else:
                 pass
-
-
-        except KeyError:
-            pass
-        else:
-            pass
 
 
 
@@ -914,7 +915,8 @@ def check_PS1(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
             PS1_t1=1;
             # need to wait to check Same amino acid change as a previously pathogenic variant
             line_tmp2=cls[Funcanno_flgs['AAChange.refGene']]
-            cls0=line_tmp2.split(',')
+            #cls0=line_tmp2.split(',')
+            cls0=re.split("[,;]",line_tmp2)
             cls0_1=cls0[0].split(':')
             aa=cls0_1[4]
             aa_last=aa[len(aa)-1:]
@@ -1135,7 +1137,8 @@ def check_PM5(line,Funcanno_flgs,Allels_flgs,aa_changes_dict):
             PM5_t1=1;
         # need to wait to check no-Same amino acid change as a previously pathogenic variant
             line_tmp2=cls[Funcanno_flgs['AAChange.refGene']]
-            cls0=line_tmp2.split(',')
+            #cls0=line_tmp2.split(',')
+            cls0=re.split("[,;]",line_tmp2)
             cls0_1=cls0[0].split(':')
             aa=cls0_1[4]
             aa_last=aa[len(aa)-1:]
