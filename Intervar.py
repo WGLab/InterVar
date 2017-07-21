@@ -852,7 +852,7 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
     else:
         pass
     #print("PVSt1= %d PVSt2= %d" % (PVS_t1,PVS_t2) )
-    # begin check the site in not affect the splicing
+    # begin check the site is really affect the splicing
     try:
         if float(cls[Funcanno_flgs['dbscSNV_RF_SCORE']])>dbscSNV_cutoff or float(cls[Funcanno_flgs['dbscSNV_ADA_SCORE']])>dbscSNV_cutoff:
             PVS_t3=1
@@ -861,7 +861,7 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
     else:
         pass
     if PVS_t1 !=0 and PVS_t2 != 0 :
-        if PVS_t3 ==0:
+        if PVS_t3 ==1:
             PVS=1
     #begin check it in the AAChange.knownGene for the major/Canonical isoform, not 1/last exon
     #SUFU:uc001kvy.2:exon6:c.G716A:p.R239Q
