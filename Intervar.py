@@ -832,6 +832,7 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
     cls=line.split('\t')
     funcs_tmp=["nonsense","frameshift","splic","stopgain"]
     funcs_tmp2="nonframe"
+    funcs_tmp3="splic"
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     PVS=0
     PVS_t1=0
@@ -861,8 +862,9 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
     else:
         pass
     if PVS_t1 !=0 and PVS_t2 != 0 :
-        if PVS_t3 ==1:
-            PVS=1
+        PVS=1
+        if line_tmp.find(funcs_tmp3)>=0 and PVS_t3 !=1:
+            PVS=0
     #begin check it in the AAChange.knownGene for the major/Canonical isoform, not 1/last exon
     #SUFU:uc001kvy.2:exon6:c.G716A:p.R239Q
     line_tmp2=cls[Funcanno_flgs['AAChange.knownGene']]
