@@ -475,9 +475,12 @@ def check_downdb():
                 file_name="1000g2015aug"
                 dataset_file=paras['database_locat']+"/"+paras['buildver']+"_"+file_name+".txt"
                 cmd="perl "+paras['annotate_variation']+" -buildver "+paras['buildver']+" -downdb -webfrom annovar "+file_name+" "+paras['database_locat']
-            print("Warning: The Annovar dataset file of %s is not in %s,begin to download this %s ..." %(dbs,paras['database_locat'],dataset_file))
-            print("%s" %cmd)
-            os.system(cmd)
+            if paras['skip_annovar'] != True:
+                print("Warning: The Annovar dataset file of %s is not in %s,begin to download this %s ..." %(dbs,paras['database_locat'],dataset_file))
+    
+            if paras['skip_annovar'] != True:
+                print("%s" %cmd)
+                os.system(cmd)
 
 def check_input():
     inputft= paras['inputfile_type']
@@ -2057,5 +2060,9 @@ def main():
     print("%s" %end)
 
 
+    
+
 if __name__ == "__main__":
     main()
+
+
