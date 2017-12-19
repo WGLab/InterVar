@@ -11,7 +11,7 @@ import copy,logging,os,io,re,time,sys,platform,optparse,gzip,glob
 
 prog="InterVar"
 
-version = """%prog 0.1.7 20170628
+version = """%prog 0.1.8 20171219
 Written by Quan LI,leequan@gmail.com. 
 InterVar is free for non-commercial use without warranty.
 Please contact the authors for commercial use.
@@ -452,9 +452,10 @@ def check_downdb():
     ds.expandtabs(1);
     # database_names = refGene 1000g2014oct esp6500siv2_all avsnp144 ljb26_all clinvar_20150629 exac03 hg19_dbscsnv11 dbnsfp31a_interpro rmsk ensGene
     if not os.path.isfile(paras['annotate_variation']):
-        print("Error: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+        print("Warning: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
                     % paras['annotate_variation'])
-        sys.exit()
+        if paras['skip_annovar'] != True:
+            sys.exit()
 
     for dbs in ds.split():
         # os.path.isfile(options.table_annovar)
@@ -474,9 +475,12 @@ def check_downdb():
                 file_name="1000g2015aug"
                 dataset_file=paras['database_locat']+"/"+paras['buildver']+"_"+file_name+".txt"
                 cmd="perl "+paras['annotate_variation']+" -buildver "+paras['buildver']+" -downdb -webfrom annovar "+file_name+" "+paras['database_locat']
-            print("Warning: The Annovar dataset file of %s is not in %s,begin to download this %s ..." %(dbs,paras['database_locat'],dataset_file))
-            print("%s" %cmd)
-            os.system(cmd)
+            if paras['skip_annovar'] != True:
+                print("Warning: The Annovar dataset file of %s is not in %s,begin to download this %s ..." %(dbs,paras['database_locat'],dataset_file))
+    
+            if paras['skip_annovar'] != True:
+                print("%s" %cmd)
+                os.system(cmd)
 
 def check_input():
     inputft= paras['inputfile_type']
@@ -490,9 +494,10 @@ def check_input():
             print("%s" %cmd)
             os.system(cmd)
         else:
-            print("Error: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+            print("Warning: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
                     % paras['convert2annovar'])
-            sys.exit()
+            if paras['skip_annovar'] != True:
+                sys.exit()
     if inputft.lower() == 'vcf_m':
         if os.path.isfile(paras['convert2annovar']):
         #convert2annovar.pl -format vcf4 variantfile > variant.avinput
@@ -502,9 +507,10 @@ def check_input():
             print("%s" %cmd)
             os.system(cmd)
         else:
-            print("Error: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+            print("Warning: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
                     % paras['convert2annovar'])
-            sys.exit()
+            if paras['skip_annovar']  != True:
+                sys.exit()
     return
 
 def check_annovar_result():
@@ -517,9 +523,10 @@ def check_annovar_result():
         annovar_options=annovar_options+"--onetranscript " 
 
     if not os.path.isfile(paras['table_annovar']):
-        print("Error: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+        print("Warning: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
                     % paras['table_annovar'])
-        sys.exit()
+        if paras['skip_annovar'] != True:
+            sys.exit()
     if inputft.lower() == 'avinput' :
         cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2015aug_all,avsnp144,dbnsfp33a,clinvar_20170130,exac03,dbscsnv11,dbnsfp31a_interpro,rmsk,ensGene,knownGene  -operation  g,f,f,f,f,f,f,f,f,r,g,g   -nastring ."+annovar_options
         print("%s" %cmd)
@@ -832,6 +839,7 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
     cls=line.split('\t')
     funcs_tmp=["nonsense","frameshift","splic","stopgain"]
     funcs_tmp2="nonframe"
+    funcs_tmp3="splic"
     line_tmp=cls[Funcanno_flgs['Func.refGene']]+" "+cls[Funcanno_flgs['ExonicFunc.refGene']]
     PVS=0
     PVS_t1=0
@@ -852,7 +860,7 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
     else:
         pass
     #print("PVSt1= %d PVSt2= %d" % (PVS_t1,PVS_t2) )
-    # begin check the site in not affect the splicing
+    # begin check the site is really affect the splicing
     try:
         if float(cls[Funcanno_flgs['dbscSNV_RF_SCORE']])>dbscSNV_cutoff or float(cls[Funcanno_flgs['dbscSNV_ADA_SCORE']])>dbscSNV_cutoff:
             PVS_t3=1
@@ -861,8 +869,9 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
     else:
         pass
     if PVS_t1 !=0 and PVS_t2 != 0 :
-        if PVS_t3 ==0:
-            PVS=1
+        PVS=1
+        if line_tmp.find(funcs_tmp3)>=0 and PVS_t3 !=1:
+            PVS=0
     #begin check it in the AAChange.knownGene for the major/Canonical isoform, not 1/last exon
     #SUFU:uc001kvy.2:exon6:c.G716A:p.R239Q
     line_tmp2=cls[Funcanno_flgs['AAChange.knownGene']]
@@ -1807,7 +1816,7 @@ def my_inter_var(annovar_outfile):
                         
 
                 if re.findall('true',paras['otherinfo'], flags=re.IGNORECASE)  :
-                    fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']], cls[Funcanno_flgs['Gene.ensGene']],cls[Funcanno_flgs['avsnp144']],cls[Funcanno_flgs['AAChange.ensGene']],cls[Funcanno_flgs['AAChange.refGene']],clinvar_bp,intervar_bp,cls[Freqs_flgs['ExAC_ALL']], cls[Freqs_flgs['esp6500siv2_all']], cls[Freqs_flgs['1000g2015aug_all']], cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],cls[Funcanno_flgs['SIFT_score']],  cls[Funcanno_flgs['GERP++_RS']],".", cls[Funcanno_flgs['dbscSNV_ADA_SCORE']], cls[Funcanno_flgs['dbscSNV_RF_SCORE']], cls[Funcanno_flgs['Interpro_domain']],cls[Funcanno_flgs['AAChange.knownGene']],cls[Funcanno_flgs['rmsk']],cls[Funcanno_flgs['MetaSVM_score']],Freq_ExAC_POPs,OMIM,Pheno_MIM,orpha,orpha_details,line_for_otherinfo   ))
+                    fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']], cls[Funcanno_flgs['Gene.ensGene']],cls[Funcanno_flgs['avsnp144']],cls[Funcanno_flgs['AAChange.ensGene']],cls[Funcanno_flgs['AAChange.refGene']],clinvar_bp,intervar_bp,cls[Freqs_flgs['ExAC_ALL']], cls[Freqs_flgs['esp6500siv2_all']], cls[Freqs_flgs['1000g2015aug_all']], cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],cls[Funcanno_flgs['SIFT_score']],  cls[Funcanno_flgs['GERP++_RS']],".", cls[Funcanno_flgs['dbscSNV_ADA_SCORE']], cls[Funcanno_flgs['dbscSNV_RF_SCORE']], cls[Funcanno_flgs['Interpro_domain']],cls[Funcanno_flgs['AAChange.knownGene']],cls[Funcanno_flgs['rmsk']],cls[Funcanno_flgs['MetaSVM_score']],Freq_ExAC_POPs,OMIM,Pheno_MIM,orpha,orpha_details,line_for_otherinfo    ))
                 else:
                     fw.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tclinvar: %s \t InterVar: %s \t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" % (cls[Allels_flgs['Chr']],cls[Allels_flgs['Start']],cls[Allels_flgs['End']],cls[Allels_flgs['Ref']],cls[Allels_flgs['Alt']],cls[Funcanno_flgs['Gene']],cls[Funcanno_flgs['Func.refGene']],cls[Funcanno_flgs['ExonicFunc.refGene']], cls[Funcanno_flgs['Gene.ensGene']],cls[Funcanno_flgs['avsnp144']],cls[Funcanno_flgs['AAChange.ensGene']],cls[Funcanno_flgs['AAChange.refGene']],clinvar_bp,intervar_bp,cls[Freqs_flgs['ExAC_ALL']], cls[Freqs_flgs['esp6500siv2_all']], cls[Freqs_flgs['1000g2015aug_all']], cls[Funcanno_flgs['CADD_raw']],cls[Funcanno_flgs['CADD_phred']],cls[Funcanno_flgs['SIFT_score']],  cls[Funcanno_flgs['GERP++_RS']],".", cls[Funcanno_flgs['dbscSNV_ADA_SCORE']], cls[Funcanno_flgs['dbscSNV_RF_SCORE']], cls[Funcanno_flgs['Interpro_domain']],cls[Funcanno_flgs['AAChange.knownGene']],cls[Funcanno_flgs['rmsk']],cls[Funcanno_flgs['MetaSVM_score']],Freq_ExAC_POPs,OMIM,Pheno_MIM,orpha,orpha_details  ))
 
@@ -1966,27 +1975,35 @@ def main():
     paras['ps4_snps'] = paras['ps4_snps']+'.'+paras['buildver']
     paras['bs2_snps'] = paras['bs2_snps']+'.'+paras['buildver']
     paras['exclude_snps'] = paras['exclude_snps']+'.'+paras['buildver']
-    if options.table_annovar != None:
+    paras['skip_annovar'] = False;
+
+    if options.skip_annovar == True:
+        paras['skip_annovar'] = True
+
+    if options.table_annovar != None and options.skip_annovar != True:
         if os.path.isfile(options.table_annovar):
             paras['table_annovar']=options.table_annovar
         else:
-            print("Error: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+            print("Warning: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
                     % options.table_annovar)
-            sys.exit()
-    if options.convert2annovar != None:
+            if options.skip_annovar != True:
+                sys.exit()
+    if options.convert2annovar != None and options.skip_annovar != True:
         if os.path.isfile(options.convert2annovar):
             paras['convert2annovar']=options.convert2annovar
         else:
-            print("Error: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+            print("Warning: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
                     % options.convert2annovar)
-            sys.exit()
-    if options.annotate_variation != None:
+            if options.skip_annovar != True:
+                sys.exit()
+    if options.annotate_variation != None and options.skip_annovar != True:
         if os.path.isfile(options.annotate_variation):
             paras['annotate_variation']=options.annotate_variation
         else:
-            print("Error: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
+            print("Warning: The Annovar file [ %s ] is not here,please download ANNOVAR firstly: http://www.openbioinformatics.org/annovar" 
                     % options.annotate_variation)
-            sys.exit()
+            if options.skip_annovar != True:
+                sys.exit()
 
 
     if not os.path.isfile(paras['inputfile']):
