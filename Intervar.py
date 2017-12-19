@@ -1916,9 +1916,9 @@ def main():
 
 
 
-
-    if os.path.isfile("config.ini"):
-        config.read("config.ini")
+    config_file = os.path.join(os.path.dirname(__file__),"config.ini")
+    if os.path.isfile(config_file):
+        config.read(config_file)
         sections = config.sections()
         for section in sections:
             ConfigSectionMap(config,section)    
