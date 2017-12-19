@@ -1908,7 +1908,6 @@ def main():
 
 
     config_file = os.path.join(os.path.dirname(__file__),"config.ini")
-    
     if os.path.isfile(config_file):
         config.read(config_file)
         sections = config.sections()
