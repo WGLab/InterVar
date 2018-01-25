@@ -354,7 +354,7 @@ def read_datasets():
         with myGzipFile(paras['bs2_snps'], "rb") as fh:
 
             #fh = open(paras['bs2_snps'], "r")
-            strs = fh.read()
+            strs = fh.read().decode()
             for line2 in strs.split('\n'):
                 cls2=line2.split(' ')
                 # PS4_snps_dict
@@ -1073,7 +1073,7 @@ def check_PM2(line,Freqs_flgs,Allels_flgs,Funcanno_flgs,mim2gene_dict,mim2gene_d
         else:
             pass
 
-        if mim_num >0: # it has  mim, check the dom or recess and freq
+        if int(mim_num) >0: # it has  mim, check the dom or recess and freq
             try:
                 if mim_recessive_dict[mim_num]=="1": # it is recessive
                     for key in Freqs_flgs.keys():
@@ -1598,7 +1598,7 @@ def check_BP7(line,Funcanno_flgs,Allels_flgs):
                 if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]<0.6 and cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]<0.6:
                     BP7_t1=1
 # check the conservation score of gerp++ > 2
-    if cls[Funcanno_flgs['GERP++_RS']] <= cutoff_conserv or cls[Funcanno_flgs['GERP++_RS']] == '.' :
+    if float(cls[Funcanno_flgs['GERP++_RS']]) <= float(cutoff_conserv) or cls[Funcanno_flgs['GERP++_RS']] == '.' :
             BP7_t2=1
 
     if BP7_t1 !=0 and BP7_t2 != 0 :
