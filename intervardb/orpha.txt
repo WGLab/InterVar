@@ -79,7 +79,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 100980	100980|Autosomal dominant pure HSP<br>Autosomal dominant pure SPG<br>Autosomal dominant uncomplicated HSP<br>Autosomal dominant uncomplicated SPG<br>Autosomal dominant uncomplicated spastic paraplegia|1-9 / 100 000|Autosomal dominant|-|
 100981	100981|Autosomal recessive complex HSP<br>Autosomal recessive complex SPG<br>Autosomal recessive complicated HSP<br>Autosomal recessive complicated SPG<br>Autosomal recessive complicated spastic paraplegia|-|-|-|
 100982	100982|Autosomal recessive pure HSP<br>Autosomal recessive pure SPG<br>Autosomal recessive uncomplicated HSP<br>Autosomal recessive uncomplicated SPG<br>Autosomal recessive uncomplicated spastic paraplegia|-|-|-|
-100984	100984|Strümpell disease|1-9 / 1 000 000|Autosomal dominant|Childhood<br>Adult|182600 
+100984	100984|Strmpell disease|1-9 / 1 000 000|Autosomal dominant|Childhood<br>Adult|182600 
 100985	100985|SPG4|-|Autosomal dominant|All ages|182601 
 100986	100986|SPG5A|<1 / 1 000 000|Autosomal recessive|-|270800 
 100988	100988|Autosomal dominant familial spastic paraplegia type 3<br>SPG6|<1 / 1 000 000|Autosomal dominant|-|600363 
@@ -373,7 +373,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 1178	1178|-|-|Unknown|-|272600 
 1179	1179|Ouvrier-Billson syndrome|-|-|-|168885 
 118	118|Beta-mannosidase deficiency|Unknown|Autosomal recessive|Infancy<br>Neonatal<br>Childhood<br>Adolescent<br>Adult|248510 
-1180	1180|Boucher-Neuhäuser syndrome|Unknown|Autosomal recessive|Childhood|215470 
+1180	1180|Boucher-Neuhuser syndrome|Unknown|Autosomal recessive|Childhood|215470 
 1182	1182|-|<1 / 1 000 000|-|Neonatal<br>Infancy<br>Childhood<br>Adolescent|108650 
 1183	1183|Ataxo-opso-myoclonus syndrome<br>Dancing eye syndrome<br>Dancing eye-dancing feet syndrome<br>Kinsbourne syndrome<br>OMA syndrome<br>OMS<br>Opsoclonus-myoclonus-ataxia syndrome<br>POMA syndrome<br>Paraneoplastic opsoclonus-myoclonus<br>Paraneoplastic opsoclonus-myoclonus-ataxia syndrome|Unknown|Not applicable|Infancy<br>Childhood|
 1184	1184|Fenton-Wilkinson-Toselano syndrome|<1 / 1 000 000|Unknown|Infancy<br>Childhood|
@@ -623,7 +623,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 139455	139455|Retinopathy, Burgess-Black type|<1 / 1 000 000|Autosomal recessive|All ages|611809 
 139466	139466|Sex reversion-kidneys, adrenal and lung dysgenesis syndrome|<1 / 1 000 000|Autosomal recessive|Antenatal|611812 
 139471	139471|Bakrania-Ragge syndrome<br>MCOPS6<br>Syndromic microphthalmia type 6|<1 / 1 000 000|-|-|607932 
-139474	139474|Dup(17)(q11.2)<br>Grisart-Destrée syndrome<br>Trisomy 17q11.2|<1 / 1 000 000|Autosomal dominant|Infancy<br>Neonatal|613675 
+139474	139474|Dup(17)(q11.2)<br>Grisart-Destre syndrome<br>Trisomy 17q11.2|<1 / 1 000 000|Autosomal dominant|Infancy<br>Neonatal|613675 
 139480	139480|SPG39<br>Spastic paraplegia due to NTE mutation<br>Spastic paraplegia due to neuropathy target esterase mutation|<1 / 1 000 000|Autosomal recessive|Childhood|612020 
 139485	139485|ARCA2<br>Autosomal recessive ataxia due to coenzyme Q10 deficiency<br>Autosomal recessive cerebellar ataxia type 2<br>Autosomal recessive spinocerebellar ataxia type 9<br>SCAR9|<1 / 1 000 000|Autosomal recessive|Childhood|612016 
 139491	139491|Autosomal dominant hereditary hemochromatosis<br>Ferroportin disease<br>Hemochromatosis due to defect in ferroportin|<1 / 1 000 000|Autosomal dominant|All ages|606069 
@@ -667,7 +667,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 140503	140503|-|-|-|-|
 1406	1406|-|Unknown|Not applicable|Neonatal|
 140653	140653|-|-|-|-|
-1408	1408|Calderón-González-Cantu syndrome|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|234030 
+1408	1408|Caldern-Gonzlez-Cantu syndrome|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|234030 
 140874	140874|JSRD|Unknown|Autosomal recessive<br>or&nbsp;X-linked recessive|Infancy<br>Neonatal|
 140896	140896|-|Unknown|-|All ages|
 1409	1409|Salamon syndrome<br>Wooly hair-hypotrichosis-everted lower lip-outstanding ears syndrome|<1 / 1 000 000|Autosomal recessive|Neonatal|278200 
@@ -967,7 +967,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 158003	158003|Montgomery syndrome|-|Not applicable|-|
 158008	158008|-|-|Not applicable|-|
 158011	158011|-|-|Not applicable|-|
-158014	158014|Destombes-Rosaï-Dorfman disease<br>Rosaï-Dorfman-Destombes disease<br>SHML<br>Sinus histiocytosis with massive lymphadenopathy|Unknown|-|Adolescent<br>Adult|
+158014	158014|Destombes-Rosa-Dorfman disease<br>Rosa-Dorfman-Destombes disease<br>SHML<br>Sinus histiocytosis with massive lymphadenopathy|Unknown|-|Adolescent<br>Adult|
 158019	158019|-|-|Not applicable|-|
 158022	158022|-|-|Not applicable|-|
 158025	158025|-|<1 / 1 000 000|Autosomal dominant|Childhood|142630 
@@ -1122,7 +1122,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 166090	166090|-|Unknown|Autosomal dominant|-|613554 
 166093	166093|-|Unknown|Autosomal recessive|-|613554 
 166096	166096|-|1-9 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|277480 
-1661	1661|Corneal dystrophy epithelial-short stature syndrome<br>Guízar Vázquez-Luengas-Muñoz syndrome|<1 / 1 000 000|X-linked recessive|Neonatal|304730 
+1661	1661|Corneal dystrophy epithelial-short stature syndrome<br>Guzar Vzquez-Luengas-Muoz syndrome|<1 / 1 000 000|X-linked recessive|Neonatal|304730 
 166100	166100|Stickler syndrome, non-ocular type|-|Autosomal dominant|-|184840 
 166105	166105|-|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|
 166108	166108|Intellectual disability-hypotonia-facial dysmorphism syndrome|<1 / 1 000 000|-|Infancy|612292 
@@ -1166,7 +1166,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 1666	1666|-|-|-|-|
 1667	1667|Early-onset diabetes mellitus with multiple epiphyseal dysplasia<br>WRS|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|226980 
 166775	166775|Rare bleeding disorder due to an acquired coagulation factor defect<br>Rare coagulopathy due to an acquired coagulation factor defect|-|-|-|
-167	167|Chédiak-Higashi disease<br>Chédiak-Higashi-Steinbrink syndrome|Unknown|Autosomal recessive|Childhood|214500 
+167	167|Chdiak-Higashi disease<br>Chdiak-Higashi-Steinbrink syndrome|Unknown|Autosomal recessive|Childhood|214500 
 1670	1670|-|-|-|-|520100 
 1671	1671|-|-|-|-|222500 
 1672	1672|Diencephalic cachexia<br>Diencephalic syndrome of childhood<br>Diencephalic syndrome of emaciation<br>Russell diencephalic cachexia<br>Russell syndrome|Unknown|Not applicable|Infancy<br>Childhood|
@@ -1404,7 +1404,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 1784	1784|Richieri-Costa-Colletto syndrome|<1 / 1 000 000|Autosomal recessive|Neonatal|201180 
 178400	178400|Distal anterior compartment myopathy|<1 / 1 000 000|-|Adolescent<br>Adult|606768 
 178461	178461|-|<1 / 1 000 000|X-linked recessive|Adult|300696 
-178464	178464|ADMERF<br>Edström Myopathy<br>HIBM-ERF<br>HMERF<br>Hereditary inclusion body myopathy with early respiratory failure<br>Myofibrillar myopathy with early respiratory failure|<1 / 1 000 000|Autosomal dominant|-|603689 
+178464	178464|ADMERF<br>Edstrm Myopathy<br>HIBM-ERF<br>HMERF<br>Hereditary inclusion body myopathy with early respiratory failure<br>Myofibrillar myopathy with early respiratory failure|<1 / 1 000 000|Autosomal dominant|-|603689 
 178469	178469|-|-|Autosomal dominant|-|156200 612580 612581 612621 613970 614113 614254 614255 614256 614257 614563 615828 616393 616579 
 178475	178475|Cutaneous infectious botulism<br>Cutaneous toxin-mediated botulism<br>Inoculation botulism<br>Skin infectious botulism<br>Skin toxin-mediated botulism|Unknown|-|All ages|
 178478	178478|Infant intestinal botulism<br>Infant intestinal toxemia botulism<br>Infant intestinal toxin-mediated botulism<br>Infantile botulism|Unknown|-|Infancy<br>Neonatal|
@@ -1446,10 +1446,10 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 180	180|CHM<br>Tapetochoroidal dystrophy|1-9 / 100 000|X-linked recessive|Adolescent<br>Childhood<br>Adult|303100 
 180062	180062|-|-|-|-|
 180065	180065|-|-|-|-|
-180068	180068|Incomplete bilateral aplasia of the Müllerian ducts|-|-|-|
+180068	180068|Incomplete bilateral aplasia of the Mllerian ducts|-|-|-|
 180071	180071|Unicornuate uterus|-|-|-|
-180074	180074|Complete unilateral Müllerian aplasia<br>Complete unilateral aplasia of the Müllerian ducts<br>Unicornuate uterus without rudimentary horn|-|-|-|
-180079	180079|Incomplete unilateral Müllerian aplasia<br>Incomplete unilateral aplasia of the Müllerian ducts<br>Unicornuate uterus with rudimentary horn|-|-|-|
+180074	180074|Complete unilateral Mllerian aplasia<br>Complete unilateral aplasia of the Mllerian ducts<br>Unicornuate uterus without rudimentary horn|-|-|-|
+180079	180079|Incomplete unilateral Mllerian aplasia<br>Incomplete unilateral aplasia of the Mllerian ducts<br>Unicornuate uterus with rudimentary horn|-|-|-|
 180086	180086|Bicervical bicornuate uterus|-|-|-|
 1801	1801|-|-|-|-|211350 
 180106	180106|-|-|-|-|
@@ -1597,7 +1597,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 183481	183481|-|-|-|-|
 183484	183484|-|-|-|-|
 183487	183487|-|-|-|-|
-183490	183490|Genetic skin photosensitivity<br>Photogenodermatosis<br>Photogénodermatose|-|-|-|
+183490	183490|Genetic skin photosensitivity<br>Photogenodermatosis<br>Photognodermatose|-|-|-|
 183494	183494|-|-|-|-|
 183497	183497|-|-|-|-|
 183500	183500|-|-|-|-|
@@ -1961,7 +1961,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 207119	207119|-|-|-|-|
 207122	207122|-|-|-|-|
 2072	2072|Cardiovascular Gaucher disease<br>Gaucher disease type 3C<br>Gaucher-like disease|<1 / 1 000 000|Autosomal recessive|Childhood|231005 
-2073	2073|Gélineau disease|1-5 / 10 000|Unknown|Adolescent<br>Childhood<br>Adult|161400 605841 609039 612417 612851 614223 614250 
+2073	2073|Glineau disease|1-5 / 10 000|Unknown|Adolescent<br>Childhood<br>Adult|161400 605841 609039 612417 612851 614223 614250 
 2074	2074|Spinocerebellar ataxia-amyotrophy-deafness syndrome|<1 / 1 000 000|Autosomal recessive|Adult|
 2075	2075|Gardner-Silengo-Wachtel syndrome|<1 / 1 000 000|-|Antenatal<br>Neonatal|231060 
 2076	2076|-|Unknown|X-linked recessive<br>or&nbsp;X-linked dominant|Childhood|300088 300423 300607 
@@ -2060,8 +2060,8 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 210163	210163|-|<1 / 1 000 000|Autosomal recessive|Antenatal<br>Neonatal|612540 
 2102	2102|GTPCH deficiency<br>Hyperphenylalaninemia due to GTP cyclohydrolase deficiency|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|233910 
 210272	210272|Disembarkment syndrome<br>MdD<br>MdDS<br>Sickness of disembarkment|Unknown|Not applicable|All ages|
-2103	2103|GBS<br>Guillain-Barré-Strohl syndrome|1-9 / 100 000|Multigenic/multifactorial|All ages|
-2104	2104|Guízar Vázquez-Sánchez-Manzano syndrome|<1 / 1 000 000|Unknown|Neonatal<br>Infancy|
+2103	2103|GBS<br>Guillain-Barr-Strohl syndrome|1-9 / 100 000|Multigenic/multifactorial|All ages|
+2104	2104|Guzar Vzquez-Snchez-Manzano syndrome|<1 / 1 000 000|Unknown|Neonatal<br>Infancy|
 210548	210548|-|<1 / 1 000 000|Autosomal dominant|Infancy<br>Neonatal|605309 
 210571	210571|DYT16<br>Early-onset dystonia parkinsonism|<1 / 1 000 000|Autosomal recessive|Infancy<br>Childhood|612067 
 210576	210576|Congenital trismus|-|-|-|
@@ -2069,8 +2069,8 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 210584	210584|Spindle cell hemangioendothelioma|-|-|-|
 210589	210589|-|-|-|-|
 2107	2107|-|<1 / 1 000 000|Autosomal recessive|Neonatal|234250 
-2108	2108|François dyscephalic syndrome<br>Oculomandibulofacial syndrome|Unknown|Unknown<br>or&nbsp;Not applicable|Neonatal<br>Infancy|234100 
-2109	2109|Dennis-Fairhurst-Moore syndrome<br>Hallermann-Streiff-François syndrome, severe form<br>Severe Hallermann-Streiff-François syndrome|-|-|-|
+2108	2108|Franois dyscephalic syndrome<br>Oculomandibulofacial syndrome|Unknown|Unknown<br>or&nbsp;Not applicable|Neonatal<br>Infancy|234100 
+2109	2109|Dennis-Fairhurst-Moore syndrome<br>Hallermann-Streiff-Franois syndrome, severe form<br>Severe Hallermann-Streiff-Franois syndrome|-|-|-|
 211	211|Turban tumor syndrome|-|Autosomal dominant|-|132700 
 2110	2110|Kleiner-Holmes syndrome|-|-|-|234280 
 211017	211017|SCA30|<1 / 1 000 000|Autosomal dominant|Adult<br>Elderly|613371 
@@ -2123,7 +2123,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 2136	2136|Lymphedema-lymphangiectasia-intellectual disability syndrome|<1 / 1 000 000|Autosomal recessive|Childhood|235510 616006 
 213600	213600|-|-|-|-|
 213605	213605|-|-|-|-|
-213610	213610|Mixed Müllerian cancer of corpus uteri|-|-|-|
+213610	213610|Mixed Mllerian cancer of corpus uteri|-|-|-|
 213615	213615|-|-|-|-|
 213620	213620|-|-|-|-|
 213625	213625|-|-|-|-|
@@ -2143,7 +2143,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 213772	213772|Cervical adenocarcinoma|-|-|-|
 213777	213777|Poorly differentiated endocrine cervical carcinoma|-|-|-|
 213782	213782|Cervical malignant mixed epithelial and mesenchymal tumor<br>Mixed epithelial and mesenchymal cancer of cervix uteri|-|-|-|
-213787	213787|Cervical malignant Müllerian mixed tumor|-|-|-|
+213787	213787|Cervical malignant Mllerian mixed tumor|-|-|-|
 213792	213792|Cervical adenosarcoma|-|-|-|
 213797	213797|Cervical malignant mesenchymal tumor<br>Cervical sarcoma<br>Malignant mesenchymal tumor of cervix uteri|-|-|-|
 2138	2138|46,XX ovotesticular DSD<br>True hermaphroditism|1-9 / 100 000|Autosomal recessive|Infancy<br>Neonatal|400045 
@@ -2278,7 +2278,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 2196	2196|FHHNC with severe ocular involvement<br>Hypercalciuria-bilateral macular coloboma syndrome<br>Meier-Blumberg-Imahorn syndrome|<1 / 1 000 000|Autosomal recessive|Childhood|248190 
 2197	2197|-|-|-|-|143870 607258 
 2198	2198|Bennion-Patterson syndrome<br>Howell-Evans syndrome<br>Keratosis palmoplantaris-esophageal carcinoma syndrome<br>Palmoplantar hyperkeratosis-esophageal carcinoma syndrome<br>Tylosis-oesophageal carcinoma syndrome|<1 / 1 000 000|Autosomal dominant|Adolescent<br>Adult|148500 
-2199	2199|Diffuse erythrodermic palmoplantar keratoderma, Voerner type<br>Diffuse erythrodermic palmoplantar keratoderma, Vörner type<br>EPPK<br>Epidermolytic palmoplantar keratoderma of Voerner<br>Epidermolytic palmoplantar keratoderma of Vörner|-|-|-|144200 
+2199	2199|Diffuse erythrodermic palmoplantar keratoderma, Voerner type<br>Diffuse erythrodermic palmoplantar keratoderma, Vrner type<br>EPPK<br>Epidermolytic palmoplantar keratoderma of Voerner<br>Epidermolytic palmoplantar keratoderma of Vrner|-|-|-|144200 
 22	22|4-hydroxybutyric aciduria<br>Gamma-hydroxybutyric aciduria<br>SSADH deficiency|Unknown|Autosomal recessive|Childhood<br>Infancy<br>Neonatal|271980 
 220	220|Drash syndrome<br>Wilms tumor and pseudohermaphroditism|<1 / 1 000 000|-|Infancy<br>Neonatal|194080 
 2200	2200|Focal palmoplantar and gingival hyperkeratosis|-|-|-|148730 
@@ -2539,11 +2539,11 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 231413	231413|Variant of GBS|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
 231416	231416|Regional variant of GBS|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
 231419	231419|Functional variant of GBS|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
-231426	231426|PCB variant of GBS<br>PCB variant of Guillain-Barré syndrome<br>Pharyngeal-cervical-brachial weakness<br>Pharyngo-cervico-brachial variant of GBS<br>Pharyngo-cervico-brachial variant of Guillain-Barré syndrome|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
+231426	231426|PCB variant of GBS<br>PCB variant of Guillain-Barr syndrome<br>Pharyngeal-cervical-brachial weakness<br>Pharyngo-cervico-brachial variant of GBS<br>Pharyngo-cervico-brachial variant of Guillain-Barr syndrome|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
 231445	231445|Paraparetic variant of GBS|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
-231450	231450|Acute pure sensory GBS<br>Acute pure sensory Guillain-Barré syndrome|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
-231457	231457|Acute panautonomic GBS<br>Acute panautonomic Guillain-Barré syndrome<br>Acute panautonomic neuropathy|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
-231466	231466|ASAN<br>Acute sensory ataxic GBS<br>Acute sensory ataxic Guillain-Barré syndrome|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
+231450	231450|Acute pure sensory GBS<br>Acute pure sensory Guillain-Barr syndrome|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
+231457	231457|Acute panautonomic GBS<br>Acute panautonomic Guillain-Barr syndrome<br>Acute panautonomic neuropathy|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
+231466	231466|ASAN<br>Acute sensory ataxic GBS<br>Acute sensory ataxic Guillain-Barr syndrome|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
 2315	2315|-|-|Autosomal recessive|Infancy<br>Neonatal|243800 
 231500	231500|HPS with pulmonary fibrosis|Unknown|Autosomal recessive|Infancy<br>Neonatal|203300 614073 
 231512	231512|HPS without pulmonary fibrosis|Unknown|Autosomal recessive|Infancy<br>Neonatal|614072 614074 614075 
@@ -2594,10 +2594,10 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 2342	2342|Keratosis palmoplantaris-periodontopathia-onychogryposis syndrome<br>Palmoplantar hyperkeratosis-periodontopathia-onychogryposis syndrome<br>Palmoplantar keratoderma-periodontopathia-onychogryposis syndrome|<1 / 1 000 000|Autosomal recessive|-|245010 
 2343	2343|-|Unknown|Not applicable|Neonatal|148800 600775 
 2345	2345|Congenital cervical vertebral fusion<br>Congenital fused cervical segments<br>Klippel-Feil malformation<br>Klippel-Feil sequence|1-9 / 100 000|Autosomal dominant<br>or&nbsp;Autosomal recessive<br>or&nbsp;Not applicable|Infancy<br>Neonatal|118100 214300 613702 
-2346	2346|Klippel-Trénaunay-Weber syndrome|Unknown|Autosomal dominant<br>or&nbsp;Not applicable|Infancy<br>Childhood<br>Adolescent|149000 608355 
+2346	2346|Klippel-Trnaunay-Weber syndrome|Unknown|Autosomal dominant<br>or&nbsp;Not applicable|Infancy<br>Childhood<br>Adolescent|149000 608355 
 2347	2347|-|<1 / 1 000 000|Autosomal recessive|Neonatal|245190 
 2348	2348|Dunnigan syndrome<br>FPLD2<br>Familial partial lipodystrophy type 2|Unknown|Autosomal dominant|Adolescent<br>Adult|151660 
-2349	2349|Hoffman syndrome<br>Kocher-Debré-Semelaigne syndrome|Unknown|-|Childhood|
+2349	2349|Hoffman syndrome<br>Kocher-Debr-Semelaigne syndrome|Unknown|-|Childhood|
 235	235|-|Unknown|Autosomal recessive|Neonatal<br>Antenatal|223370 
 2351	2351|Sacral meningocele-conotruncal heart defects syndrome|<1 / 1 000 000|-|Antenatal<br>Infancy<br>Neonatal|
 2352	2352|-|<1 / 1 000 000|-|Infancy<br>Neonatal|
@@ -2676,7 +2676,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 2398	2398|Cephalothoracic lipodystrophy<br>Familial benign cervical lipomatosis<br>Launois-Bensaude lipomatosis<br>Madelung disease|Unknown|Not applicable<br>or&nbsp;Autosomal dominant<br>or&nbsp;Mitochondrial inheritance<br>or&nbsp;Autosomal recessive|Adult|151800 
 2399	2399|-|<1 / 1 000 000|Autosomal dominant|Infancy<br>Neonatal|167730 
 24	24|Fumarase deficiency|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|606812 
-240	240|Léri-Weill syndrome|Unknown|Autosomal dominant|Neonatal|127300 
+240	240|Lri-Weill syndrome|Unknown|Autosomal dominant|Neonatal|127300 
 2400	2400|Lisker-Garcia-Ramos syndrome|-|Unknown|-|252320 
 240071	240071|Classic PSP syndrome<br>Richardson syndrome<br>Steele-Richardson-Olszewski disease|1-9 / 100 000|Not applicable|Adult|601104 609454 610898 
 240085	240085|PSP-p<br>PSP-parkinsonism|Unknown|Not applicable|Adult|260540 
@@ -2789,7 +2789,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 247724	247724|-|-|Not applicable|-|
 247762	247762|-|Unknown|Not applicable|Childhood|
 247765	247765|-|-|X-linked recessive<br>or&nbsp;X-linked dominant|-|
-247768	247768|Müllerian duct failure and hyperandrogenism<br>WNT4 deficiency|Unknown|Autosomal dominant<br>or&nbsp;Not applicable|Infancy<br>Neonatal|158330 
+247768	247768|Mllerian duct failure and hyperandrogenism<br>WNT4 deficiency|Unknown|Autosomal dominant<br>or&nbsp;Not applicable|Infancy<br>Neonatal|158330 
 247775	247775|Congenital absence of uterus and vagina<br>MRKH syndrome type 1<br>Rokitansky sequence|1-9 / 100 000|Autosomal dominant<br>or&nbsp;Not applicable|Antenatal<br>Adolescent|277000 
 247790	247790|FTH1-associated iron overload|<1 / 1 000 000|Autosomal dominant|No data available|615517 
 247794	247794|-|<1 / 1 000 000|Autosomal dominant|Childhood|612018 
@@ -2806,7 +2806,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 247861	247861|Polyarthritis without rheumatoid factor without anti-nuclear antibodies|-|-|-|
 247868	247868|FCAS2<br>Familial cold autoinflammatory syndrome type 2<br>NAPS12|-|Autosomal dominant|Neonatal<br>Infancy|611762 
 247871	247871|-|-|-|Childhood<br>Adolescent<br>Adult|193200 606579 607836 608391 608392 609400 
-2479	2479|MMR syndrome<br>Neuhäuser syndrome|-|-|-|249310 
+2479	2479|MMR syndrome<br>Neuhuser syndrome|-|-|-|249310 
 248	248|AR-HED<br>Autosomal recessive anhidrotic ectodermal dysplasia|Unknown|Autosomal recessive|Infancy<br>Neonatal|224900 614941 
 248095	248095|Idiopathic hypertrophic osteoarthropathy<br>PHO|Unknown|Autosomal recessive|Infancy<br>Neonatal|
 2481	2481|NCM<br>Neurocutaneous melanosis|1-9 / 100 000|Not applicable|Childhood|249400 
@@ -3101,8 +3101,8 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 2573	2573|-|1-9 / 1 000 000|Multigenic/multifactorial<br>or&nbsp;Autosomal dominant<br>or&nbsp;Autosomal recessive<br>or&nbsp;X-linked recessive|All ages|252350 607151 608796 614042 
 2574	2574|Alopecia-epilepsy-intellectual disability syndrome, Moynahan type|-|-|-|203600 
 2575	2575|Lubani-Al Saleh-Teebi syndrome|<1 / 1 000 000|Autosomal recessive|Infancy|219721 
-2576	2576|MULIBREY dwarfism<br>Muscle-liver-brain-eye nanism<br>Perheentupa syndrome<br>Pericardial constriction-growth failure syndrome|Unknown|Autosomal recessive|Infancy<br>Neonatal|253250 
-2578	2578|Atypical MRKH syndrome<br>MRKH syndrome type 2<br>MURCS association<br>Müllerian duct aplasia-renal dysplasia-cervical somite anomalies syndrome|1-9 / 100 000|Autosomal dominant<br>or&nbsp;Not applicable|Antenatal<br>Adolescent|601076 
+2576	2576|MULIBREY dwarfism<br>Muscle-liver-brain-eye nanism<br>Perheentupa syndrome<br>Pericardial constriction-growth failure syndrome|Unknown|Autosomal recessive|Infancy<br>Neonata253250 
+2578	2578|Atypical MRKH syndrome<br>MRKH syndrome type 2<br>MURCS association<br>Mllerian duct aplasia-renal dysplasia-cervical somite anomalies syndrome|1-9 / 100 000|Autosomal dominant<br>or&nbsp;Not applicable|Antenatal<br>Adolescent|601076 
 2579	2579|Furukawa-Takagi-Nakao syndrome|<1 / 1 000 000|Autosomal dominant|Childhood|158500 
 258	258|CMD1A<br>Congenital muscular dystrophy due to laminin alpha2 deficiency<br>MDC1A<br>Merosin-negative congenital muscular dystrophy|1-9 / 1 000 000|Autosomal recessive|Neonatal|607855 
 2580	2580|-|-|-|-|
@@ -3444,7 +3444,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 2674	2674|-|<1 / 1 000 000|Autosomal dominant|Antenatal<br>Neonatal|123853 
 2676	2676|Oerter-Friedman-Anderson syndrome|<1 / 1 000 000|Unknown|Infancy<br>Neonatal|
 2677	2677|-|Unknown|Not applicable|Childhood|612219 
-2678	2678|Familial café-au-lait spots<br>Multiple café-au-lait spots<br>Multiple café-au-lait syndrome<br>NF6|Unknown|Autosomal dominant|Childhood|114030 
+2678	2678|Familial caf-au-lait spots<br>Multiple caf-au-lait spots<br>Multiple caf-au-lait syndrome<br>NF6|Unknown|Autosomal dominant|Childhood|114030 
 2679	2679|-|-|-|-|
 26790	26790|Adenomucinosis<br>Gelatinous ascites<br>PMP|Unknown|Unknown|Adult|
 26791	26791|Electron transfer flavoprotein deficiency<br>Electron transfer flavoprotein ubiquinone oxidoreductase deficiency<br>Glutaric acidemia type 2<br>Glutaric aciduria type 2<br>MAD deficiency<br>MADD|1-9 / 1 000 000|Autosomal recessive|All ages|231680 
@@ -3596,11 +3596,11 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 2746	2746|-|<1 / 1 000 000|Autosomal recessive|Neonatal|258480 
 2749	2749|Oroacral syndrome|1-9 / 1 000 000|-|Infancy<br>Neonatal|
 275	275|SCID due to ARTEMIS deficiency<br>SCID due to DCLRE1C deficiency<br>SCID, Athabascan type<br>SCID, Athabaskan type<br>Severe combined immunodeficiency due to ARTEMIS deficiency<br>Severe combined immunodeficiency, Athabascan type<br>Severe combined immunodeficiency, Athabaskan type|Unknown|Autosomal recessive|Infancy<br>Neonatal|602450 
-2750	2750|OFD1<br>OFDI<br>OFDSI<br>Oral-facial-digital syndrome type 1<br>Papillon-Léage-Psaume syndrome|Unknown|X-linked dominant<br>or&nbsp;Not applicable|Infancy<br>Neonatal|311200 
+2750	2750|OFD1<br>OFDI<br>OFDSI<br>Oral-facial-digital syndrome type 1<br>Papillon-Lage-Psaume syndrome|Unknown|X-linked dominant<br>or&nbsp;Not applicable|Infancy<br>Neonatal|311200 
 2751	2751|Mohr syndrome<br>OFD2<br>Oral-facial-digital syndrome type 2|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|252100 
 2752	2752|OFD3<br>Oral-facial-digital syndrome type 3<br>Sugarman syndrome|<1 / 1 000 000|Autosomal recessive|Childhood|258850 
 2753	2753|Baraitser-Burn syndrome<br>Mohr-Majewski syndrome<br>OFD4<br>Oral-facial-digital syndrome type 4|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|258860 
-2754	2754|Joubert syndrome with oral-facial-digital syndrome<br>OFD6<br>Oral-facial-digital syndrome type 6<br>Orofaciodigital syndrome type 6<br>Polydactyly-cleft lip/palate-psychomotor retardation syndrome<br>Váradi syndrome<br>Váradi-Papp syndrome|<1 / 1 000 000|Autosomal recessive<br>or&nbsp;X-linked recessive|Infancy<br>Neonatal|277170 300804 614815 615665 
+2754	2754|Joubert syndrome with oral-facial-digital syndrome<br>OFD6<br>Oral-facial-digital syndrome type 6<br>Orofaciodigital syndrome type 6<br>Polydactyly-cleft lip/palate-psychomotor retardation syndrome<br>Vradi syndrome<br>Vradi-Papp syndrome|<1 / 1 000 000|Autosomal recessive<br>or&nbsp;X-linked recessive|Infancy<br>Neonatal|277170 300804 614815 615665 
 2755	2755|OFD8<br>Oral-facial-digital syndrome type 8<br>Oral-facial-digital syndrome, Edwards type<br>Orofaciodigital syndrome, Edwards type|<1 / 1 000 000|X-linked recessive|Infancy<br>Neonatal|300484 
 275517	275517|ALPS with recurrent viral infections<br>CEDS<br>Caspase 8 deficiency syndrome|<1 / 1 000 000|Autosomal recessive|Childhood|607271 
 275523	275523|DALD|<1 / 1 000 000|Unknown|All ages|605233 
@@ -3657,7 +3657,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 276280	276280|HHML|<1 / 1 000 000|Not applicable|Childhood|
 2763	2763|Gracile bone dysplasia<br>Osteocraniosplenic syndrome|<1 / 1 000 000|Autosomal dominant|Neonatal<br>Antenatal|602361 
 276399	276399|FMNG<br>Familial MNG|Unknown|Autosomal dominant|Adolescent|138800 
-2764	2764|König disease|1-5 / 10 000|-|All ages|
+2764	2764|Knig disease|1-5 / 10 000|-|All ages|
 276402	276402|-|-|-|-|
 276405	276405|Green jaundice|<1 / 1 000 000|Autosomal dominant<br>or&nbsp;Autosomal recessive|Adult|614156 
 276413	276413|Del(10)(q22.3q23.3)<br>Deletion 10q22.3q23.3<br>Monosomy 10q22.3q23.3|Unknown|Not applicable<br>or&nbsp;Unknown|Infancy<br>Neonatal|612242 
@@ -3693,7 +3693,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 2781	2781|-|Unknown|Autosomal dominant<br>or&nbsp;Autosomal recessive<br>or&nbsp;X-linked recessive|All ages|
 2783	2783|-|<1 / 1 000 000|Autosomal dominant|Adolescent<br>Childhood|607634 
 2785	2785|Carbonic anhydrase 2 deficiency<br>Guibaud-Vainsel syndrome<br>Marble brain disease<br>Mixed RTA<br>Mixed renal tubular acidosis<br>Renal tubular acidosis type 3|<1 / 1 000 000|Autosomal recessive|Infancy<br>Childhood|259730 267200 
-2786	2786|Hernández-Fragoso syndrome<br>OOCHS|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|601220 
+2786	2786|Hernndez-Fragoso syndrome<br>OOCHS|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|601220 
 2787	2787|Heide syndrome|Unknown|-|Infancy<br>Neonatal|
 2788	2788|OPPG<br>Ocular form of osteogenesis imperfecta|<1 / 1 000 000|Autosomal recessive|Childhood|259770 
 2789	2789|Lehman syndrome|<1 / 1 000 000|Autosomal dominant|Infancy<br>Neonatal|130720 
@@ -3905,7 +3905,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 285014	285014|-|-|-|-|
 2854	2854|Fibular hypoplasia or aplasia-femoral bowing-oligodactyly syndrome<br>Fuhrmann-Rieger-de Sousa syndrome|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|228930 
 2855	2855|XX gonodal dysgenesis-deafness syndrome|<1 / 1 000 000|Autosomal recessive|Adolescent<br>Childhood<br>Adult|233400 614129 614926 615300 616138 
-2856	2856|PMDS<br>Persistent Müllerian derivatives|Unknown|Autosomal recessive|Infancy<br>Childhood<br>Adolescent<br>Adult|261550 
+2856	2856|PMDS<br>Persistent Mllerian derivatives|Unknown|Autosomal recessive|Infancy<br>Childhood<br>Adolescent<br>Adult|261550 
 285657	285657|-|-|-|-|
 286	286|EDS IV<br>EDS type 4<br>Ehlers-Danlos syndrome type 4<br>Ehlers-Danlos syndrome type IV<br>Sack-Barabas syndrome|1-9 / 100 000|Autosomal dominant|Infancy<br>Neonatal|130050 
 2863	2863|Stratton-Parker syndrome|-|-|-|185120 
@@ -3920,7 +3920,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 2874	2874|-|<1 / 1 000 000|Unknown|Infancy<br>Neonatal|
 2875	2875|-|-|Not applicable|-|
 2876	2876|Powell-Chandra-Saal syndrome|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|261575 
-2878	2878|Stoll-Lévy-Francfort syndrome|-|-|-|171480 
+2878	2878|Stoll-Lvy-Francfort syndrome|-|-|-|171480 
 2879	2879|Al Awadi-Raas-Rothschild syndrome<br>Aplasia/hypoplasia of limbs and pelvis<br>Congenital absence of ulna and fibula<br>Severe limb deficit|Unknown|Autosomal recessive|Infancy<br>Neonatal|276820 
 288	288|HE|1-5 / 10 000|Autosomal dominant<br>or&nbsp;Autosomal recessive|All ages|130600 235370 611804 
 2880	2880|PEPCK deficiency|<1 / 1 000 000|Autosomal recessive<br>or&nbsp;Mitochondrial inheritance|Infancy<br>Neonatal|261650 261680 
@@ -3948,7 +3948,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 289362	289362|Non-CNS-localized embryonal carcinoma|-|-|-|
 289365	289365|Familial VUR|Unknown|Autosomal dominant|All ages|193000 610878 613674 614317 614318 614319 615390 615963 
 289377	289377|-|Unknown|Autosomal recessive|Childhood|611705 
-289380	289380|Congenital myosclerosis, Löwenthal type|Unknown|Autosomal recessive|Childhood|255600 
+289380	289380|Congenital myosclerosis, Lwenthal type|Unknown|Autosomal recessive|Childhood|255600 
 289385	289385|Cancer diagnosed during pregnancy|-|-|-|
 2894	2894|-|-|-|-|
 289465	289465|Congenital absence of fingerprints<br>Immigration delay disease|Unknown|Autosomal dominant|Infancy<br>Neonatal|136000 
@@ -4087,7 +4087,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 294415	294415|Ivemark II syndrome<br>Renohepaticopancreatic dysplasia|-|Autosomal recessive|-|208540 615415 
 294422	294422|CIF|-|Not applicable|All ages|
 2946	2946|Brachydactyly, long thumb type|<1 / 1 000 000|Autosomal dominant|Infancy<br>Neonatal|112430 
-2947	2947|Carnevale-Hernández-del Castillo syndrome|<1 / 1 000 000|Autosomal dominant|Neonatal|190680 
+2947	2947|Carnevale-Hernndez-del Castillo syndrome|<1 / 1 000 000|Autosomal dominant|Neonatal|190680 
 294925	294925|-|-|-|-|
 294927	294927|Intercalary meromelia|-|-|-|
 294929	294929|Terminal meromelia|-|-|-|
@@ -4392,7 +4392,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 306519	306519|-|-|-|-|
 306522	306522|-|-|-|-|
 306527	306527|-|<1 / 1 000 000|Autosomal dominant<br>or&nbsp;Autosomal recessive|Infancy<br>Neonatal|601471 
-306530	306530|Congenital hereditary facial palsy with variable deafness<br>Congenital hereditary facial palsy with variable hearing loss<br>Congenital hereditary facial paralysis with variable deafness<br>Congenital hereditary facial paralysis-variable deafness syndrome<br>Parálisis facial hereditaria congénita con pérdida de audición variable<br>Parálisis facial hereditaria congénita con sordera variable|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|604185 614744 
+306530	306530|Congenital hereditary facial palsy with variable deafness<br>Congenital hereditary facial palsy with variable hearing loss<br>Congenital hereditary facial paralysis with variable deafness<br>Congenital hereditary facial paralysis-variable deafness syndrome<br>Parlisis facial hereditaria congnita con prdida de audicin variable<br>Parlisis facial hereditaria congnita con sordera variable|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|604185 614744 
 306539	306539|-|Unknown|Autosomal dominant<br>or&nbsp;Autosomal recessive|Infancy<br>Neonatal|173650 
 306542	306542|ALX1-related frontonasal dysplasia|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|613456 
 306547	306547|-|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|613730 
@@ -4448,7 +4448,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 3071	3071|FCS syndrome<br>Faciocutaneoskeletal syndrome|Unknown|Autosomal dominant<br>or&nbsp;Not applicable|Neonatal<br>Antenatal|218040 
 307141	307141|Diffuse PPK<br>Diffuse keratosis palmoplantaris<br>Diffuse palmoplantar hyperkeratosis|-|-|-|
 307148	307148|Isolated diffuse PPK<br>Isolated diffuse keratosis palmoplantaris<br>Isolated diffuse palmoplantar hyperkeratosis|-|-|-|
-3074	3074|Stoll-Géraudel-Chauvin syndrome|-|-|-|
+3074	3074|Stoll-Graudel-Chauvin syndrome|-|-|-|
 3077	3077|Lindsay-Burn syndrome<br>PPM-X|<1 / 1 000 000|X-linked dominant|Childhood|300055 
 307711	307711|Disease with diffuse palmoplantar hyperkeratosis as a major feature|-|-|-|
 307766	307766|CHAC syndrome<br>CHACS|-|-|-|607656 
@@ -4597,7 +4597,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 3111	3111|Hyperbilirubinemia, Rotor type|<1 / 1 000 000|Autosomal recessive|All ages|237450 
 31112	31112|DFSP|1-5 / 10 000|Not applicable|All ages|607907 
 31142	31142|-|-|-|-|
-3115	3115|Hereditary areflexic dystasia, Roussy-Lévy type|-|-|Infancy<br>Childhood|180800 
+3115	3115|Hereditary areflexic dystasia, Roussy-Lvy type|-|-|Infancy<br>Childhood|180800 
 31150	31150|ATP-binding cassette transporter A1 deficiency<br>Analphalipoproteinemia<br>Defective adenosine triphosphate-binding cassette transporter A1|<1 / 1 000 000|Autosomal recessive|Neonatal<br>Infancy<br>Childhood|205400 
 31153	31153|-|-|-|-|
 31154	31154|-|-|-|-|
@@ -4717,7 +4717,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 3157	3157|De Morsier syndrome<br>SOD<br>Septo-optic dysplasia|Unknown|Autosomal dominant<br>or&nbsp;Autosomal recessive<br>or&nbsp;Multigenic/multifactorial<br>or&nbsp;Not applicable|Infancy<br>Neonatal|182230 
 316	316|Darier-Gottron disease<br>Erythrokeratodermia progressiva symmetrica<br>Progressive symmetric erythrokeratodermia, Gottron type|Unknown|Autosomal dominant|Infancy<br>Neonatal|
 3161	3161|Congenital bronchopulmonary sequestration|-|-|-|
-3162	3162|Sézary lymphoma|Unknown|Not applicable<br>or&nbsp;Multigenic/multifactorial|Adult|
+3162	3162|Szary lymphoma|Unknown|Not applicable<br>or&nbsp;Multigenic/multifactorial|Adult|
 316226	316226|SPAX|-|-|-|
 316235	316235|AD-SPAX|-|-|-|
 316240	316240|AR-SPAX|-|-|-|
@@ -4861,7 +4861,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 320406	320406|SPOAN|<1 / 1 000 000|Autosomal recessive|Infancy|609541 
 320411	320411|SPG56|<1 / 1 000 000|-|Neonatal<br>Infancy<br>Childhood|615030 
 3205	3205|Encephalofacial angiomatosis<br>Encephalotrigeminal angiomatosis<br>SWS<br>Sturge-Weber-Dimitri syndrome<br>Sturge-Weber-Krabbe angiomatosis<br>Sturge-Weber-Krabbe syndrome|1-9 / 100 000|Not applicable|Infancy<br>Neonatal<br>Childhood<br>Adolescent|185300 
-3206	3206|Neonatal Schwartz-Jampel syndrome<br>SJS2<br>Schwartz-Jampel syndrome type 2<br>Stüve-Wiedemann dysplasia<br>Stüve-Wiedemann/Schwartz-Jampel type 2 syndrome|<1 / 1 000 000|Autosomal recessive|Neonatal|601559 
+3206	3206|Neonatal Schwartz-Jampel syndrome<br>SJS2<br>Schwartz-Jampel syndrome type 2<br>Stve-Wiedemann dysplasia<br>Stve-Wiedemann/Schwartz-Jampel type 2 syndrome|<1 / 1 000 000|Autosomal recessive|Neonatal|601559 
 3207	3207|Curatolo-Cilio-Pessagno syndrome|-|-|-|
 3208	3208|Isolated mitochondrial respiratory chain complex II deficiency<br>Isolated succinate-coenzyme Q reductase deficiency<br>Isolated succinate-ubiquinone reductase deficiency|<1 / 1 000 000|Autosomal recessive|-|252011 
 321	321|Bessel-Hagen disease<br>EXT1/EXT2-CDG<br>Multiple cartilaginous exostoses|1-9 / 100 000|Autosomal dominant|Childhood|133700 133701 600209 
@@ -4977,7 +4977,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 3265	3265|Humero-radial fusion|<1 / 1 000 000|Autosomal dominant<br>or&nbsp;Autosomal recessive|All ages|143050 236400 
 3266	3266|Humero-radio-ulnar fusion|<1 / 1 000 000|Unknown|All ages|
 3267	3267|-|-|-|-|600775 
-3268	3268|Giuffré-Tsukahara syndrome<br>Tsukahara syndrome|<1 / 1 000 000|Unknown|Antenatal<br>Neonatal|603438 
+3268	3268|Giuffr-Tsukahara syndrome<br>Tsukahara syndrome|<1 / 1 000 000|Unknown|Antenatal<br>Neonatal|603438 
 3269	3269|Radioulnar fusion|Unknown|Unknown|Infancy<br>Childhood|179300 
 327	327|Congenital proconvertin deficiency<br>Hypoproconvertinemia|1-9 / 1 000 000|Autosomal recessive|All ages|227500 
 3270	3270|Der Kaloustian-McIntosh-Silver syndrome|<1 / 1 000 000|Unknown|Neonatal|266255 
@@ -5063,7 +5063,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 330197	330197|Genetic MCA/variable MR<br>Genetic multiple congenital anomalies-variable intellectual disability with or without dysmorphism syndrome|-|-|-|
 330206	330206|Genetic MCA<br>Genetic multiple congenital anomalies without intellectual disability (with or without dysmorphism)|-|-|-|
 3303	3303|-|1-5 / 10 000|Autosomal dominant<br>or&nbsp;Multigenic/multifactorial|Neonatal<br>Antenatal|187500 
-3304	3304|Bindewald-Ulmer-Müller syndrome|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|601127 
+3304	3304|Bindewald-Ulmer-Mller syndrome|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|601127 
 3305	3305|-|-|-|-|
 3306	3306|Inv dup(15)<br>Isodicentric 15 chromosome<br>Non-distal tetrasomy 15q<br>Non-telomeric tetrasomy 15q<br>idic(15)|-|Not applicable<br>or&nbsp;Unknown|Neonatal|
 33067	33067|-|<1 / 1 000 000|Autosomal dominant|Infancy<br>Neonatal|156400 
@@ -5259,7 +5259,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 35121	35121|-|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|200950 
 35122	35122|CSID<br>Congenital sucrase-isomaltose malabsorption<br>Congenital sucrose intolerance<br>Disaccharide intolerance|1-5 / 10 000|Autosomal recessive|Childhood|222900 
 35125	35125|Epidermal hamartoma syndrome|Unknown|Not applicable|Infancy<br>Neonatal|
-35173	35173|CDPX2<br>CDPXD<br>CPXD<br>Chondrodystrophia calcificans congenita<br>Conradi-Hünermann-Happle syndrome<br>X-linked chondrodysplasia punctata type 2|1-9 / 1 000 000|X-linked dominant|Infancy<br>Neonatal|302960 
+35173	35173|CDPX2<br>CDPXD<br>CPXD<br>Chondrodystrophia calcificans congenita<br>Conradi-Hnermann-Happle syndrome<br>X-linked chondrodysplasia punctata type 2|1-9 / 1 000 000|X-linked dominant|Infancy<br>Neonatal|302960 
 352	352|-|Unknown|Autosomal recessive|Infancy<br>Neonatal<br>Childhood|230200 230350 230400 
 352298	352298|-|-|-|-|
 352301	352301|-|-|-|-|
@@ -5297,7 +5297,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 352709	352709|-|<1 / 1 000 000|Autosomal recessive|Adult|615362 
 352712	352712|FILS syndrome|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|615139 
 352718	352718|Retinol dystrophy-iris coloboma-comedogenic acne syndrome|<1 / 1 000 000|Autosomal recessive|Childhood|615147 
-352723	352723|Atypical Chédiak-Higashi syndrome|<1 / 1 000 000|Autosomal recessive|Childhood|
+352723	352723|Atypical Chdiak-Higashi syndrome|<1 / 1 000 000|Autosomal recessive|Childhood|
 352728	352728|-|-|-|-|
 352731	352731|OCA1|1-9 / 100 000|Autosomal recessive|Infancy<br>Neonatal|203100 606952 
 352734	352734|MP OCA type 1<br>OCA1-MP|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|
@@ -5348,7 +5348,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 357058	357058|ARCL2A|-|-|-|219200 278250 
 35706	35706|Glutaric aciduria type 3<br>Glutaryl-CoA oxidase deficiency|Unknown|Autosomal recessive|All ages|231690 
 357064	357064|ARCL2, progeroid type<br>ARCL2B<br>Autosomal recessive cutis laxa type 2, progeroid type|-|-|-|612940 
-357074	357074|ARCL2, Debré type<br>ARCL2, classic type<br>Autosomal recessive cutis laxa type 2, Debré type|-|-|-|219200 
+357074	357074|ARCL2, Debr type<br>ARCL2, classic type<br>Autosomal recessive cutis laxa type 2, Debr type|-|-|-|219200 
 35708	35708|AADC deficiency|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|608643 
 35710	35710|SGLT1 deficiency|Unknown|Autosomal recessive|Infancy<br>Neonatal|606824 
 357107	357107|ATOS<br>Arterial TOS<br>Arterial cervical rib syndrome<br>Arterial costoclavicular syndrome<br>Arterial hyperabduction syndrome<br>Arterial scalenus anticus syndrome<br>Arterial thoracic outlet compression syndrome|-|-|-|
@@ -5594,7 +5594,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 379	379|CGD<br>Chronic septic granulomatosis|1-9 / 1 000 000|Autosomal recessive<br>or&nbsp;X-linked recessive|Infancy<br>Childhood<br>Adolescent<br>Adult|233670 233690 233700 233710 306400 613960 
 38	38|AKE<br>PPKP3<br>Punctate palmoplantar hyperkeratosis type 3<br>Punctate palmoplantar keratoderma type 3|Unknown|Autosomal dominant<br>or&nbsp;Not applicable|Adolescent<br>Adult|101850 
 380	380|GCPS|1-9 / 1 000 000|Autosomal dominant|Neonatal|175700 
-381	381|Chédiak-Higashi-like syndrome<br>Griscelli-Pruniéras syndrome<br>Partial albinism-immunodeficiency syndrome|<1 / 1 000 000|Autosomal recessive|Childhood|214450 607624 609227 
+381	381|Chdiak-Higashi-like syndrome<br>Griscelli-Pruniras syndrome<br>Partial albinism-immunodeficiency syndrome|<1 / 1 000 000|Autosomal recessive|Childhood|214450 607624 609227 
 382	382|GAMT deficiency|<1 / 1 000 000|Autosomal recessive|Infancy<br>Childhood|612736 
 383	383|Conductive deafness with stapes fixation<br>DFNX2<br>Nance deafness<br>X-linked deafness type 2<br>X-linked mixed conductive and neurosensory deafness<br>X-linked mixed conductive and neurosensory hearing loss<br>X-linked mixed conductive and sensorineural deafness<br>X-linked mixed conductive and sensorineural hearing loss<br>X-linked stapes gusher syndrome|Unknown|X-linked recessive|Infancy|304400 
 384	384|Huriez syndrome<br>Palmoplantar hyperkeratosis-sclerodactyly syndrome<br>Scleroatrophic syndrome<br>Sclerotylosis|-|-|-|181600 
@@ -6208,7 +6208,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 448264	448264|-|<1 / 1 000 000|Autosomal dominant|No data available|616400 
 448267	448267|-|<1 / 1 000 000|Autosomal recessive|Neonatal|
 448270	448270|-|Unknown|Not applicable|Antenatal|
-448348	448348|Familial infantile gigantism due to a point mutation<br>X-LAG (X-linked acrogigantism) due to a point mutation|-|-|-|
+448348	448348|Familial infantile gigantism due to a point mutation<br>X-LA(X-linked acrogigantism) due to a point mutation|-|-|-|
 448372	448372|Familial infantile gigantism due to Xq26 microduplication<br>Familial infantile gigantism due to dup(X)q(26)<br>X-LAG (X-linked acrogigantism) due to dup(X)q(26)|<1 / 1 000 000|X-linked dominant|Infancy<br>Childhood|300942 
 448426	448426|-|-|-|-|
 44890	44890|GIST<br>Gastrointestinal stromal sarcoma|1-5 / 10 000|Not applicable<br>or&nbsp;Autosomal dominant|Childhood<br>Adolescent<br>Adult|606764 
@@ -6221,7 +6221,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 449395	449395|-|Unknown|Not applicable|Adult<br>Elderly|
 449400	449400|IgG4-related periaortitis|Unknown|Not applicable|Adult<br>Elderly|
 449427	449427|Idiopathic hypertrophic pachymeningitis|Unknown|Not applicable|Adult<br>Elderly|
-449432	449432|IgG4-related sialadenitis<br>Küttner tumor|Unknown|Not applicable|Adult<br>Elderly|
+449432	449432|IgG4-related sialadenitis<br>Kttner tumor|Unknown|Not applicable|Adult<br>Elderly|
 449563	449563|-|Unknown|Not applicable|Adult<br>Elderly|
 449566	449566|IgG4-related eosinophilic angiocentric fibrosis|<1 / 1 000 000|Not applicable|Adult|
 45	45|AMP deaminase deficiency<br>Myoadenylate deaminase deficiency|Unknown|Autosomal recessive|All ages|612874 615511 
@@ -6470,7 +6470,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 50811	50811|Rajab-Spranger syndrome|<1 / 1 000 000|Autosomal recessive|Childhood|608154 
 50812	50812|Ahn-Lerman-Sagie syndrome|<1 / 1 000 000|Autosomal recessive<br>or&nbsp;Mitochondrial inheritance|Childhood|
 50814	50814|Boyadjiev-Jabs syndrome|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|607812 
-50815	50815|Mégarbané-Loiselet syndrome|<1 / 1 000 000|Autosomal dominant|Antenatal<br>Neonatal|609166 
+50815	50815|Mgarban-Loiselet syndrome|<1 / 1 000 000|Autosomal dominant|Antenatal<br>Neonatal|609166 
 50817	50817|Verloes-Deprez syndrome|<1 / 1 000 000|Autosomal recessive|Childhood|
 50839	50839|Bartonellosis due to Bartonella henselae infection|1-9 / 100 000|Not applicable|All ages|
 509	509|-|1-9 / 1 000 000|Not applicable|All ages|
@@ -6602,7 +6602,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 569	569|-|1-5 / 10 000|Autosomal dominant|Childhood|141500 602481 607516 609634 
 56970	56970|TSE<br>Transmissible spongiform encephalopathy|1-9 / 1 000 000|-|Adult|
 57	57|GSD due to aldolase A deficiency<br>GSD type 12<br>GSD type XII<br>Glycogen storage disease type 12<br>Glycogen storage disease type XII<br>Glycogenosis due to aldolase A deficiency<br>Glycogenosis type 12<br>Glycogenosis type XII|Unknown|Autosomal recessive|Neonatal|611881 
-570	570|Congenital facial diplegia<br>Möbius syndrome|Unknown|Autosomal dominant|Neonatal|157900 
+570	570|Congenital facial diplegia<br>Mbius syndrome|Unknown|Autosomal dominant|Neonatal|157900 
 57145	57145|Short-lasting unilateral neuralgiform headache attacks with conjunctival injection and tearing|1-9 / 100 000|-|Adult|
 57146	57146|-|-|-|-|
 57194	57194|-|-|-|-|
@@ -6692,7 +6692,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 63273	63273|Distal ABD-filaminopathy|<1 / 1 000 000|Autosomal dominant|Adolescent<br>Adult|614065 
 63275	63275|Gestational pemphigoid|-|-|-|
 633	633|Complete growth hormone insensitivity<br>GH receptor deficiency<br>Growth hormone receptor deficiency<br>Laron-type dwarfism<br>Primary GH insensitivity<br>Primary GH resistance<br>Primary growth hormone insensitivity<br>Primary growth hormone resistance<br>Short stature due to growth hormone resistance|1-9 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|262500 
-634	634|Bamboo hair syndrome<br>Comèl-Netherton syndrome<br>NS|1-9 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|256500 
+634	634|Bamboo hair syndrome<br>Coml-Netherton syndrome<br>NS|1-9 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|256500 
 63440	63440|Acrocephaly<br>Hypsicephaly<br>Hypsocephaly<br>Pyrgocephaly<br>Turricephaly|<1 / 1 000 000|Not applicable<br>or&nbsp;Autosomal dominant|Childhood|123100 616602 
 63442	63442|ASPED|<1 / 1 000 000|Autosomal dominant|All ages|105835 
 63443	63443|Rare gastric epithelial tumor|1-9 / 100 000|Multigenic/multifactorial<br>or&nbsp;Not applicable|Adult|
@@ -6814,7 +6814,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 676	676|-|1-9 / 1 000 000|Autosomal dominant|Childhood<br>Adolescent|167800 
 677	677|-|<1 / 1 000 000|Not applicable|Childhood<br>Adult|
 678	678|Keratosis palmoplantar-periodontopathy syndrome<br>PLS|1-9 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|245000 
-679	679|Degos disease<br>Köhlmeier-Degos disease<br>Köhlmeier-Degos-Delort-Tricort syndrome<br>Papulosis atrophican maligna|<1 / 1 000 000|Autosomal dominant|Adult|602248 
+679	679|Degos disease<br>Khlmeier-Degos disease<br>Khlmeier-Degos-Delort-Tricort syndrome<br>Papulosis atrophican maligna|<1 / 1 000 000|Autosomal dominant|Adult|602248 
 68	68|-|1-9 / 100 000|Not applicable|All ages|
 681	681|Westphall disease|1-9 / 100 000|Autosomal dominant|Childhood|170400 613345 
 682	682|Adynamia episodica hereditaria<br>Familial hyperPP<br>Familial hyperkalemic periodic paralysis<br>Gamstorp disease<br>Gamstorp episodic adynamy<br>HYPP<br>HyperKPP<br>HyperPP<br>Hyperkalemic PP<br>Primary hyperPP<br>Primary hyperkalemic periodic paralysis|1-9 / 1 000 000|Autosomal dominant|Childhood|170500 
@@ -6847,7 +6847,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 68415	68415|-|-|-|-|
 68416	68416|-|-|-|-|
 68419	68419|-|-|-|-|
-685	685|Familial spastic paraplegia<br>HSP<br>Hereditary spastic paraparesis<br>SPG<br>Strümpell-Lorrain disease|1-9 / 100 000|Autosomal dominant<br>or&nbsp;Autosomal recessive<br>or&nbsp;X-linked recessive|All ages|
+685	685|Familial spastic paraplegia<br>HSP<br>Hereditary spastic paraparesis<br>SPG<br>Strmpell-Lorrain disease|1-9 / 100 000|Autosomal dominant<br>or&nbsp;Autosomal recessive<br>or&nbsp;X-linked recessive|All ages|
 69	69|-|Unknown|-|All ages|
 69028	69028|-|Unknown|Autosomal dominant<br>or&nbsp;Autosomal recessive<br>or&nbsp;X-linked recessive|Infancy<br>Neonatal|
 69061	69061|-|Unknown|Unknown|Childhood|615861 
@@ -6963,7 +6963,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 73014	73014|IDI|-|-|Childhood|
 731	731|-|1-9 / 100 000|Autosomal recessive|Childhood|263200 
 732	732|PM|1-9 / 100 000|Not applicable|Adult<br>Elderly|
-73217	73217|Aplasia of the Müllerian ducts<br>Müllerian duct failure|1-5 / 10 000|Autosomal dominant|Adolescent<br>Adult|
+73217	73217|Aplasia of the Mllerian ducts<br>Mllerian duct failure|1-5 / 10 000|Autosomal dominant|Adolescent<br>Adult|
 73220	73220|-|Unknown|X-linked recessive|Infancy<br>Neonatal|309580 
 73223	73223|-|<1 / 1 000 000|Unknown|Childhood|
 73224	73224|-|<1 / 1 000 000|Autosomal dominant|Childhood|
@@ -7037,12 +7037,12 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 759	759|CPP<br>Gonadotropin-dependant precocious puberty|Unknown|Not applicable<br>or&nbsp;Autosomal dominant|Infancy<br>Childhood|176400 615346 
 76	76|Anguilluliasis<br>Anguillulosis|Unknown|Not applicable|All ages|
 760	760|PNP deficiency<br>PNPase deficiency|Unknown|Autosomal recessive|Infancy<br>Childhood|613179 
-761	761|Anaphylactoid purpura<br>Henoch-Schönlein purpura<br>IgA vasculitis<br>Purpura rheumatica<br>Rheumatoid purpura|1-9 / 100 000|Not applicable|Childhood|
+761	761|Anaphylactoid purpura<br>Henoch-Schnlein purpura<br>IgA vasculitis<br>Purpura rheumatica<br>Rheumatoid purpura|1-9 / 100 000|Not applicable|Childhood|
 763	763|Pyknodysostosis|1-9 / 1 000 000|Autosomal recessive|All ages|265800 
 764	764|Myositis purulenta tropica<br>Myositis tropicans<br>PM<br>Suppurative myositis<br>Tropical pyomyositis|Unknown|Not applicable|All ages|
 765	765|PDH<br>PDHC<br>Pyruvate dehydrogenase complex deficiency|<1 / 1 000 000|Autosomal recessive<br>or&nbsp;X-linked dominant<br>or&nbsp;Not applicable|Childhood<br>Infancy<br>Neonatal|245348 245349 246900 312170 608782 614111 
 766	766|Pyruvate kinase deficiency of erythrocytes|1-9 / 100 000|Autosomal recessive|Infancy<br>Neonatal|266200 
-767	767|Küssmaul-Maier disease<br>PAN<br>Periarteritis nodosa|1-9 / 100 000|Not applicable|All ages|
+767	767|Kssmaul-Maier disease<br>PAN<br>Periarteritis nodosa|1-9 / 100 000|Not applicable|All ages|
 768	768|Congenital long QT syndrome|Unknown|Autosomal dominant<br>or&nbsp;Autosomal recessive|Childhood|192500 220400 600919 601005 603830 611818 611819 611820 612347 612955 613485 613688 613693 613695 616247 616249 
 769	769|-|Unknown|Autosomal recessive|Infancy<br>Neonatal|262190 
 77	77|-|1-9 / 100 000|-|Infancy<br>Neonatal|
@@ -7127,12 +7127,12 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 79141	79141|Keratosis palmoplantaris nummularis<br>PPK nummularis<br>Plamoplantar hyperkeratosis nummularis<br>Plamoplantar keratoderma nummularis|<1 / 1 000 000|Autosomal dominant|No data available|114140 
 79142	79142|-|-|-|-|126900 
 79143	79143|Isolated anonychia|<1 / 1 000 000|Autosomal dominant<br>or&nbsp;Autosomal recessive|-|107000 206800 614149 
-79144	79144|COIF<br>COIF syndrome<br>Congenital onychodysplasia of the index fingers<br>Iso-Kikuchi syndrome|-|-|-|605779 
+79144	79144|COIF<br>COIF syndrome<br>Congenital onychodysplasiaf the index fingers<br>Iso-Kikuchi syndrome|-|-|-|605779 
 79145	79145|Reticular pigment anomaly of flexures|Unknown|Autosomal dominant|Adolescent<br>Adult|179850 615327 615674 615696 
 79146	79146|Melanosis diffusa congenita<br>Melanosis universalis hereditaria<br>Universal melanosis|-|Autosomal dominant|Neonatal<br>Infancy|145250 614233 
 79147	79147|-|<1 / 1 000 000|-|Childhood|216700 
 79148	79148|-|-|-|-|130100 
-79149	79149|François syndrome|<1 / 1 000 000|-|Childhood|221800 
+79149	79149|Franois syndrome|<1 / 1 000 000|-|Childhood|221800 
 79150	79150|-|-|-|-|614323 
 79151	79151|-|-|Autosomal dominant|Neonatal<br>Infancy<br>Adult|101900 
 79152	79152|-|Unknown|Autosomal dominant|Adult|175900 607728 612293 612353 614714 616063 616631 
@@ -7216,7 +7216,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 79272	79272|GNS deficiency<br>Glucosamine N-acetyl-6-sulfatase deficiency<br>MPS3D<br>MPSIIID<br>Mucopolysaccharidosis type 3D<br>Mucopolysaccharidosis type IIID|-|Autosomal recessive|-|252940 
 79273	79273|-|1-9 / 1 000 000|Autosomal dominant|Adolescent<br>Adult|121300 
 79276	79276|-|1-9 / 1 000 000|Autosomal dominant|Adolescent<br>Adult|176000 
-79277	79277|CEP<br>Günther disease|<1 / 1 000 000|Autosomal recessive|All ages|263700 
+79277	79277|CEP<br>Gnther disease|<1 / 1 000 000|Autosomal recessive|All ages|263700 
 79278	79278|EPP|1-9 / 1 000 000|Autosomal dominant<br>or&nbsp;Autosomal recessive|Infancy<br>Neonatal|177000 
 79279	79279|NAGA deficiency type 1<br>Schindler disease type 1|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|609241 
 79280	79280|Adult-onset Alpha-N-acetylgalactosaminidase deficiency<br>Kanzaki disease<br>NAGA deficiency type 2<br>Schindler disease type 2|<1 / 1 000 000|Autosomal recessive|Adult|609242 
@@ -7301,7 +7301,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 79395	79395|Camisa disease<br>Keratoderma-ichthyosiform dermatosis-elevated beta-glucuronidase syndrome<br>Loricrin keratoderma<br>Vohwinkel syndrome with ichthyosis|<1 / 1 000 000|Autosomal dominant|Childhood|604117 
 79396	79396|Epidermolysis bullosa simplex, herpetiformis|<1 / 1 000 000|Autosomal dominant|Neonatal|131760 
 79397	79397|EBS-MP|Unknown|Autosomal dominant|Infancy<br>Neonatal|131960 
-79399	79399|Epidermolysis bullosa simplex, Koebner type<br>Epidermolysis bullosa simplex, Köbner type<br>Generalized EBS, non-Dowling-Meara type|Unknown|Autosomal dominant<br>or&nbsp;Not applicable|Infancy<br>Neonatal|131900 
+79399	79399|Epidermolysis bullosa simplex, Koebner type<br>Epidermolysis bullosa simplex, Kbner type<br>Generalized EBS, non-Dowling-Meara type|Unknown|Autosomal dominant<br>or&nbsp;Not applicable|Infancy<br>Neonatal|131900 
 794	794|ACS3<br>Acrocephalosyndactyly type 3<br>SCS|1-9 / 100 000|Autosomal dominant|Neonatal|101400 
 79400	79400|EBS-loc<br>Epidermolysis bullosa simplex of palms and soles<br>Epidermolysis bullosa simplex, Weber-Cockayne type|1-9 / 1 000 000|Autosomal dominant|Childhood|131800 
 79401	79401|EBS-O|<1 / 1 000 000|Autosomal dominant|Infancy<br>Neonatal|131950 
@@ -7336,9 +7336,9 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 79468	79468|-|-|-|-|
 79473	79473|Protoporphyrinogen oxidase deficiency<br>Variegate porphyria|1-9 / 1 000 000|Autosomal dominant|Adolescent<br>Adult|176200 
 79474	79474|Atypical progeroid syndrome|-|Unknown<br>or&nbsp;Autosomal dominant|-|
-79476	79476|Griscelli-Pruniéras syndrome type 1<br>Hypopigmentation-neurologic impairment syndrome|<1 / 1 000 000|-|Infancy|214450 
-79477	79477|Griscelli-Pruniéras syndrome type 2<br>Hypopigmentation-immunodeficiency with or without neurologic impairment syndrome|<1 / 1 000 000|Autosomal recessive|Infancy|607624 
-79478	79478|Griscelli-Pruniéras syndrome type 3|<1 / 1 000 000|Autosomal recessive|Infancy|609227 
+79476	79476|Griscelli-Pruniras syndrome type 1<br>Hypopigmentation-neurologic impairment syndrome|<1 / 1 000 000|-|Infancy|214450 
+79477	79477|Griscelli-Pruniras syndrome type 2<br>Hypopigmentation-immunodeficiency with or without neurologic impairment syndrome|<1 / 1 000 000|Autosomal recessive|Infancy|607624 
+79478	79478|Griscelli-Pruniras syndrome type 3|<1 / 1 000 000|Autosomal recessive|Infancy|609227 
 79479	79479|-|-|-|-|
 79480	79480|Seborrheic pemphigus<br>Senear-Usher syndrome|-|-|-|
 79481	79481|-|-|-|-|
@@ -7475,7 +7475,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 85102	85102|-|-|-|-|
 85110	85110|FENIB|<1 / 1 000 000|Autosomal dominant|Adult|604218 
 85112	85112|Palmoplantar hyperkeratosis-XX sex reversal-predisposition to squamous cell carcinoma syndrome|<1 / 1 000 000|Autosomal recessive|Childhood|610644 
-85128	85128|Västerbotten dystrophy|Unknown|Autosomal recessive|Childhood|607475 
+85128	85128|Vsterbotten dystrophy|Unknown|Autosomal recessive|Childhood|607475 
 85136	85136|CLWM|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal|612951 
 85138	85138|Autoimmune Addison's disease<br>Autoimmune adrenalitis<br>Classic Addison's disease<br>Primary Addison's disease|1-5 / 10 000|-|All ages|103230 240200 
 85146	85146|Kaeser syndrome<br>Stark-Kaeser syndrome|-|Autosomal dominant|-|181400 
@@ -7650,7 +7650,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 86923	86923|Hereditary palmoplantar hyperkeratosis, Gamborg-Nielsen type<br>PPK, Gamborg-Nielsen type|Unknown|Autosomal recessive|-|244850 
 87	87|ACS1<br>Acrocephalosyndactyly type 1|1-9 / 100 000|Autosomal dominant|Antenatal<br>Neonatal|101200 
 870	870|Trisomy 21|1-5 / 10 000|Not applicable|Antenatal<br>Neonatal|190685 
-871	871|Familial Lenègre disease<br>Familial Lev disease<br>Familial Lev-Lenègre disease<br>Familial PCCD<br>Familial progressive heart block<br>Hereditary bundle branch defect|Unknown|Autosomal dominant|Adult|113900 115080 140400 604559 612838 
+871	871|Familial Lengre disease<br>Familial Lev disease<br>Familial Lev-Lengre disease<br>Familial PCCD<br>Familial progressive heart block<br>Hereditary bundle branch defect|Unknown|Autosomal dominant|Adult|113900 115080 140400 604559 612838 
 872	872|-|-|-|-|
 87277	87277|-|-|-|-|
 873	873|Aggressive fibromatosis<br>Desmoid type fibromatosis|Unknown|Not applicable<br>or&nbsp;Unknown|Adolescent<br>Adult|135290 
@@ -8917,10 +8917,10 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 98913	98913|-|-|-|-|254300 601462 605809 608930 608931 614198 615120 616304 616313 616314 616321 616322 616323 616324 616325 616326 616720 
 98914	98914|-|-|Autosomal dominant<br>or&nbsp;Autosomal recessive|-|254210 615120 616040 616330 616720 617143 
 98915	98915|-|-|-|-|603034 
-98916	98916|AIDP<br>Acute idiopathic demyelinating polyneuropathy<br>Acute inflammatory polyneuropathy<br>GBS, acute inflammatory demyelinating polyradiculoneuropathic form<br>Guillain-Barré syndrome, acute inflammatory demyelinating polyradiculoneuropathic form|1-9 / 100 000|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|139393 
-98917	98917|AMSAN<br>Acute motor-sensory axonal GBS<br>Acute motor-sensory axonal Guillain-Barré syndrome|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
-98918	98918|AMAN<br>Acute pure motor GBS<br>Acute pure motor Guillain-Barré syndrome|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
-98919	98919|Cranial variant of GBS<br>Cranial variant of Guillain-Barré syndrome<br>Fisher syndrome|1-9 / 1 000 000|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
+98916	98916|AIDP<br>Acute idiopathic demyelinating polyneuropathy<br>Acute inflammatory polyneuropathy<br>GBS, acute inflammatory demyelinating polyradiculoneuropathic form<br>Guillain-Barr syndrome, acute inflammatory demyelinating polyradiculoneuropathic form|1-9 / 100 000|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|139393 
+98917	98917|AMSAN<br>Acute motor-sensory axonal GBS<br>Acute motor-sensory axonal Guillain-Barr syndrome|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
+98918	98918|AMAN<br>Acute pure motor GBS<br>Acute pure motor Guillain-Barr syndrome|-|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
+98919	98919|Cranial variant of GBS<br>Cranial variant of Guillain-Barr syndrome<br>Fisher syndrome|1-9 / 1 000 000|Multigenic/multifactorial<br>or&nbsp;Not applicable|All ages|
 98920	98920|Autosomal recessive distal spinal muscular atrophy type 1<br>Autosomal recessive spinal muscular atrophy with respiratory distress<br>Diaphragmatic spinal muscular atrophy<br>Distal hereditary motor neuropathy type 6<br>Distal-HMN type 6<br>SIANRF<br>SMARD1<br>Severe infantile axonal neuropathy with respiratory failure type 1<br>dHMN6<br>dSMA1|<1 / 1 000 000|Autosomal recessive|Infancy<br>Neonatal<br>Childhood|604320 
 98922	98922|-|-|-|-|
 98933	98933|MSA, parkinsonian type<br>MSA-p|1-9 / 100 000|Not applicable|Adult|
@@ -8950,7 +8950,7 @@ Orpha	Orpha|Syndrome|Prevalence|Inheritance|Age of onset|OMIM
 98964	98964|Biber-Haab-Dimmer dystrophy<br>Classic lattice corneal dystrophy<br>LCD1<br>LCDI<br>Lattice corneal dystrophy type 1|Unknown|Autosomal dominant|All ages|122200 608471 
 98967	98967|Crystalline stromal dystrophy<br>Hereditary crystalline stromal dystrophy of Schnyder<br>SCCD<br>SCD<br>Schnyder crystalline corneal dystrophy<br>Schnyder crystalline dystrophy sine crystals|<1 / 1 000 000|Autosomal dominant|All ages|121800 
 98969	98969|Corneal dystrophy Groenouw type II<br>Fehr corneal dystrophy<br>MCD|1-9 / 100 000|Autosomal recessive|All ages|217800 
-98970	98970|FCD<br>François-Neetens speckled corneal dystrophy|<1 / 1 000 000|Autosomal dominant|All ages|121850 
+98970	98970|FCD<br>Franois-Neetens speckled corneal dystrophy|<1 / 1 000 000|Autosomal dominant|All ages|121850 
 98971	98971|PACD<br>Posterior amorphous stromal dystrophy|<1 / 1 000 000|Autosomal dominant|Infancy<br>Neonatal|612868 
 98972	98972|CCDF<br>Central cloudy corneal dystrophy of Francois|<1 / 1 000 000|Autosomal dominant|Childhood|217600 
 98973	98973|PPCD<br>Posterior polymorphous dystrophy<br>Schlichting dystrophy|Unknown|Autosomal dominant|Childhood|122000 609140 609141 
