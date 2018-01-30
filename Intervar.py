@@ -1598,8 +1598,14 @@ def check_BP7(line,Funcanno_flgs,Allels_flgs):
                 if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]<0.6 and cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]<0.6:
                     BP7_t1=1
 # check the conservation score of gerp++ > 2
-    if float(cls[Funcanno_flgs['GERP++_RS']]) <= float(cutoff_conserv) or cls[Funcanno_flgs['GERP++_RS']] == '.' :
+    try:
+        if float(cls[Funcanno_flgs['GERP++_RS']]) <= float(cutoff_conserv) or cls[Funcanno_flgs['GERP++_RS']] == '.' :
             BP7_t2=1
+    except ValueError:
+        # absent means there are gaps in the multiple alignment,so cannot have the score,not conserved
+        BP7_t2=1
+    else:
+        pass
 
     if BP7_t1 !=0 and BP7_t2 != 0 :
         BP7=1        
