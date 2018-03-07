@@ -1,5 +1,5 @@
 # InterVar
-A bioinformatics software tool for clinical interpretation of genetic variants by the ACMG-AMP 2015 guideline
+A bioinformatics software tool for clinical interpretation of genetic variants by the ACMG-AMP 2015 guidelines
 
 ## SYNOPSIS
 
