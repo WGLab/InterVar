@@ -11,7 +11,7 @@ import copy,logging,os,io,re,time,sys,platform,optparse,gzip,glob
 
 prog="InterVar"
 
-version = """%prog 2.0.2 20180118
+version = """%prog 0.1.7 20180118
 Written by Quan LI,leequan@gmail.com. 
 InterVar is free for non-commercial use without warranty.
 Please contact the authors for commercial use.
@@ -1595,7 +1595,7 @@ def check_BP7(line,Funcanno_flgs,Allels_flgs):
             if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]=="." or  cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]==".":
                 BP7_t1=1  # absent means it is not in the  splice consensus sequence
             else:
-                if float(cls[Funcanno_flgs['dbscSNV_RF_SCORE']])<0.6 and float(cls[Funcanno_flgs['dbscSNV_ADA_SCORE']])<0.6:
+                if cls[Funcanno_flgs['dbscSNV_RF_SCORE']]<0.6 and cls[Funcanno_flgs['dbscSNV_ADA_SCORE']]<0.6:
                     BP7_t1=1
 # check the conservation score of gerp++ > 2
     try:
