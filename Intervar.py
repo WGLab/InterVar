@@ -908,7 +908,8 @@ def check_PVS1(line,Funcanno_flgs,Allels_flgs,lof_genes_dict):
             exon=cls0_1[2]
             try:
                 exon_lth="exon"+knownGeneCanonical_dict[trans_id]
-                if exon==exon_lth or exon =="exon1": # not 1 or last exon
+                #if exon==exon_lth or exon =="exon1": # not 1 or last exon
+                if exon==exon_lth: # relax for only last exon
                     PVS=0
                 try:
                     if (float(knownGeneCanonical_ed_dict[trans_id])-float( cls[Allels_flgs['Start']]  ))<50: # means close  3' of gene 50 bp.
@@ -1326,7 +1327,8 @@ def check_PP5(line,Funcanno_flgs,Allels_flgs):
         cls3=line_tmp2.split(';')
         clinvar_bp=cls3[0]
         if clinvar_bp.find("ikely pathogenic")>=0 or clinvar_bp.find("athogenic")>=0:
-            PP5=1
+            if clinvar_bp.find("onflicting")==0:
+                PP5=1
     return(PP5)
 
 def check_BA1(line,Freqs_flgs,Allels_flgs):
