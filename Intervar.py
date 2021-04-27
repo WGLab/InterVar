@@ -1796,6 +1796,10 @@ def search_key_index(line,dict):
             if key==cls[ii]:
                 dict[key]=ii
                 break
+            if key=="Otherinfo":
+                if cls[ii]==key or cls[ii]=="Otherinfo1":
+                    dict[key]=ii
+                    break
     return
 
 def my_inter_var(annovar_outfile):
