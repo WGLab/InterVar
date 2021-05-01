@@ -1327,7 +1327,7 @@ def check_PP5(line,Funcanno_flgs,Allels_flgs):
         cls3=line_tmp2.split(';')
         clinvar_bp=cls3[0]
         if clinvar_bp.find("ikely pathogenic")>=0 or clinvar_bp.find("athogenic")>=0:
-            if clinvar_bp.find("onflicting")==0:
+            if clinvar_bp.find("onflicting")<0:
                 PP5=1
     return(PP5)
 
@@ -1358,11 +1358,13 @@ def check_BS1(line,Freqs_flgs,Allels_flgs):
     cutoff=0.005 # disorder cutoff
     try:
         cutoff=float(paras['disorder_cutoff']) # user's disorder cutoff
+        print("Warning: Customized  disease cutoff %s in config.ini" % (cutoff)) 
     except ValueError:
         cutoff=0.005
     else:
-        cutoff=0.005
+        pass
     cls=line.split('\t')
+    print("Warning: Current effective disease cutoff %s" % (cutoff)) 
     for key in Freqs_flgs.keys():
         try:
             if cls[Freqs_flgs[key]] !='.':
