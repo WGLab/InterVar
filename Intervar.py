@@ -11,7 +11,7 @@ import copy,logging,os,io,re,time,sys,platform,optparse,gzip,glob
 
 prog="InterVar"
 
-version = """%prog 2.1.2 20210727
+version = """%prog 2.2.2 20210727
 Written by Quan LI,leequan@gmail.com. 
 InterVar is free for non-commercial use without warranty.
 Please contact the authors for commercial use.
