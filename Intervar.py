@@ -11,7 +11,7 @@ import copy,logging,os,io,re,time,sys,platform,optparse,gzip,glob
 
 prog="InterVar"
 
-version = """%prog 2.0.2 20190327
+version = """%prog 2.1.2 20210727
 Written by Quan LI,leequan@gmail.com. 
 InterVar is free for non-commercial use without warranty.
 Please contact the authors for commercial use.
@@ -547,18 +547,18 @@ def check_annovar_result():
         if paras['skip_annovar'] != True:
             sys.exit()
     if inputft.lower() == 'avinput' :
-        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2015aug_all,avsnp147,dbnsfp33a,clinvar_20190305,gnomad_genome,dbscsnv11,dbnsfp31a_interpro,rmsk,ensGene,knownGene  -operation  g,f,f,f,f,f,f,f,f,r,g,g   -nastring ."+annovar_options
+        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2015aug_all,avsnp147,dbnsfp42a,clinvar_20210501,gnomad_genome,dbscsnv11,rmsk,ensGene,knownGene  -operation  g,f,f,f,f,f,f,f,r,g,g   -nastring ."+annovar_options
         print("%s" %cmd)
         os.system(cmd)
     if inputft.lower() == 'vcf' :
-        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+".avinput "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2015aug_all,avsnp147,dbnsfp33a,clinvar_20190305,gnomad_genome,dbscsnv11,dbnsfp31a_interpro,rmsk,ensGene,knownGene   -operation  g,f,f,f,f,f,f,f,f,r,g,g   -nastring ."+annovar_options
+        cmd="perl "+paras['table_annovar']+" "+paras['inputfile']+".avinput "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ paras['outfile']+" -protocol refGene,esp6500siv2_all,1000g2015aug_all,avsnp147,dbnsfp42a,clinvar_20210501,gnomad_genome,dbscsnv11,rmsk,ensGene,knownGene   -operation  g,f,f,f,f,f,f,f,r,g,g   -nastring ."+annovar_options
         print("%s" %cmd)
         os.system(cmd)
     if inputft.lower() == 'vcf_m' :
         for f in glob.iglob(paras['outfile']+"*.avinput"): 
             print("INFO: Begin to annotate sample file of %s ...." %(f))
             new_outfile=re.sub(".avinput","",f)
-            cmd="perl "+paras['table_annovar']+" "+f+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ new_outfile +" -protocol refGene,esp6500siv2_all,1000g2015aug_all,avsnp147,dbnsfp33a,clinvar_20190305,gnomad_genome,dbscsnv11,dbnsfp31a_interpro,rmsk,ensGene,knownGene   -operation  g,f,f,f,f,f,f,f,f,r,g,g   -nastring ."+annovar_options
+            cmd="perl "+paras['table_annovar']+" "+f+" "+paras['database_locat']+" -buildver "+paras['buildver']+" -remove -out "+ new_outfile +" -protocol refGene,esp6500siv2_all,1000g2015aug_all,avsnp147,dbnsfp42a,clinvar_20210501,gnomad_genome,dbscsnv11,rmsk,ensGene,knownGene   -operation  g,f,f,f,f,f,f,f,r,g,g   -nastring ."+annovar_options
             print("%s" %cmd)
             os.system(cmd)
         
@@ -1358,13 +1358,13 @@ def check_BS1(line,Freqs_flgs,Allels_flgs):
     cutoff=0.005 # disorder cutoff
     try:
         cutoff=float(paras['disorder_cutoff']) # user's disorder cutoff
-        print("Warning: Customized  disease cutoff %s in config.ini" % (cutoff)) 
+        #print("Warning: Customized  disease cutoff %s in config.ini" % (cutoff)) 
     except ValueError:
         cutoff=0.005
     else:
         pass
     cls=line.split('\t')
-    print("Warning: Current effective disease cutoff %s" % (cutoff)) 
+    #print("Warning: Current effective disease cutoff %s" % (cutoff)) 
     for key in Freqs_flgs.keys():
         try:
             if cls[Freqs_flgs[key]] !='.':
@@ -2080,6 +2080,10 @@ def main():
     else:
          print ("Warning: You activated the option of --skip_annovar, the Annovar will not run!")
          print ("Warning: The InterVar will interpret the variants based on your old annotation information!")
+
+    cutoff=float(paras['disorder_cutoff']) # user's disorder cutoff
+    if cutoff != 0.005 :
+        print("Warning: Customized  disease cutoff %s in config.ini, not suggested as 0.005" % (cutoff)) 
 
     read_datasets()
     
